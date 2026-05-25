@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
 
 const tours = [
@@ -173,6 +173,12 @@ function HomeContent() {
       message: String(form.get("message") || "").trim() || null,
       lead_source: leadSource,
     };
+
+    if (!isSupabaseConfigured) {
+      setSubmitting(false);
+      setError("Database is not configured on this deployment. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel.");
+      return;
+    }
 
     const { error: insertError } = await supabase.from("itinerary_requests").insert(payload);
 
@@ -833,7 +839,7 @@ function HomeContent() {
             <p className="text-gray-400 leading-8">
               Kampala, Uganda<br />
               Email: reservations@wildspineuganda.com<br />
-              WhatsApp: +256 751 821 745
+              WhatsApp: +256 751 828 241
             </p>
           </div>
         </div>
@@ -841,7 +847,7 @@ function HomeContent() {
 
 {/* WHATSAPP BUTTON */}
 <a
-  href="https://wa.me/256751821745"
+  href="https://wa.me/256751828241"
   target="_blank"
   rel="noopener noreferrer"
   className="whatsapp-button"

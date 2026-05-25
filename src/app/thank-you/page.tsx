@@ -56,7 +56,7 @@ function ThankYouContent() {
         </div>
 
         <div className="mt-12 flex flex-col gap-4 sm:flex-row">
-          <a href="https://wa.me/256751821745" target="_blank" rel="noopener noreferrer" className="rounded-full bg-yellow-500 px-8 py-4 text-center font-black text-black hover:bg-yellow-400">
+          <a href="https://wa.me/256751828241" target="_blank" rel="noopener noreferrer" className="rounded-full bg-yellow-500 px-8 py-4 text-center font-black text-black hover:bg-yellow-400">
             Continue on WhatsApp
           </a>
           <a href="/tours" className="rounded-full border border-white/20 px-8 py-4 text-center font-black hover:bg-white hover:text-black">

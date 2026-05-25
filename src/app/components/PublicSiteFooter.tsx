@@ -50,7 +50,7 @@ export default function PublicSiteFooter() {
           <div className="grid gap-3 text-sm text-gray-400">
             <p>Kampala, Uganda</p>
             <a href="mailto:reservations@wildspineuganda.com" className="hover:text-yellow-500">reservations@wildspineuganda.com</a>
-            <a href="https://wa.me/256751821745" className="hover:text-yellow-500">WhatsApp: +256 751 821 745</a>
+            <a href="https://wa.me/256751828241" className="hover:text-yellow-500">WhatsApp: +256 751 828 241</a>
             <div className="flex flex-wrap gap-3 pt-3">
               <a href="/privacy" className="hover:text-yellow-500">Privacy</a>
               <a href="/terms" className="hover:text-yellow-500">Terms</a>

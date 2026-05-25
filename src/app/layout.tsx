@@ -57,7 +57,7 @@ export default function RootLayout({
             areaServed: "Uganda",
             description:
               "Private Uganda journeys for gorilla trekking, Rwenzori hiking, luxury safaris, and permit planning.",
-            telephone: "+256751821745",
+            telephone: "+256751828241",
             email: "reservations@wildspineuganda.com",
             address: {
               "@type": "PostalAddress",
