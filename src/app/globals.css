@@ -1,0 +1,377 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #000;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+section {
+  scroll-margin-top: 90px;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  z-index: 9999;
+  transform-origin: left;
+  background: linear-gradient(90deg, #f5b416, #fff2a8);
+  animation: progress linear;
+  animation-timeline: scroll();
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.luxury-bg {
+  background:
+    radial-gradient(circle at 75% 20%, rgba(245,180,22,0.18), transparent 30%),
+    radial-gradient(circle at 25% 40%, rgba(20,90,50,0.35), transparent 35%),
+    linear-gradient(135deg, #020302 0%, #050806 35%, #0b140d 65%, #000 100%);
+}
+
+.mountain-layer {
+  clip-path: polygon(0 75%, 15% 55%, 30% 70%, 45% 42%, 62% 66%, 78% 38%, 100% 70%, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.02));
+  opacity: 0.35;
+  animation: mountainMove 14s ease-in-out infinite;
+}
+
+.mist-layer {
+  background:
+    linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent),
+    radial-gradient(circle at 50% 45%, rgba(255,255,255,0.1), transparent 35%);
+  animation: mistMove 12s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes mountainMove {
+  0%, 100% { transform: translateY(0) scale(1.02); }
+  50% { transform: translateY(-18px) scale(1.07); }
+}
+
+@keyframes mistMove {
+  0%, 100% { transform: translateX(-50px); opacity: .25; }
+  50% { transform: translateX(50px); opacity: .55; }
+}
+
+.nav-link {
+  position: relative;
+  transition: color .3s ease;
+}
+
+.nav-link:hover {
+  color: #eab308;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 0;
+  height: 1px;
+  background: #eab308;
+  transition: width .3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.section-kicker {
+  color: #eab308;
+  text-transform: uppercase;
+  letter-spacing: .35em;
+  font-size: .875rem;
+  margin-bottom: 1.25rem;
+}
+
+.package-card,
+.premium-card {
+  padding: 32px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: .4s ease;
+}
+
+.package-card:hover,
+.premium-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(245,180,22,.55);
+}
+
+.featured-card {
+  background: linear-gradient(180deg, rgba(245,180,22,0.16), rgba(255,255,255,0.04));
+}
+
+.form-input {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.35);
+  padding: 16px 18px;
+  color: white;
+  outline: none;
+  transition: .3s ease;
+}
+
+.form-input::placeholder {
+  color: rgba(255,255,255,0.45);
+}
+
+.form-input:focus {
+  border-color: rgba(245,180,22,0.75);
+  box-shadow: 0 0 0 4px rgba(245,180,22,0.08);
+}
+
+.partner-logo-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.partner-logo-carousel::before,
+.partner-logo-carousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 72px;
+  pointer-events: none;
+}
+
+.partner-logo-carousel::before {
+  left: 0;
+  background: linear-gradient(90deg, #000, transparent);
+}
+
+.partner-logo-carousel::after {
+  right: 0;
+  background: linear-gradient(270deg, #000, transparent);
+}
+
+.partner-logo-track {
+  display: flex;
+  width: max-content;
+  gap: 16px;
+  animation: partnerLogoScroll 34s linear infinite;
+}
+
+.partner-logo-carousel:hover .partner-logo-track {
+  animation-play-state: paused;
+}
+
+.partner-logo-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 310px;
+  min-height: 104px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.045);
+  padding: 18px;
+  transition: border-color .25s ease, background .25s ease, transform .25s ease;
+}
+
+.partner-logo-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245,180,22,0.45);
+  background: rgba(255,255,255,0.075);
+}
+
+.partner-logo-mark {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  background: #f5b416;
+  color: #050505;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.partner-logo-name {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.partner-logo-note {
+  margin-top: 4px;
+  color: rgba(255,255,255,0.52);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@keyframes partnerLogoScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .partner-logo-carousel::before,
+  .partner-logo-carousel::after {
+    width: 36px;
+  }
+
+  .partner-logo-card {
+    width: 260px;
+    min-height: 112px;
+  }
+}
+
+.admin-primary-button {
+  border-radius: 999px;
+  background: #eab308;
+  color: #000;
+  padding: 12px 20px;
+  font-weight: 900;
+  transition: .25s ease;
+}
+
+.admin-primary-button:hover {
+  background: #facc15;
+}
+
+.admin-outline-button {
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 12px 20px;
+  font-weight: 800;
+  transition: .25s ease;
+}
+
+.admin-outline-button:hover {
+  border-color: #eab308;
+  color: #eab308;
+}
+
+.reveal-section {
+  animation: sectionReveal both;
+  animation-timeline: view();
+  animation-range: entry 10% cover 35%;
+}
+
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.whatsapp-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 80;
+  background: #22c55e;
+  color: black;
+  padding: 14px 20px;
+  border-radius: 999px;
+  font-weight: 900;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  transition: .3s ease;
+}
+
+.whatsapp-button:hover {
+  transform: translateY(-3px);
+  background: #4ade80;
+}
+
+@media (max-width: 768px) {
+  .whatsapp-button {
+    right: 16px;
+    bottom: 16px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+.hero-video {
+  transform: scale(1.06);
+  animation: heroVideoDrift 18s ease-in-out infinite;
+}
+
+@keyframes heroVideoDrift {
+  0%, 100% {
+    transform: scale(1.06) translateY(0);
+  }
+  50% {
+    transform: scale(1.12) translateY(-24px);
+  }
+}
+
+.moving-mist {
+  background:
+    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.10), transparent 30%),
+    radial-gradient(circle at 70% 35%, rgba(255,255,255,0.08), transparent 28%),
+    linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  mix-blend-mode: screen;
+  opacity: 0.45;
+  animation: mistTravel 14s ease-in-out infinite;
+}
+
+@keyframes mistTravel {
+  0%, 100% {
+    transform: translateX(-80px);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateX(80px);
+    opacity: 0.55;
+  }
+}
+
+.hero-copy {
+  animation: luxuryHeroEnter 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes luxuryHeroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}/* 🔥 LUXURY SCROLL ANIMATIONS */
+
+.reveal-section {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 1.2s ease;
+}
+
+.reveal-section.active {
+  opacity: 1;
+  transform: translateY(0);
+}
