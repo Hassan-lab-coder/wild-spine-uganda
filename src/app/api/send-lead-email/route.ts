@@ -22,6 +22,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ sent: false, reason: "Email sending is not configured. Add RESEND_API_KEY." }, { status: 500 });
   }
 
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return NextResponse.json({ sent: false, reason: "Supabase is not configured on this deployment." }, { status: 500 });
+  }
+
   if (!payload.to || !payload.subject || !payload.message) {
     return NextResponse.json({ sent: false, reason: "Recipient, subject, and message are required." }, { status: 400 });
   }
