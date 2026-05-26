@@ -819,6 +819,7 @@ function HomeContent() {
                   <option>The Spine Explorer</option>
                   <option>The Summit Trail</option>
                   <option>Margherita Expedition</option>
+                  <option>Gorilla Permit Help</option>
                   <option>Custom Uganda Safari</option>
                 </select>
                 </label>

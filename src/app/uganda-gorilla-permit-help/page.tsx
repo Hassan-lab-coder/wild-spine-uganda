@@ -19,6 +19,8 @@ const planningSteps = [
   ["Secure properly", "Once you approve, permit and travel services are secured in the right order."],
 ];
 
+const permitInquiryHref = "/?route=Gorilla%20Permit%20Help&source=permit_help#book";
+
 export default function UgandaGorillaPermitHelpPage() {
   return (
     <main className="min-h-screen bg-black text-white">
@@ -37,7 +39,7 @@ export default function UgandaGorillaPermitHelpPage() {
             Gorilla permits are not just tickets. They determine your date, sector, lodge area, transfer route, and sometimes the whole shape of a Uganda itinerary.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
-            <a href="/#book" className="rounded-full bg-yellow-500 px-8 py-4 font-black text-black hover:bg-yellow-400">Request Permit Help</a>
+            <a href={permitInquiryHref} className="rounded-full bg-yellow-500 px-8 py-4 font-black text-black hover:bg-yellow-400">Request Permit Help</a>
             <a href="https://wa.me/256751828241" className="rounded-full border border-white/20 px-8 py-4 font-black hover:bg-white hover:text-black">Ask on WhatsApp</a>
           </div>
         </div>
@@ -108,7 +110,7 @@ export default function UgandaGorillaPermitHelpPage() {
               <li>Ask how changes are handled if permits, lodges, or road conditions shift.</li>
               <li>Keep invoices and receipts for every payment.</li>
             </ul>
-            <a href="/#book" className="mt-8 inline-block rounded-full bg-yellow-500 px-7 py-4 font-black text-black hover:bg-yellow-400">
+            <a href={permitInquiryHref} className="mt-8 inline-block rounded-full bg-yellow-500 px-7 py-4 font-black text-black hover:bg-yellow-400">
               Check Permit Options
             </a>
           </aside>
