@@ -11,8 +11,9 @@ type VolunteerApplication = Database["public"]["Tables"]["volunteer_applications
 type AnalyticsEvent = Database["public"]["Tables"]["analytics_events"]["Row"];
 type Invoice = Database["public"]["Tables"]["invoices"]["Row"];
 type Receipt = Database["public"]["Tables"]["receipts"]["Row"];
+type InboundEmail = Database["public"]["Tables"]["inbound_emails"]["Row"];
 type LineItem = Invoice["line_items"][number];
-type TabKey = "requests" | "volunteers" | "guides" | "invoices" | "receipts" | "analytics";
+type TabKey = "requests" | "volunteers" | "guides" | "inbox" | "invoices" | "receipts" | "analytics";
 type Status = "new" | "contacted" | "qualified" | "confirmed" | "closed";
 type DateFilter = "all" | "7" | "30" | "followups";
 type SortBy = "newest" | "oldest" | "follow_up" | "status";
@@ -31,6 +32,7 @@ export default function AdminDashboard() {
   const [analyticsEvents, setAnalyticsEvents] = useState<AnalyticsEvent[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [receipts, setReceipts] = useState<Receipt[]>([]);
+  const [inboundEmails, setInboundEmails] = useState<InboundEmail[]>([]);
   const [dataError, setDataError] = useState("");
   const [notice, setNotice] = useState("");
   const [activeTab, setActiveTab] = useState<TabKey>("requests");
@@ -48,16 +50,17 @@ export default function AdminDashboard() {
     setRefreshing(true);
     setDataError("");
 
-    const [requestResult, guideResult, volunteerResult, analyticsResult, invoiceResult, receiptResult] = await Promise.all([
+    const [requestResult, guideResult, volunteerResult, analyticsResult, invoiceResult, receiptResult, inboundEmailResult] = await Promise.all([
       supabase.from("itinerary_requests").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("guide_leads").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("volunteer_applications").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("analytics_events").select("*").order("created_at", { ascending: false }).limit(300),
       supabase.from("invoices").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("receipts").select("*").order("created_at", { ascending: false }).limit(200),
+      supabase.from("inbound_emails").select("*").order("received_at", { ascending: false }).limit(200),
     ]);
 
-    const firstError = requestResult.error || guideResult.error || volunteerResult.error || invoiceResult.error || receiptResult.error;
+    const firstError = requestResult.error || guideResult.error || volunteerResult.error || invoiceResult.error || receiptResult.error || inboundEmailResult.error;
 
     if (firstError) {
       setDataError(firstError.message);
@@ -71,6 +74,7 @@ export default function AdminDashboard() {
     setAnalyticsEvents(analyticsResult.error ? [] : analyticsResult.data || []);
     setInvoices(invoiceResult.data || []);
     setReceipts(receiptResult.data || []);
+    setInboundEmails(inboundEmailResult.data || []);
     setDashboardTime(Date.now());
     setRefreshing(false);
   }, []);
@@ -120,6 +124,7 @@ export default function AdminDashboard() {
   );
   const visibleInvoices = useMemo(() => filterRows(invoices, query), [invoices, query]);
   const visibleReceipts = useMemo(() => filterRows(receipts, query), [receipts, query]);
+  const visibleInboundEmails = useMemo(() => filterRows(inboundEmails, query, "received_at"), [inboundEmails, query]);
   const operationalRows = useMemo(() => [...requests, ...volunteers, ...guideLeads], [guideLeads, requests, volunteers]);
 
   const metrics = useMemo(() => {
@@ -132,9 +137,10 @@ export default function AdminDashboard() {
       due: operationalRows.filter((item) => isFollowUpDue(item.follow_up_at, dashboardTime)).length,
       invoices: invoices.length,
       receipts: receipts.length,
+      unreadEmails: inboundEmails.filter((email) => !email.read_at).length,
       unpaid: invoices.filter((invoice) => !["paid", "cancelled"].includes(invoice.status)).length,
     };
-  }, [dashboardTime, invoices, operationalRows, receipts]);
+  }, [dashboardTime, inboundEmails, invoices, operationalRows, receipts]);
 
   async function updateStatus(kind: "requests" | "volunteers" | "guides", id: string, status: Status) {
     await updateRecord(kind, id, { status });
@@ -207,6 +213,22 @@ export default function AdminDashboard() {
 
     setInvoices((current) => [result.data, ...current]);
     setNotice("Invoice created.");
+  }
+
+  async function updateInboundEmailReadState(id: string, read: boolean) {
+    setNotice("");
+    setDataError("");
+
+    const readAt = read ? new Date().toISOString() : null;
+    const result = await supabase.from("inbound_emails").update({ read_at: readAt }).eq("id", id);
+
+    if (result.error) {
+      setDataError(result.error.message);
+      return;
+    }
+
+    setInboundEmails((current) => current.map((email) => email.id === id ? { ...email, read_at: readAt } : email));
+    setNotice(read ? "Email marked as read." : "Email marked as unread.");
   }
 
   async function updateInvoiceStatus(id: string, status: InvoiceStatus) {
@@ -286,6 +308,7 @@ export default function AdminDashboard() {
         activeTab === "guides" ? visibleGuideLeads :
           activeTab === "invoices" ? visibleInvoices :
             activeTab === "receipts" ? visibleReceipts :
+              activeTab === "inbox" ? visibleInboundEmails :
               analyticsEvents;
 
   if (loading) {
@@ -333,11 +356,12 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      <section className="mb-6 grid gap-4 md:grid-cols-3 xl:grid-cols-7">
+      <section className="mb-6 grid gap-4 md:grid-cols-4 xl:grid-cols-8">
         <MetricCard label="Total Records" value={metrics.total} />
         <MetricCard label="New Leads" value={metrics.new} />
         <MetricCard label="Last 7 Days" value={metrics.fresh} />
         <MetricCard label="Follow-Ups Due" value={metrics.due} urgent={metrics.due > 0} />
+        <MetricCard label="Unread Inbox" value={metrics.unreadEmails} urgent={metrics.unreadEmails > 0} />
         <MetricCard label="Invoices" value={metrics.invoices} />
         <MetricCard label="Receipts" value={metrics.receipts} />
         <MetricCard label="Unpaid Invoices" value={metrics.unpaid} urgent={metrics.unpaid > 0} />
@@ -372,10 +396,11 @@ export default function AdminDashboard() {
           <option value="status">Status</option>
         </select>
 
-        <div className="grid grid-cols-2 rounded-2xl border border-white/10 bg-black/40 p-1 md:grid-cols-6">
+        <div className="grid grid-cols-2 rounded-2xl border border-white/10 bg-black/40 p-1 md:grid-cols-7">
           <TabButton active={activeTab === "requests"} onClick={() => setActiveTab("requests")}>Requests</TabButton>
           <TabButton active={activeTab === "volunteers"} onClick={() => setActiveTab("volunteers")}>Volunteers</TabButton>
           <TabButton active={activeTab === "guides"} onClick={() => setActiveTab("guides")}>Guides</TabButton>
+          <TabButton active={activeTab === "inbox"} onClick={() => setActiveTab("inbox")}>Inbox</TabButton>
           <TabButton active={activeTab === "invoices"} onClick={() => setActiveTab("invoices")}>Invoices</TabButton>
           <TabButton active={activeTab === "receipts"} onClick={() => setActiveTab("receipts")}>Receipts</TabButton>
           <TabButton active={activeTab === "analytics"} onClick={() => setActiveTab("analytics")}>Analytics</TabButton>
@@ -420,6 +445,18 @@ export default function AdminDashboard() {
               now={dashboardTime}
               onStatusChange={(status) => updateStatus("guides", lead.id, status)}
               onSave={(values) => saveAdminWork("guides", lead.id, values)}
+            />
+          )}
+        </RecordGrid>
+      )}
+
+      {activeTab === "inbox" && (
+        <RecordGrid title="Inbox Emails" empty="No received emails match this view." rows={visibleInboundEmails}>
+          {(email) => (
+            <InboundEmailCard
+              key={email.id}
+              email={email}
+              onReadStateChange={(read) => updateInboundEmailReadState(email.id, read)}
             />
           )}
         </RecordGrid>
@@ -739,6 +776,48 @@ function ReceiptCard({ receipt, onPrint }: { receipt: Receipt; onPrint: () => vo
       </div>
       {receipt.notes && <MessageBlock label="Notes" value={receipt.notes} />}
       <button type="button" onClick={onPrint} className="admin-primary-button mt-5 text-sm">Print Receipt</button>
+    </article>
+  );
+}
+
+function InboundEmailCard({ email, onReadStateChange }: { email: InboundEmail; onReadStateChange: (read: boolean) => void }) {
+  const body = email.text_body || stripHtml(email.html_body || "") || "No message body was returned by Resend.";
+  const replyHref = `mailto:${email.from_email}?subject=${encodeURIComponent(`Re: ${email.subject || "Wild Spine Uganda"}`)}`;
+
+  return (
+    <article className={`rounded-3xl border p-6 ${email.read_at ? "border-white/10 bg-white/5" : "border-yellow-500/40 bg-yellow-500/10"}`}>
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <div className="flex flex-wrap items-center gap-3">
+            <h3 className="text-2xl font-black">{email.subject || "No subject"}</h3>
+            {!email.read_at && <span className="rounded-full bg-yellow-500 px-3 py-1 text-xs font-black text-black">Unread</span>}
+          </div>
+          <p className="mt-2 text-gray-400">From: {email.from_email}</p>
+          <p className="mt-1 text-sm text-gray-500">To: {email.to_emails.join(", ") || "Not provided"}</p>
+          <p className="mt-1 text-sm text-gray-500">Received {formatDate(email.received_at)}</p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <a href={replyHref} className="admin-primary-button text-sm">Reply</a>
+          <button type="button" onClick={() => onReadStateChange(!email.read_at)} className="admin-outline-button text-sm">
+            {email.read_at ? "Mark Unread" : "Mark Read"}
+          </button>
+        </div>
+      </div>
+
+      <MessageBlock label="Message" value={body} />
+
+      {(email.cc_emails.length > 0 || email.attachments?.length || email.raw_download_url) && (
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          {email.cc_emails.length > 0 && <Field label="CC" value={email.cc_emails.join(", ")} />}
+          {email.attachments?.length ? <Field label="Attachments" value={email.attachments.map((item) => item.filename || item.id).join(", ")} /> : null}
+          {email.raw_download_url && (
+            <a href={email.raw_download_url} className="rounded-2xl border border-white/10 bg-black/30 p-4 hover:border-yellow-500/40">
+              <p className="text-xs uppercase tracking-widest text-gray-500">Raw Email</p>
+              <p className="mt-2 font-bold text-yellow-500">Download original</p>
+            </a>
+          )}
+        </div>
+      )}
     </article>
   );
 }
@@ -1121,12 +1200,12 @@ function prepareRows<T extends { status: string; created_at: string; follow_up_a
     });
 }
 
-function filterRows<T extends { created_at: string }>(rows: T[], query: string) {
+function filterRows<T extends object>(rows: T[], query: string, dateKey: keyof T = "created_at" as keyof T) {
   const normalizedQuery = query.trim().toLowerCase();
 
   return rows
     .filter((row) => normalizedQuery.length === 0 || Object.values(row).some((value) => String(value || "").toLowerCase().includes(normalizedQuery)))
-    .toSorted((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    .toSorted((a, b) => new Date(String(b[dateKey] || "")).getTime() - new Date(String(a[dateKey] || "")).getTime());
 }
 
 function exportCsv(tab: TabKey, rows: Array<Record<string, unknown>>) {
@@ -1199,6 +1278,15 @@ function nextDocumentNumber(prefix: string, existingNumbers: string[]) {
 
 function labelStatus(status: string) {
   return status.charAt(0).toUpperCase() + status.slice(1);
+}
+
+function stripHtml(value: string) {
+  return value
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function requestReplyTemplate(request: ItineraryRequest) {

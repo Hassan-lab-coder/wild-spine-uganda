@@ -76,6 +76,26 @@ create table if not exists public.receipts (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.inbound_emails (
+  id uuid primary key default gen_random_uuid(),
+  resend_email_id text not null unique,
+  message_id text,
+  from_email text not null,
+  to_emails text[] not null default '{}',
+  cc_emails text[] not null default '{}',
+  bcc_emails text[] not null default '{}',
+  subject text,
+  text_body text,
+  html_body text,
+  headers jsonb,
+  attachments jsonb,
+  raw_download_url text,
+  raw_expires_at timestamptz,
+  received_at timestamptz not null default now(),
+  read_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
 alter table public.itinerary_requests add column if not exists admin_notes text;
 alter table public.itinerary_requests add column if not exists follow_up_at timestamptz;
 alter table public.itinerary_requests add column if not exists phone text;
@@ -120,6 +140,7 @@ alter table public.guide_leads enable row level security;
 alter table public.volunteer_applications enable row level security;
 alter table public.invoices enable row level security;
 alter table public.receipts enable row level security;
+alter table public.inbound_emails enable row level security;
 alter table public.admin_users enable row level security;
 alter table public.analytics_events enable row level security;
 
@@ -133,6 +154,7 @@ grant insert on public.volunteer_applications to anon, authenticated;
 grant select, update on public.volunteer_applications to authenticated;
 grant select, insert, update on public.invoices to authenticated;
 grant select, insert, update on public.receipts to authenticated;
+grant select, update on public.inbound_emails to authenticated;
 grant select on public.admin_users to authenticated;
 grant insert on public.analytics_events to anon, authenticated;
 grant select on public.analytics_events to authenticated;
@@ -256,6 +278,21 @@ create policy "Admins can update receipts"
   using (public.is_admin())
   with check (public.is_admin());
 
+drop policy if exists "Admins can read inbound emails" on public.inbound_emails;
+create policy "Admins can read inbound emails"
+  on public.inbound_emails
+  for select
+  to authenticated
+  using (public.is_admin());
+
+drop policy if exists "Admins can update inbound emails" on public.inbound_emails;
+create policy "Admins can update inbound emails"
+  on public.inbound_emails
+  for update
+  to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
+
 drop policy if exists "Users can read their own admin profile" on public.admin_users;
 create policy "Users can read their own admin profile"
   on public.admin_users
@@ -292,6 +329,9 @@ create index if not exists invoices_invoice_number_idx on public.invoices (invoi
 create index if not exists receipts_created_at_idx on public.receipts (created_at desc);
 create index if not exists receipts_receipt_number_idx on public.receipts (receipt_number);
 create index if not exists receipts_invoice_id_idx on public.receipts (invoice_id);
+create index if not exists inbound_emails_received_at_idx on public.inbound_emails (received_at desc);
+create index if not exists inbound_emails_read_at_idx on public.inbound_emails (read_at);
+create index if not exists inbound_emails_from_email_idx on public.inbound_emails (from_email);
 create index if not exists analytics_events_created_at_idx on public.analytics_events (created_at desc);
 
 alter table public.itinerary_requests

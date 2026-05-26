@@ -84,6 +84,60 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["receipts"]["Insert"]>;
         Relationships: [];
       };
+      inbound_emails: {
+        Row: {
+          id: string;
+          resend_email_id: string;
+          message_id: string | null;
+          from_email: string;
+          to_emails: string[];
+          cc_emails: string[];
+          bcc_emails: string[];
+          subject: string | null;
+          text_body: string | null;
+          html_body: string | null;
+          headers: Record<string, unknown> | null;
+          attachments: Array<{
+            id: string;
+            filename: string | null;
+            content_type: string | null;
+            content_disposition: string | null;
+            content_id: string | null;
+          }> | null;
+          raw_download_url: string | null;
+          raw_expires_at: string | null;
+          received_at: string;
+          read_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          resend_email_id: string;
+          message_id?: string | null;
+          from_email: string;
+          to_emails?: string[];
+          cc_emails?: string[];
+          bcc_emails?: string[];
+          subject?: string | null;
+          text_body?: string | null;
+          html_body?: string | null;
+          headers?: Record<string, unknown> | null;
+          attachments?: Array<{
+            id: string;
+            filename: string | null;
+            content_type: string | null;
+            content_disposition: string | null;
+            content_id: string | null;
+          }> | null;
+          raw_download_url?: string | null;
+          raw_expires_at?: string | null;
+          received_at?: string;
+          read_at?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["inbound_emails"]["Insert"]>;
+        Relationships: [];
+      };
       itinerary_requests: {
         Row: {
           id: string;
