@@ -58,6 +58,29 @@ const safariCards = [
   },
 ];
 
+const journeyMoments = [
+  {
+    title: "Forest approach",
+    img: "/images/forest.jpg",
+    caption: "Quiet Bwindi mornings, permit timing, and the slow approach to the trek.",
+  },
+  {
+    title: "Gorilla encounter",
+    img: "/images/gorilla.jpg",
+    caption: "The rare moment most travelers build the whole journey around.",
+  },
+  {
+    title: "Rwenzori trail",
+    img: "/images/hiking.jpg",
+    caption: "Wet valleys, alpine plants, and a pace that needs honest planning.",
+  },
+  {
+    title: "High mountain country",
+    img: "/images/rwenzori.jpg",
+    caption: "Expedition days where weather, gear, and recovery all matter.",
+  },
+];
+
 const travelerReviews = [
   {
     text: "Wild Spine handled the details we were nervous about: permits, route timing, lodge choices, and the long transfers. The trip felt personal, calm, and very well organized.",
@@ -494,6 +517,34 @@ function HomeContent() {
       The pace slows. And for a moment, you’re no longer a visitor —
       you’re part of the wilderness.
     </p>
+  </div>
+</section>
+
+<section className="px-6 pb-24 md:px-24 bg-black">
+  <div className="max-w-6xl mx-auto">
+    <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p className="section-kicker">Journey Moments</p>
+        <h3 className="text-3xl md:text-5xl font-black">More than a route on paper.</h3>
+      </div>
+      <p className="max-w-2xl text-sm leading-6 text-gray-400">
+        A Wild Spine itinerary moves through real places: forest roads, misty trailheads, mountain valleys, and recovery stops that make the trip feel grounded.
+      </p>
+    </div>
+    <div className="grid gap-4 md:grid-cols-4">
+      {journeyMoments.map((moment, index) => (
+        <figure key={moment.title} className={`group overflow-hidden rounded-3xl border border-white/10 bg-white/5 ${index === 1 ? "md:translate-y-8" : ""}`}>
+          <div className="relative h-72 overflow-hidden">
+            <img src={moment.img} alt={moment.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+            <figcaption className="absolute bottom-0 p-5">
+              <p className="font-black text-white">{moment.title}</p>
+            </figcaption>
+          </div>
+          <p className="p-5 text-sm leading-6 text-gray-400">{moment.caption}</p>
+        </figure>
+      ))}
+    </div>
   </div>
 </section>
 

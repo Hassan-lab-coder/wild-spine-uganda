@@ -82,6 +82,33 @@ export default function UgandaGorillaPermitHelpPage() {
         </div>
       </section>
 
+      <section className="px-6 py-20 md:px-24">
+        <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-[1.2fr_0.8fr]">
+          <figure className="relative min-h-[420px] overflow-hidden rounded-3xl border border-white/10">
+            <img src="/images/gorilla.jpg" alt="Gorilla trekking permit planning" className="absolute inset-0 h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+            <figcaption className="absolute bottom-0 max-w-xl p-8">
+              <p className="section-kicker">Permit First</p>
+              <h2 className="mt-3 text-4xl font-black">The right date changes everything.</h2>
+              <p className="mt-4 leading-7 text-gray-300">
+                Sector choice affects lodge location, road time, trek-day wakeup, and whether the rest of the itinerary feels smooth or strained.
+              </p>
+            </figcaption>
+          </figure>
+
+          <div className="grid gap-5">
+            <figure className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+              <img src="/images/forest.jpg" alt="Bwindi forest route planning" className="h-56 w-full object-cover" />
+              <figcaption className="p-5 text-sm leading-6 text-gray-400">Forest access, weather, and road timing shape the comfort of the trip.</figcaption>
+            </figure>
+            <figure className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+              <img src="/images/hiking.jpg" alt="Uganda extension planning" className="h-56 w-full object-cover" />
+              <figcaption className="p-5 text-sm leading-6 text-gray-400">Permit plans can connect naturally into hiking, safari, or lake extensions.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
       <section className="px-6 py-24 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>

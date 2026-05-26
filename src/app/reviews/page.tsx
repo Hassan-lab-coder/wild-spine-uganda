@@ -94,6 +94,27 @@ export default function ReviewsPage() {
         </div>
       </section>
 
+      <section className="px-6 py-20 md:px-24">
+        <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-3">
+          {[
+            ["Permit days", "/images/gorilla.jpg", "Travelers remember the trek, but trust is built in the planning before it."],
+            ["Trail days", "/images/hiking.jpg", "Mountain routes need clear pacing, guide support, and realistic expectations."],
+            ["Recovery days", "/images/rwenzori.jpg", "Good itineraries leave room for weather, rest, and the journey back down."],
+          ].map(([title, image, caption]) => (
+            <figure key={title} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+              <div className="relative h-80 overflow-hidden">
+                <img src={image} alt={title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <figcaption className="absolute bottom-0 p-6">
+                  <p className="text-2xl font-black">{title}</p>
+                </figcaption>
+              </div>
+              <p className="p-5 text-sm leading-6 text-gray-400">{caption}</p>
+            </figure>
+          ))}
+        </div>
+      </section>
+
       <section className="px-6 py-24 md:px-24">
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">

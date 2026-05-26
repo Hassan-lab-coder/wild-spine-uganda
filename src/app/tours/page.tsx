@@ -6,6 +6,7 @@ const tours = [
     desc: "Premium gorilla trekking through Bwindi with private guidance, permit support, and curated lodge planning.",
     link: "/tours/spine-explorer",
     bestFor: "Short private gorilla journeys",
+    image: "/images/gorilla.jpg",
   },
   {
     title: "The Summit Trail",
@@ -14,6 +15,7 @@ const tours = [
     desc: "The signature Wild Spine journey combining gorilla forests, Rwenzori valleys, alpine trails, and glacier country.",
     link: "/tours/summit-trail",
     bestFor: "Gorillas plus serious hiking",
+    image: "/images/hiking.jpg",
   },
   {
     title: "Margherita Expedition",
@@ -22,6 +24,7 @@ const tours = [
     desc: "Ultra-premium summit expedition to Uganda's highest peak with private logistics and serious expedition support.",
     link: "/tours/margherita-expedition",
     bestFor: "High-altitude expedition travelers",
+    image: "/images/rwenzori.jpg",
   },
 ];
 
@@ -45,15 +48,23 @@ export default function ToursPage() {
       <section className="px-6 pb-28 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
           {tours.map((tour, index) => (
-            <a key={tour.title} href={tour.link} className={`package-card group ${index === 1 ? "featured-card" : ""}`}>
-              <p className="mb-3 text-sm text-yellow-500">0{index + 1} / {tour.days}</p>
-              <h2 className="mb-4 text-3xl font-black transition group-hover:text-yellow-500">{tour.title}</h2>
-              <p className="mb-5 font-semibold text-white">{tour.price}</p>
-              <p className="mb-6 leading-7 text-gray-400">{tour.desc}</p>
-              <p className="mb-8 rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm font-bold text-gray-300">
-                Best for: {tour.bestFor}
-              </p>
-              <p className="font-black text-yellow-500">View Full Itinerary</p>
+            <a key={tour.title} href={tour.link} className={`group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition hover:-translate-y-1 hover:border-yellow-500/40 ${index === 1 ? "ring-1 ring-yellow-500/30" : ""}`}>
+              <div className="relative h-64 overflow-hidden">
+                <img src={tour.image} alt={tour.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                <p className="absolute left-5 top-5 rounded-full bg-black/60 px-4 py-2 text-sm font-black text-yellow-500">
+                  0{index + 1} / {tour.days}
+                </p>
+              </div>
+              <div className="p-7">
+                <h2 className="mb-4 text-3xl font-black transition group-hover:text-yellow-500">{tour.title}</h2>
+                <p className="mb-5 font-semibold text-white">{tour.price}</p>
+                <p className="mb-6 leading-7 text-gray-400">{tour.desc}</p>
+                <p className="mb-8 rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm font-bold text-gray-300">
+                  Best for: {tour.bestFor}
+                </p>
+                <p className="font-black text-yellow-500">View Full Itinerary</p>
+              </div>
             </a>
           ))}
         </div>
