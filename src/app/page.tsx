@@ -837,7 +837,8 @@ function HomeContent() {
             <p className="section-kicker">Contact Wild Spine</p>
             <h2 className="text-4xl md:text-6xl font-black mb-8">Begin with a conversation.</h2>
             <p className="text-gray-400 leading-8">
-              Kampala, Uganda<br />
+              Victoria Mall, Entebbe<br />
+              Kingdom Kampala, Kampala<br />
               Email: reservations@wildspineuganda.com<br />
               WhatsApp: +256 751 828 241
             </p>

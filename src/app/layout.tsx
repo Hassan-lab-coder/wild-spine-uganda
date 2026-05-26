@@ -59,11 +59,20 @@ export default function RootLayout({
               "Private Uganda journeys for gorilla trekking, Rwenzori hiking, luxury safaris, and permit planning.",
             telephone: "+256751828241",
             email: "reservations@wildspineuganda.com",
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Kampala",
-              addressCountry: "UG",
-            },
+            address: [
+              {
+                "@type": "PostalAddress",
+                streetAddress: "Victoria Mall",
+                addressLocality: "Entebbe",
+                addressCountry: "UG",
+              },
+              {
+                "@type": "PostalAddress",
+                streetAddress: "Kingdom Kampala",
+                addressLocality: "Kampala",
+                addressCountry: "UG",
+              },
+            ],
             makesOffer: [
               { "@type": "Offer", itemOffered: { "@type": "TouristTrip", name: "The Spine Explorer" } },
               { "@type": "Offer", itemOffered: { "@type": "TouristTrip", name: "The Summit Trail" } },

@@ -48,7 +48,10 @@ export default function PublicSiteFooter() {
         <div>
           <h4 className="mb-4 font-black">Contact</h4>
           <div className="grid gap-3 text-sm text-gray-400">
-            <p>Kampala, Uganda</p>
+            <div>
+              <p>Victoria Mall, Entebbe</p>
+              <p>Kingdom Kampala, Kampala</p>
+            </div>
             <a href="mailto:reservations@wildspineuganda.com" className="hover:text-yellow-500">reservations@wildspineuganda.com</a>
             <a href="https://wa.me/256751828241" className="hover:text-yellow-500">WhatsApp: +256 751 828 241</a>
             <div className="flex flex-wrap gap-3 pt-3">

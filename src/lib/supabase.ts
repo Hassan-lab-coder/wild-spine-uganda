@@ -10,6 +10,80 @@ export const isSupabaseConfigured = Boolean(
 export type Database = {
   public: {
     Tables: {
+      invoices: {
+        Row: {
+          id: string;
+          invoice_number: string;
+          client_name: string;
+          client_email: string | null;
+          client_phone: string | null;
+          trip_name: string | null;
+          issue_date: string;
+          due_date: string | null;
+          currency: string;
+          subtotal: number;
+          tax: number;
+          total: number;
+          status: string;
+          notes: string | null;
+          line_items: Array<{ description: string; quantity: number; unit_price: number; total: number }>;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          invoice_number: string;
+          client_name: string;
+          client_email?: string | null;
+          client_phone?: string | null;
+          trip_name?: string | null;
+          issue_date?: string;
+          due_date?: string | null;
+          currency?: string;
+          subtotal?: number;
+          tax?: number;
+          total?: number;
+          status?: string;
+          notes?: string | null;
+          line_items?: Array<{ description: string; quantity: number; unit_price: number; total: number }>;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["invoices"]["Insert"]>;
+        Relationships: [];
+      };
+      receipts: {
+        Row: {
+          id: string;
+          receipt_number: string;
+          invoice_id: string | null;
+          invoice_number: string | null;
+          client_name: string;
+          client_email: string | null;
+          payment_date: string;
+          currency: string;
+          amount: number;
+          payment_method: string;
+          reference: string | null;
+          notes: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          receipt_number: string;
+          invoice_id?: string | null;
+          invoice_number?: string | null;
+          client_name: string;
+          client_email?: string | null;
+          payment_date?: string;
+          currency?: string;
+          amount: number;
+          payment_method?: string;
+          reference?: string | null;
+          notes?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["receipts"]["Insert"]>;
+        Relationships: [];
+      };
       itinerary_requests: {
         Row: {
           id: string;
