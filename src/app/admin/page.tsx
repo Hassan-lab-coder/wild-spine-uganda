@@ -14,6 +14,8 @@ type Receipt = Database["public"]["Tables"]["receipts"]["Row"];
 type LineItem = Invoice["line_items"][number];
 type TabKey = "requests" | "volunteers" | "guides" | "invoices" | "receipts" | "analytics";
 type Status = "new" | "contacted" | "qualified" | "confirmed" | "closed";
+type DateFilter = "all" | "7" | "30" | "followups";
+type SortBy = "newest" | "oldest" | "follow_up" | "status";
 type InvoiceStatus = "draft" | "sent" | "paid" | "cancelled";
 
 const statuses: Status[] = ["new", "contacted", "qualified", "confirmed", "closed"];
@@ -35,6 +37,10 @@ export default function AdminDashboard() {
   const [invoiceDraft, setInvoiceDraft] = useState<InvoiceDraft | null>(null);
   const [invoiceDraftVersion, setInvoiceDraftVersion] = useState(0);
   const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
+  const [dateFilter, setDateFilter] = useState<DateFilter>("all");
+  const [sortBy, setSortBy] = useState<SortBy>("newest");
+  const [dashboardTime, setDashboardTime] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
@@ -65,6 +71,7 @@ export default function AdminDashboard() {
     setAnalyticsEvents(analyticsResult.error ? [] : analyticsResult.data || []);
     setInvoices(invoiceResult.data || []);
     setReceipts(receiptResult.data || []);
+    setDashboardTime(Date.now());
     setRefreshing(false);
   }, []);
 
@@ -99,41 +106,72 @@ export default function AdminDashboard() {
     getSession();
   }, [loadDashboardData, router]);
 
-  const visibleRequests = useMemo(() => filterRows(requests, query), [query, requests]);
-  const visibleVolunteers = useMemo(() => filterRows(volunteers, query), [query, volunteers]);
-  const visibleGuideLeads = useMemo(() => filterRows(guideLeads, query), [guideLeads, query]);
+  const visibleRequests = useMemo(
+    () => prepareRows(requests, query, statusFilter, dateFilter, sortBy, dashboardTime),
+    [dashboardTime, dateFilter, query, requests, sortBy, statusFilter]
+  );
+  const visibleVolunteers = useMemo(
+    () => prepareRows(volunteers, query, statusFilter, dateFilter, sortBy, dashboardTime),
+    [dashboardTime, dateFilter, query, sortBy, statusFilter, volunteers]
+  );
+  const visibleGuideLeads = useMemo(
+    () => prepareRows(guideLeads, query, statusFilter, dateFilter, sortBy, dashboardTime),
+    [dashboardTime, dateFilter, guideLeads, query, sortBy, statusFilter]
+  );
   const visibleInvoices = useMemo(() => filterRows(invoices, query), [invoices, query]);
   const visibleReceipts = useMemo(() => filterRows(receipts, query), [receipts, query]);
   const operationalRows = useMemo(() => [...requests, ...volunteers, ...guideLeads], [guideLeads, requests, volunteers]);
 
-  const metrics = useMemo(() => ({
-    total: operationalRows.length,
-    new: operationalRows.filter((item) => item.status === "new").length,
-    invoices: invoices.length,
-    receipts: receipts.length,
-    unpaid: invoices.filter((invoice) => !["paid", "cancelled"].includes(invoice.status)).length,
-  }), [invoices, operationalRows, receipts]);
+  const metrics = useMemo(() => {
+    const sevenDaysAgo = dashboardTime - 7 * 24 * 60 * 60 * 1000;
 
-  async function updateLeadStatus(kind: "requests" | "volunteers" | "guides", id: string, status: Status) {
+    return {
+      total: operationalRows.length,
+      new: operationalRows.filter((item) => item.status === "new").length,
+      fresh: operationalRows.filter((item) => new Date(item.created_at).getTime() >= sevenDaysAgo).length,
+      due: operationalRows.filter((item) => isFollowUpDue(item.follow_up_at, dashboardTime)).length,
+      invoices: invoices.length,
+      receipts: receipts.length,
+      unpaid: invoices.filter((invoice) => !["paid", "cancelled"].includes(invoice.status)).length,
+    };
+  }, [dashboardTime, invoices, operationalRows, receipts]);
+
+  async function updateStatus(kind: "requests" | "volunteers" | "guides", id: string, status: Status) {
+    await updateRecord(kind, id, { status });
+  }
+
+  async function saveAdminWork(
+    kind: "requests" | "volunteers" | "guides",
+    id: string,
+    values: { admin_notes: string | null; follow_up_at: string | null }
+  ) {
+    await updateRecord(kind, id, values);
+  }
+
+  async function updateRecord(
+    kind: "requests" | "volunteers" | "guides",
+    id: string,
+    values: { status?: Status; admin_notes?: string | null; follow_up_at?: string | null }
+  ) {
     setNotice("");
     setDataError("");
 
     const result =
       kind === "requests"
-        ? await supabase.from("itinerary_requests").update({ status }).eq("id", id)
+        ? await supabase.from("itinerary_requests").update(values).eq("id", id)
         : kind === "volunteers"
-          ? await supabase.from("volunteer_applications").update({ status }).eq("id", id)
-          : await supabase.from("guide_leads").update({ status }).eq("id", id);
+          ? await supabase.from("volunteer_applications").update(values).eq("id", id)
+          : await supabase.from("guide_leads").update(values).eq("id", id);
 
     if (result.error) {
       setDataError(result.error.message);
       return;
     }
 
-    if (kind === "requests") setRequests((current) => current.map((item) => item.id === id ? { ...item, status } : item));
-    if (kind === "volunteers") setVolunteers((current) => current.map((item) => item.id === id ? { ...item, status } : item));
-    if (kind === "guides") setGuideLeads((current) => current.map((item) => item.id === id ? { ...item, status } : item));
-    setNotice("Status saved.");
+    if (kind === "requests") setRequests((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
+    if (kind === "volunteers") setVolunteers((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
+    if (kind === "guides") setGuideLeads((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
+    setNotice("Record saved.");
   }
 
   async function createInvoice(values: InvoiceFormValues) {
@@ -295,21 +333,45 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      <section className="mb-6 grid gap-4 md:grid-cols-5">
-        <MetricCard label="Total Leads" value={metrics.total} />
+      <section className="mb-6 grid gap-4 md:grid-cols-3 xl:grid-cols-7">
+        <MetricCard label="Total Records" value={metrics.total} />
         <MetricCard label="New Leads" value={metrics.new} />
+        <MetricCard label="Last 7 Days" value={metrics.fresh} />
+        <MetricCard label="Follow-Ups Due" value={metrics.due} urgent={metrics.due > 0} />
         <MetricCard label="Invoices" value={metrics.invoices} />
         <MetricCard label="Receipts" value={metrics.receipts} />
         <MetricCard label="Unpaid Invoices" value={metrics.unpaid} urgent={metrics.unpaid > 0} />
       </section>
 
-      <section className="mb-8 grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 xl:grid-cols-[1fr_auto]">
+      <PipelineSummary rows={operationalRows} />
+
+      <section className="mb-8 grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 xl:grid-cols-[1fr_auto_auto_auto_auto]">
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           className="form-input"
-          placeholder="Search records..."
+          placeholder="Search name, email, country, route, program, notes, message..."
         />
+
+        <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "all" | Status)} className="form-input xl:w-48">
+          <option value="all">All statuses</option>
+          {statuses.map((status) => <option key={status} value={status}>{labelStatus(status)}</option>)}
+        </select>
+
+        <select value={dateFilter} onChange={(event) => setDateFilter(event.target.value as DateFilter)} className="form-input xl:w-48">
+          <option value="all">All dates</option>
+          <option value="7">Last 7 days</option>
+          <option value="30">Last 30 days</option>
+          <option value="followups">Follow-ups due</option>
+        </select>
+
+        <select value={sortBy} onChange={(event) => setSortBy(event.target.value as SortBy)} className="form-input xl:w-48">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="follow_up">Follow-up date</option>
+          <option value="status">Status</option>
+        </select>
+
         <div className="grid grid-cols-2 rounded-2xl border border-white/10 bg-black/40 p-1 md:grid-cols-6">
           <TabButton active={activeTab === "requests"} onClick={() => setActiveTab("requests")}>Requests</TabButton>
           <TabButton active={activeTab === "volunteers"} onClick={() => setActiveTab("volunteers")}>Volunteers</TabButton>
@@ -322,28 +384,44 @@ export default function AdminDashboard() {
 
       {activeTab === "requests" && (
         <RecordGrid title="Itinerary Requests" empty="No itinerary requests match this view." rows={visibleRequests}>
-          {(request) => <LeadCard key={request.id} title={request.name} subtitle={request.email} status={request.status} createdAt={request.created_at} onStatusChange={(status) => updateLeadStatus("requests", request.id, status)} fields={[
-            ["Route", request.route || "Not selected"],
-            ["Travel Month", request.travel_month || "Not provided"],
-            ["Country", request.country || "Not provided"],
-            ["Phone / WhatsApp", request.phone || "Not provided"],
-          ]} message={request.message} actionLabel="Generate Invoice" onAction={() => startInvoiceFromRequest(request)} />}
+          {(request) => (
+            <ItineraryCard
+              key={request.id}
+              request={request}
+              now={dashboardTime}
+              onStatusChange={(status) => updateStatus("requests", request.id, status)}
+              onSave={(values) => saveAdminWork("requests", request.id, values)}
+              onInvoice={() => startInvoiceFromRequest(request)}
+            />
+          )}
         </RecordGrid>
       )}
 
       {activeTab === "volunteers" && (
         <RecordGrid title="Volunteer Applications" empty="No volunteer applications match this view." rows={visibleVolunteers}>
-          {(application) => <LeadCard key={application.id} title={application.name} subtitle={application.email} status={application.status} createdAt={application.created_at} onStatusChange={(status) => updateLeadStatus("volunteers", application.id, status)} fields={[
-            ["Program", application.program || "Not selected"],
-            ["Country", application.country || "Not provided"],
-            ["Phone / WhatsApp", application.phone || "Not provided"],
-          ]} message={application.motivation} />}
+          {(application) => (
+            <VolunteerCard
+              key={application.id}
+              application={application}
+              now={dashboardTime}
+              onStatusChange={(status) => updateStatus("volunteers", application.id, status)}
+              onSave={(values) => saveAdminWork("volunteers", application.id, values)}
+            />
+          )}
         </RecordGrid>
       )}
 
       {activeTab === "guides" && (
         <RecordGrid title="Guide Leads" empty="No guide leads match this view." rows={visibleGuideLeads}>
-          {(lead) => <LeadCard key={lead.id} title={lead.email} subtitle={lead.source} status={lead.status} createdAt={lead.created_at} onStatusChange={(status) => updateLeadStatus("guides", lead.id, status)} fields={[]} />}
+          {(lead) => (
+            <GuideLeadCard
+              key={lead.id}
+              lead={lead}
+              now={dashboardTime}
+              onStatusChange={(status) => updateStatus("guides", lead.id, status)}
+              onSave={(values) => saveAdminWork("guides", lead.id, values)}
+            />
+          )}
         </RecordGrid>
       )}
 
@@ -665,41 +743,249 @@ function ReceiptCard({ receipt, onPrint }: { receipt: Receipt; onPrint: () => vo
   );
 }
 
-function LeadCard({ title, subtitle, status, createdAt, fields, message, onStatusChange, actionLabel, onAction }: {
+function PipelineSummary({ rows }: { rows: Array<{ status: string }> }) {
+  return (
+    <section className="mb-8 grid gap-3 md:grid-cols-5">
+      {statuses.map((status) => {
+        const count = rows.filter((item) => item.status === status).length;
+        return (
+          <div key={status} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="text-xs uppercase tracking-widest text-gray-500">{labelStatus(status)}</p>
+            <div className="mt-3 h-2 rounded-full bg-white/10">
+              <div className="h-2 rounded-full bg-yellow-500" style={{ width: `${rows.length ? (count / rows.length) * 100 : 0}%` }} />
+            </div>
+            <p className="mt-3 text-2xl font-black">{count}</p>
+          </div>
+        );
+      })}
+    </section>
+  );
+}
+
+function ItineraryCard({ request, now, onStatusChange, onSave, onInvoice }: {
+  request: ItineraryRequest;
+  now: number;
+  onStatusChange: (status: Status) => void;
+  onSave: (values: { admin_notes: string | null; follow_up_at: string | null }) => void;
+  onInvoice: () => void;
+}) {
+  return (
+    <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <RecordHeader title={request.name} subtitle={request.email} status={request.status} createdAt={request.created_at} followUpAt={request.follow_up_at} now={now} onStatusChange={onStatusChange} />
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <Field label="Route" value={request.route || "Not selected"} />
+        <Field label="Travel Month" value={request.travel_month || "Not provided"} />
+        <Field label="Country" value={request.country || "Not provided"} />
+        <Field label="Phone / WhatsApp" value={request.phone || "Not provided"} />
+      </div>
+      <MessageBlock label="Message" value={request.message || "No message provided."} />
+      <AdminWorkPanel
+        key={`${request.admin_notes || ""}-${request.follow_up_at || ""}`}
+        notes={request.admin_notes}
+        followUpAt={request.follow_up_at}
+        onSave={onSave}
+      />
+      <QuickActions email={request.email} phone={request.phone} subject={`Wild Spine itinerary request: ${request.route || "Uganda journey"}`} template={requestReplyTemplate(request)} />
+      <button type="button" onClick={onInvoice} className="admin-primary-button mt-5 text-sm">Generate Invoice</button>
+    </article>
+  );
+}
+
+function VolunteerCard({ application, now, onStatusChange, onSave }: {
+  application: VolunteerApplication;
+  now: number;
+  onStatusChange: (status: Status) => void;
+  onSave: (values: { admin_notes: string | null; follow_up_at: string | null }) => void;
+}) {
+  return (
+    <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <RecordHeader title={application.name} subtitle={application.email} status={application.status} createdAt={application.created_at} followUpAt={application.follow_up_at} now={now} onStatusChange={onStatusChange} />
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <Field label="Program" value={application.program || "Not selected"} />
+        <Field label="Country" value={application.country || "Not provided"} />
+        <Field label="Phone / WhatsApp" value={application.phone || "Not provided"} />
+      </div>
+      <MessageBlock label="Motivation" value={application.motivation || "No motivation provided."} />
+      <AdminWorkPanel
+        key={`${application.admin_notes || ""}-${application.follow_up_at || ""}`}
+        notes={application.admin_notes}
+        followUpAt={application.follow_up_at}
+        onSave={onSave}
+      />
+      <QuickActions email={application.email} phone={application.phone} subject={`Wild Spine volunteer application: ${application.program || "Program"}`} template={volunteerReplyTemplate(application)} />
+    </article>
+  );
+}
+
+function GuideLeadCard({ lead, now, onStatusChange, onSave }: {
+  lead: GuideLead;
+  now: number;
+  onStatusChange: (status: Status) => void;
+  onSave: (values: { admin_notes: string | null; follow_up_at: string | null }) => void;
+}) {
+  return (
+    <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <RecordHeader title={lead.email} subtitle={lead.source} status={lead.status} createdAt={lead.created_at} followUpAt={lead.follow_up_at} now={now} onStatusChange={onStatusChange} />
+      <AdminWorkPanel
+        key={`${lead.admin_notes || ""}-${lead.follow_up_at || ""}`}
+        notes={lead.admin_notes}
+        followUpAt={lead.follow_up_at}
+        onSave={onSave}
+      />
+      <QuickActions email={lead.email} phone={null} subject="Wild Spine Uganda travel guide" template={guideReplyTemplate()} />
+    </article>
+  );
+}
+
+function RecordHeader({ title, subtitle, status, createdAt, followUpAt, now, onStatusChange }: {
   title: string;
   subtitle: string;
   status: string;
   createdAt: string;
-  fields: Array<[string, string]>;
-  message?: string | null;
+  followUpAt: string | null;
+  now: number;
   onStatusChange: (status: Status) => void;
-  actionLabel?: string;
-  onAction?: () => void;
 }) {
+  const due = isFollowUpDue(followUpAt, now);
+
   return (
-    <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-        <div>
+    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+      <div>
+        <div className="flex flex-wrap items-center gap-3">
           <h3 className="text-2xl font-black">{title}</h3>
-          <p className="text-gray-400">{subtitle}</p>
-          <p className="mt-1 text-sm text-gray-500">{formatDate(createdAt)}</p>
+          {due && <span className="rounded-full bg-red-500/20 px-3 py-1 text-xs font-black text-red-200">Follow-up due</span>}
         </div>
-        <select value={status} onChange={(event) => onStatusChange(event.target.value as Status)} className="form-input md:w-44">
-          {statuses.map((item) => <option key={item} value={item}>{labelStatus(item)}</option>)}
-        </select>
+        <p className="text-gray-400">{subtitle}</p>
+        <p className="mt-1 text-sm text-gray-500">{formatDate(createdAt)}</p>
+        {followUpAt && <p className="mt-1 text-sm text-yellow-300">Follow up {formatDate(followUpAt)}</p>}
       </div>
-      {fields.length > 0 && (
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          {fields.map(([label, value]) => <Field key={label} label={label} value={value} />)}
+      <select value={status} onChange={(event) => onStatusChange(event.target.value as Status)} className="form-input md:w-44">
+        {statuses.map((item) => <option key={item} value={item}>{labelStatus(item)}</option>)}
+      </select>
+    </div>
+  );
+}
+
+function AdminWorkPanel({ notes, followUpAt, onSave }: {
+  notes: string | null;
+  followUpAt: string | null;
+  onSave: (values: { admin_notes: string | null; follow_up_at: string | null }) => void;
+}) {
+  const [draftNotes, setDraftNotes] = useState(notes || "");
+  const [draftFollowUp, setDraftFollowUp] = useState(toDatetimeLocal(followUpAt));
+
+  return (
+    <div className="mt-5 rounded-2xl border border-white/10 bg-black/30 p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p className="text-xs uppercase tracking-widest text-gray-500">Admin Notes & Follow-Up</p>
+        <button
+          type="button"
+          onClick={() => onSave({ admin_notes: draftNotes.trim() || null, follow_up_at: draftFollowUp ? new Date(draftFollowUp).toISOString() : null })}
+          className="rounded-full bg-white/10 px-4 py-2 text-xs font-black transition hover:bg-yellow-500 hover:text-black"
+        >
+          Save
+        </button>
+      </div>
+      <div className="grid gap-3 md:grid-cols-[1fr_210px]">
+        <textarea className="form-input min-h-24" value={draftNotes} onChange={(event) => setDraftNotes(event.target.value)} placeholder="Add internal notes, next step, quote status..." />
+        <input className="form-input" type="datetime-local" value={draftFollowUp} onChange={(event) => setDraftFollowUp(event.target.value)} />
+      </div>
+    </div>
+  );
+}
+
+function QuickActions({ email, phone, subject, template }: { email: string; phone: string | null; subject: string; template: string }) {
+  const mailTo = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(template)}`;
+  const whatsappHref = phone ? `https://wa.me/${phone.replace(/\D/g, "")}` : "";
+  const [showComposer, setShowComposer] = useState(false);
+  const [draftSubject, setDraftSubject] = useState(subject);
+  const [draftMessage, setDraftMessage] = useState(template);
+  const [sending, setSending] = useState(false);
+  const [sendResult, setSendResult] = useState("");
+  const [sendError, setSendError] = useState("");
+
+  async function sendEmail() {
+    setSending(true);
+    setSendResult("");
+    setSendError("");
+
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+
+    if (!token) {
+      setSending(false);
+      setSendError("Your admin session expired. Sign in again before sending email.");
+      return;
+    }
+
+    const response = await fetch("/api/send-lead-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        to: email,
+        subject: draftSubject,
+        message: draftMessage,
+      }),
+    });
+
+    const result = (await response.json()) as { sent?: boolean; reason?: string };
+    setSending(false);
+
+    if (!response.ok || !result.sent) {
+      setSendError(result.reason || "Email could not be sent.");
+      return;
+    }
+
+    setSendResult(`Email sent from reservations@wildspineuganda.com to ${email}.`);
+  }
+
+  return (
+    <div className="mt-5">
+      <div className="flex flex-wrap gap-3">
+        <button type="button" onClick={() => setShowComposer((open) => !open)} className="admin-primary-button text-sm">
+          {showComposer ? "Close Email" : "Send Email"}
+        </button>
+        {whatsappHref && (
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="admin-primary-button text-sm">
+            WhatsApp
+          </a>
+        )}
+        <a href={mailTo} className="admin-outline-button text-sm">Open Webmail</a>
+        <button type="button" onClick={() => navigator.clipboard.writeText(email)} className="admin-outline-button text-sm">Copy Email</button>
+        {phone && <button type="button" onClick={() => navigator.clipboard.writeText(phone)} className="admin-outline-button text-sm">Copy Phone</button>}
+        <button type="button" onClick={() => navigator.clipboard.writeText(draftMessage)} className="admin-outline-button text-sm">Copy Reply</button>
+      </div>
+
+      {showComposer && (
+        <div className="mt-4 rounded-3xl border border-white/10 bg-black/35 p-5">
+          <div className="mb-4 grid gap-1 text-sm text-gray-400">
+            <p>From: reservations@wildspineuganda.com</p>
+            <p>To: {email}</p>
+          </div>
+          <label className="mb-3 grid gap-2 text-sm font-bold text-gray-300">
+            Subject
+            <input className="form-input" value={draftSubject} onChange={(event) => setDraftSubject(event.target.value)} />
+          </label>
+          <label className="grid gap-2 text-sm font-bold text-gray-300">
+            Message
+            <textarea className="form-input min-h-52" value={draftMessage} onChange={(event) => setDraftMessage(event.target.value)} />
+          </label>
+          {sendError && <p className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{sendError}</p>}
+          {sendResult && <p className="mt-4 rounded-xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm text-green-200">{sendResult}</p>}
+          <button
+            type="button"
+            onClick={sendEmail}
+            disabled={sending || !draftSubject.trim() || !draftMessage.trim()}
+            className="admin-primary-button mt-4 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {sending ? "Sending..." : "Send From Reservations"}
+          </button>
         </div>
       )}
-      {message && <MessageBlock label="Message" value={message} />}
-      {onAction && (
-        <button type="button" onClick={onAction} className="admin-primary-button mt-5 text-sm">
-          {actionLabel || "Create"}
-        </button>
-      )}
-    </article>
+    </div>
   );
 }
 
@@ -803,6 +1089,38 @@ function MessageBlock({ label, value }: { label: string; value: string }) {
   );
 }
 
+function prepareRows<T extends { status: string; created_at: string; follow_up_at: string | null }>(
+  rows: T[],
+  query: string,
+  statusFilter: "all" | Status,
+  dateFilter: DateFilter,
+  sortBy: SortBy,
+  now: number
+) {
+  const normalizedQuery = query.trim().toLowerCase();
+  const cutoff = dateFilter === "7" ? now - 7 * 24 * 60 * 60 * 1000 : now - 30 * 24 * 60 * 60 * 1000;
+
+  return rows
+    .filter((row) => {
+      const createdAt = new Date(row.created_at).getTime();
+      const matchesStatus = statusFilter === "all" || row.status === statusFilter;
+      const matchesDate =
+        dateFilter === "all" ||
+        (dateFilter === "followups" ? isFollowUpDue(row.follow_up_at, now) : createdAt >= cutoff);
+      const matchesQuery =
+        normalizedQuery.length === 0 ||
+        Object.values(row).some((value) => String(value || "").toLowerCase().includes(normalizedQuery));
+
+      return matchesStatus && matchesDate && matchesQuery;
+    })
+    .toSorted((a, b) => {
+      if (sortBy === "oldest") return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      if (sortBy === "status") return statuses.indexOf(a.status as Status) - statuses.indexOf(b.status as Status);
+      if (sortBy === "follow_up") return nullableTime(a.follow_up_at) - nullableTime(b.follow_up_at);
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
+}
+
 function filterRows<T extends { created_at: string }>(rows: T[], query: string) {
   const normalizedQuery = query.trim().toLowerCase();
 
@@ -832,6 +1150,21 @@ function countBy<T>(items: T[], getKey: (item: T) => string) {
   const counts = new Map<string, number>();
   items.forEach((item) => counts.set(getKey(item), (counts.get(getKey(item)) || 0) + 1));
   return [...counts.entries()].toSorted((a, b) => b[1] - a[1]);
+}
+
+function nullableTime(value: string | null) {
+  return value ? new Date(value).getTime() : Number.MAX_SAFE_INTEGER;
+}
+
+function isFollowUpDue(value: string | null, now: number) {
+  return Boolean(value && new Date(value).getTime() <= now);
+}
+
+function toDatetimeLocal(value: string | null) {
+  if (!value) return "";
+  const date = new Date(value);
+  const offsetMs = date.getTimezoneOffset() * 60 * 1000;
+  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
 }
 
 function formatDate(value: string) {
@@ -866,6 +1199,44 @@ function nextDocumentNumber(prefix: string, existingNumbers: string[]) {
 
 function labelStatus(status: string) {
   return status.charAt(0).toUpperCase() + status.slice(1);
+}
+
+function requestReplyTemplate(request: ItineraryRequest) {
+  return `Hi ${request.name},
+
+Thank you for reaching out to Wild Spine Uganda about ${request.route || "your Uganda journey"}.
+
+We received your preferred travel timing (${request.travel_month || "dates to confirm"}) and will help you shape the best route, permits, and logistics.
+
+A few quick questions:
+- How many travelers will join?
+- What comfort level do you prefer?
+- Are your dates flexible?
+
+Warmly,
+Wild Spine Uganda`;
+}
+
+function volunteerReplyTemplate(application: VolunteerApplication) {
+  return `Hi ${application.name},
+
+Thank you for applying for ${application.program || "a Wild Spine volunteer program"}.
+
+We received your application and would love to understand your ideal timing, skills, and whether you want to add a gorilla or Rwenzori experience after volunteering.
+
+Warmly,
+Wild Spine Uganda`;
+}
+
+function guideReplyTemplate() {
+  return `Hi,
+
+Thank you for downloading the Wild Spine Uganda guide.
+
+If you would like help planning gorilla trekking, Rwenzori hiking, permits, or a private itinerary, reply with your travel month and number of travelers.
+
+Warmly,
+Wild Spine Uganda`;
 }
 
 function printInvoice(invoice: Invoice) {
