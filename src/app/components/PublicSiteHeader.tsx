@@ -21,8 +21,10 @@ export default function PublicSiteHeader() {
 
         <nav className="hidden items-center gap-7 text-xs font-bold uppercase tracking-widest text-gray-300 md:flex">
           <a href="/tours" className="hover:text-yellow-500">Tours</a>
+          <a href="/uganda-gorilla-permit-help" className="hover:text-yellow-500">Permits</a>
           <a href="/guide" className="hover:text-yellow-500">Guide</a>
           <a href="/volunteer" className="hover:text-yellow-500">Volunteer</a>
+          <a href="/reviews" className="hover:text-yellow-500">Reviews</a>
           <a href="/about" className="hover:text-yellow-500">About</a>
         </nav>
 

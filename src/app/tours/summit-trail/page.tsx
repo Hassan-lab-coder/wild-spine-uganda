@@ -94,8 +94,10 @@ export default function SummitTrailPage() {
       <TourConversionSections
         tourName="The Summit Trail"
         proof="This signature route joins two complex Uganda experiences: gorilla permits and Rwenzori trail logistics. We coordinate pacing, transfer timing, lodge comfort, and expedition preparation as one coherent journey."
-        inclusions={["Gorilla permit planning", "Rwenzori route guidance", "Private transfer coordination", "Pre-expedition briefing"]}
-        exclusions={["International flights", "Travel insurance", "Personal mountain gear", "Optional luxury upgrades"]}
+        inclusions={["Gorilla permit planning", "Rwenzori route guidance", "Private transfer coordination", "Pre-expedition briefing", "Guide and porter coordination guidance", "Recovery and departure planning"]}
+        exclusions={["International flights", "Uganda visa fees", "Travel insurance", "Personal mountain gear", "Tips and gratuities", "Optional luxury upgrades"]}
+        lodgeExamples={["Before trek: western Uganda lodges near Bwindi or Queen Elizabeth routing", "Mountain section: route-appropriate huts or expedition accommodation", "After trek: recovery lodge options around Kasese, Fort Portal, or Entebbe depending on routing"]}
+        priceNotes={["Rates shift with gorilla permit sector, mountain route length, lodge level, and group size.", "Mountain weather and trail conditions can require route adjustments.", "A final quote confirms permits, transfers, accommodation class, and support level in writing."]}
         faqs={[
           ["Who is this route for?", "Travelers who want both rare wildlife and a serious mountain experience in one private Uganda journey."],
           ["Do I need mountain experience?", "Good hiking fitness is important. We help you choose the right route based on ability and comfort."],

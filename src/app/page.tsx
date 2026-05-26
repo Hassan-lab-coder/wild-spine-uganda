@@ -163,6 +163,17 @@ function HomeContent() {
     const form = new FormData(e.currentTarget);
     const route = String(form.get("route") || "");
     const leadSource = searchParams.get("source") || "homepage";
+    const tripDetails = [
+      ["Group size", String(form.get("group_size") || "").trim()],
+      ["Budget range", String(form.get("budget_range") || "").trim()],
+      ["Comfort level", String(form.get("comfort_level") || "").trim()],
+      ["Travel pace", String(form.get("pace") || "").trim()],
+      ["Must-see experiences", String(form.get("experiences") || "").trim()],
+      ["Message", String(form.get("message") || "").trim()],
+    ]
+      .filter(([, value]) => value)
+      .map(([label, value]) => `${label}: ${value}`)
+      .join("\n");
     const payload = {
       name: String(form.get("name") || "").trim(),
       email: String(form.get("email") || "").trim(),
@@ -170,7 +181,7 @@ function HomeContent() {
       country: String(form.get("country") || "").trim() || null,
       travel_month: String(form.get("travel_month") || "").trim() || null,
       route: route === "Choose preferred route" ? null : route,
-      message: String(form.get("message") || "").trim() || null,
+      message: tripDetails || null,
       lead_source: leadSource,
     };
 
@@ -799,6 +810,7 @@ function HomeContent() {
                 <input name="phone" className="form-input" placeholder="WhatsApp / phone" />
                 <input name="country" className="form-input" placeholder="Country" />
                 <input name="travel_month" className="form-input" placeholder="Travel month" />
+                <input name="group_size" className="form-input" placeholder="Travelers" />
 
                 <label className="grid gap-2 sm:col-span-2">
                   <span className="text-sm font-bold text-gray-300">Preferred route</span>
@@ -807,8 +819,36 @@ function HomeContent() {
                   <option>The Spine Explorer</option>
                   <option>The Summit Trail</option>
                   <option>Margherita Expedition</option>
+                  <option>Custom Uganda Safari</option>
                 </select>
                 </label>
+
+                <select name="comfort_level" className="form-input">
+                  <option value="">Comfort level</option>
+                  <option>Comfort</option>
+                  <option>Premium</option>
+                  <option>Luxury</option>
+                  <option>Ultra-luxury / expedition support</option>
+                </select>
+
+                <select name="budget_range" className="form-input">
+                  <option value="">Budget range per person</option>
+                  <option>Under $1,500</option>
+                  <option>$1,500 - $3,000</option>
+                  <option>$3,000 - $6,000</option>
+                  <option>$6,000+</option>
+                  <option>Not sure yet</option>
+                </select>
+
+                <select name="pace" className="form-input">
+                  <option value="">Travel pace</option>
+                  <option>Relaxed</option>
+                  <option>Balanced</option>
+                  <option>Active</option>
+                  <option>Serious expedition</option>
+                </select>
+
+                <input name="experiences" className="form-input" placeholder="Must-see: gorillas, chimps, Rwenzori..." />
 
                 <textarea
                   name="message"

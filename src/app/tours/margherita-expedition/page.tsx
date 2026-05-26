@@ -94,8 +94,10 @@ export default function MargheritaExpeditionPage() {
       <TourConversionSections
         tourName="Margherita Expedition"
         proof="Margherita Peak requires serious preparation, clear logistics, and honest guidance about altitude, weather, gear, and summit conditions. This route is planned carefully before any commitment is made."
-        inclusions={["Summit logistics planning", "Guide and porter coordination", "Gear review support", "Private transfers and recovery planning"]}
-        exclusions={["International flights", "Travel insurance", "Technical personal gear", "Emergency evacuation cover"]}
+        inclusions={["Summit logistics planning", "Guide and porter coordination", "Gear review support", "Private transfers and recovery planning", "Pre-climb suitability discussion", "Contingency planning guidance"]}
+        exclusions={["International flights", "Uganda visa fees", "Travel insurance", "Technical personal gear", "Emergency evacuation cover", "Tips and gratuities"]}
+        lodgeExamples={["Pre-expedition: premium Entebbe or western Uganda briefing stay", "Mountain section: route-appropriate expedition huts and camps", "Post-expedition: recovery lodge or city hotel based on onward travel"]}
+        priceNotes={["Summit pricing depends on route length, guide team, porter needs, gear support, and recovery plan.", "Emergency evacuation and travel insurance should be arranged before travel.", "Weather, altitude, and trail conditions can change summit timing."]}
         faqs={[
           ["Is Margherita Peak technical?", "It can involve glacier conditions, altitude, and demanding terrain. We review suitability before confirming."],
           ["How early should I plan?", "Earlier is better because guides, gear, weather windows, and comfort logistics need careful coordination."],

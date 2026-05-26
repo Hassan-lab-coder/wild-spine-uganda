@@ -32,6 +32,7 @@ export default function PublicSiteFooter() {
             <a href="/tours/summit-trail" className="hover:text-yellow-500">The Summit Trail</a>
             <a href="/tours/margherita-expedition" className="hover:text-yellow-500">Margherita Expedition</a>
             <a href="/uganda-gorilla-permit-help" className="hover:text-yellow-500">Permit Help</a>
+            <a href="/reviews" className="hover:text-yellow-500">Traveler Proof</a>
           </div>
         </div>
 
@@ -42,6 +43,7 @@ export default function PublicSiteFooter() {
             <a href="/rwenzori-hiking-tours" className="hover:text-yellow-500">Rwenzori Hiking</a>
             <a href="/uganda-luxury-safari" className="hover:text-yellow-500">Luxury Safari</a>
             <a href="/#book" className="hover:text-yellow-500">Request Itinerary</a>
+            <a href="/terms" className="hover:text-yellow-500">Booking Terms</a>
           </div>
         </div>
 

@@ -106,8 +106,10 @@ export default function SpineExplorerPage() {
       <TourConversionSections
         tourName="The Spine Explorer"
         proof="This route is built for travelers who want one powerful gorilla trekking experience without losing comfort, clarity, or local support. We help shape dates around permit availability and realistic transfer timing."
-        inclusions={["Permit planning support", "Private guide and driver coordination", "Lodge selection guidance", "Transfer and park logistics"]}
-        exclusions={["International flights", "Travel insurance", "Visa fees", "Personal tips and optional upgrades"]}
+        inclusions={["Gorilla permit planning support", "Private guide and driver coordination", "Lodge selection guidance", "Airport or city transfer planning", "Park entry and trek-day logistics", "Pre-trip briefing by WhatsApp or email"]}
+        exclusions={["International flights", "Uganda visa fees", "Travel insurance", "Premium drinks and personal expenses", "Tips and gratuities", "Optional upgrades or extensions"]}
+        lodgeExamples={["Comfort: clean local lodges near Bwindi sector access", "Premium: boutique forest lodges with strong service and views", "Luxury: high-touch Bwindi lodges where sector and availability allow"]}
+        priceNotes={["Published prices are starting guidance and depend on season, group size, lodge level, and permit sector.", "Gorilla permits are subject to availability and are normally secured only after payment.", "A written quote confirms what is included before you commit."]}
         faqs={[
           ["How hard is gorilla trekking?", "It can be moderate or demanding depending on where the gorilla family is located that day. We brief you honestly before the trek."],
           ["How early should I book?", "Book as early as possible for peak months because gorilla permits are limited."],
