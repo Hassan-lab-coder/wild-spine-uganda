@@ -81,6 +81,63 @@ const journeyMoments = [
   },
 ];
 
+const storyCards = [
+  {
+    label: "Watch",
+    title: "Gorilla trekking in Bwindi",
+    desc: "A visual starting point for travelers who want to understand the forest experience before planning.",
+    image: "/images/gorilla.jpg",
+    href: "https://utb.go.ug/",
+    cta: "Explore Visit Uganda",
+    external: true,
+  },
+  {
+    label: "Read",
+    title: "Gorilla Trekking Guide 2026",
+    desc: "Permits, timing, trekking expectations, and how to prepare for a serious Uganda journey.",
+    image: "/images/forest.jpg",
+    href: "/guide",
+    cta: "Read Our Guide",
+    external: false,
+  },
+  {
+    label: "Official",
+    title: "Bwindi World Heritage context",
+    desc: "UNESCO background on the biodiversity and conservation value of Bwindi Impenetrable National Park.",
+    image: "/images/forest.jpg",
+    href: "https://whc.unesco.org/en/list/682",
+    cta: "Open UNESCO Source",
+    external: true,
+  },
+  {
+    label: "Official",
+    title: "Permit and tracking rules",
+    desc: "Uganda Wildlife Authority guidance for gorilla and chimpanzee tracking procedures.",
+    image: "/images/gorilla.jpg",
+    href: "https://ugandawildlife.org/wp-content/uploads/2024/07/Guidelines-for-the-management-of-gorilla-and-chimpanzee-tracking-JULY-2024.pdf",
+    cta: "View UWA Guidance",
+    external: true,
+  },
+  {
+    label: "Plan",
+    title: "Rwenzori trail preparation",
+    desc: "Mountain route planning, weather, pacing, gear expectations, and recovery days for high-country travel.",
+    image: "/images/rwenzori.jpg",
+    href: "/rwenzori-hiking-tours",
+    cta: "Explore Rwenzori",
+    external: false,
+  },
+  {
+    label: "Private",
+    title: "Build your Uganda story",
+    desc: "Bring the inspiration back to a real itinerary with permits, lodges, guiding, and private logistics.",
+    image: "/images/hiking.jpg",
+    href: "/#book",
+    cta: "Request Itinerary",
+    external: false,
+  },
+];
+
 const travelerReviews = [
   {
     text: "Wild Spine handled the details we were nervous about: permits, route timing, lodge choices, and the long transfers. The trip felt personal, calm, and very well organized.",
@@ -385,70 +442,42 @@ function HomeContent() {
 </section>
 
 <section className="py-32 px-6 md:px-24 bg-black">
-
   <div className="max-w-6xl mx-auto">
-
-    {/* HEADER */}
     <div className="mb-16">
       <h3 className="text-4xl md:text-6xl font-black mb-6">
         Stories from the Wild
       </h3>
       <p className="text-gray-400 max-w-2xl">
-        Real journeys. Real moments. Discover what it feels like to trek deep into Uganda’s untouched wilderness.
+        Real journeys, useful field notes, and trusted tourism sources for travelers planning Uganda with care.
       </p>
     </div>
 
-    {/* GRID */}
-    <div className="grid md:grid-cols-3 gap-8">
-
-      {/* VIDEO 1 */}
-      <div className="group cursor-pointer">
-        <div className="relative overflow-hidden rounded-xl">
-          <img src="/images/gorilla.jpg" alt="Mountain gorilla in Bwindi forest" className="w-full h-[300px] object-cover group-hover:scale-110 transition duration-700" />
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <span className="text-white text-lg font-bold">▶ Watch</span>
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {storyCards.map((story) => (
+        <a
+          key={story.title}
+          href={story.href}
+          target={story.external ? "_blank" : undefined}
+          rel={story.external ? "noopener noreferrer" : undefined}
+          className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-1 hover:border-yellow-500/50 hover:bg-white/10"
+        >
+          <div className="relative h-64 overflow-hidden">
+            <img src={story.image} alt={story.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
+            <div className="absolute left-5 top-5 rounded-full bg-yellow-500 px-4 py-2 text-xs font-black uppercase tracking-widest text-black">
+              {story.label}
+            </div>
           </div>
-        </div>
-        <h4 className="mt-4 font-bold text-lg">
-          First Time Seeing Gorillas
-        </h4>
-        <p className="text-gray-400 text-sm">
-          A life-changing encounter deep in Bwindi forest.
-        </p>
-      </div>
-
-      {/* BLOG 1 */}
-      <div className="bg-white/5 p-6 rounded-xl border border-white/10 hover:bg-white/10 transition">
-        <h4 className="font-bold text-lg mb-3">
-          Gorilla Trekking Guide 2026
-        </h4>
-        <p className="text-gray-400 text-sm mb-4">
-          Everything you need to know before visiting Uganda — permits, costs, preparation.
-        </p>
-        <a href="/guide" className="text-yellow-500 text-sm font-bold">
-          Read More →
+          <div className="p-6">
+            <h4 className="text-xl font-black text-white">{story.title}</h4>
+            <p className="mt-3 min-h-20 text-sm leading-6 text-gray-400">{story.desc}</p>
+            <p className="mt-5 text-sm font-black text-yellow-500">{story.cta} -&gt;</p>
+          </div>
         </a>
-      </div>
-
-      {/* BLOG 2 */}
-      <div className="bg-white/5 p-6 rounded-xl border border-white/10 hover:bg-white/10 transition">
-        <h4 className="font-bold text-lg mb-3">
-          How Safe is Uganda?
-        </h4>
-        <p className="text-gray-400 text-sm mb-4">
-          What travelers need to know about safety, guides, and local experience.
-        </p>
-        <a href="/guide" className="text-yellow-500 text-sm font-bold">
-          Read More →
-        </a>
-      </div>
-
+      ))}
     </div>
-
   </div>
-
 </section>
-
 <section className="px-6 md:px-24 py-12 bg-black border-y border-white/10">
         <div className="max-w-6xl mx-auto grid grid-cols-3 gap-6 text-center">
           <div>
@@ -951,3 +980,4 @@ function HomeContent() {
     </main>
   );
 }
+
