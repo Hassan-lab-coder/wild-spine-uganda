@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import type { Database } from "@/lib/supabase";
+import { bearerToken, cleanMultilineText, cleanText, isAllowedBrowserOrigin, isEmail, readJsonObject } from "@/lib/server-validation";
 
 type EmailPayload = {
   to?: string;
@@ -9,10 +10,18 @@ type EmailPayload = {
 };
 
 export async function POST(request: Request) {
-  const payload = (await request.json()) as EmailPayload;
-  const token = request.headers.get("authorization")?.replace("Bearer ", "");
+  if (!isAllowedBrowserOrigin(request)) {
+    return NextResponse.json({ sent: false, reason: "Origin is not allowed." }, { status: 403 });
+  }
+
+  const body = await readJsonObject(request);
+  const token = bearerToken(request);
   const resendKey = process.env.RESEND_API_KEY;
   const from = process.env.ADMIN_REPLY_FROM || process.env.LEAD_NOTIFICATION_FROM || "Wild Spine <reservations@wildspineuganda.com>";
+
+  if (!body) {
+    return NextResponse.json({ sent: false, reason: "Invalid JSON payload." }, { status: 400 });
+  }
 
   if (!token) {
     return NextResponse.json({ sent: false, reason: "Admin session is missing." }, { status: 401 });
@@ -26,8 +35,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ sent: false, reason: "Supabase is not configured on this deployment." }, { status: 500 });
   }
 
+  const payload: EmailPayload = {
+    to: cleanText(body.to, 160),
+    subject: cleanText(body.subject, 180),
+    message: cleanMultilineText(body.message),
+  };
+
   if (!payload.to || !payload.subject || !payload.message) {
     return NextResponse.json({ sent: false, reason: "Recipient, subject, and message are required." }, { status: 400 });
+  }
+
+  if (!isEmail(payload.to)) {
+    return NextResponse.json({ sent: false, reason: "Recipient email is invalid." }, { status: 400 });
   }
 
   const supabase = createClient<Database>(

@@ -1,10 +1,10 @@
-import { supabase } from "@/lib/supabase";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 
 export async function trackEvent(
   eventName: string,
   metadata: Record<string, unknown> = {}
 ) {
-  if (typeof window === "undefined") {
+  if (typeof window === "undefined" || !isSupabaseConfigured) {
     return;
   }
 
@@ -14,7 +14,7 @@ export async function trackEvent(
     metadata,
   });
 
-  if (error) {
+  if (error && process.env.NODE_ENV !== "production") {
     console.warn("Analytics event was not saved:", error.message);
   }
 }

@@ -318,17 +318,22 @@ create index if not exists itinerary_requests_created_at_idx on public.itinerary
 create index if not exists itinerary_requests_status_idx on public.itinerary_requests (status);
 create index if not exists itinerary_requests_lead_source_idx on public.itinerary_requests (lead_source);
 create index if not exists itinerary_requests_follow_up_at_idx on public.itinerary_requests (follow_up_at);
+create index if not exists itinerary_requests_email_idx on public.itinerary_requests (lower(email));
 create index if not exists guide_leads_created_at_idx on public.guide_leads (created_at desc);
 create index if not exists guide_leads_status_idx on public.guide_leads (status);
+create index if not exists guide_leads_email_idx on public.guide_leads (lower(email));
 create index if not exists volunteer_applications_created_at_idx on public.volunteer_applications (created_at desc);
 create index if not exists volunteer_applications_status_idx on public.volunteer_applications (status);
 create index if not exists volunteer_applications_lead_source_idx on public.volunteer_applications (lead_source);
+create index if not exists volunteer_applications_email_idx on public.volunteer_applications (lower(email));
 create index if not exists invoices_created_at_idx on public.invoices (created_at desc);
 create index if not exists invoices_status_idx on public.invoices (status);
 create index if not exists invoices_invoice_number_idx on public.invoices (invoice_number);
+create index if not exists invoices_client_email_idx on public.invoices (lower(client_email));
 create index if not exists receipts_created_at_idx on public.receipts (created_at desc);
 create index if not exists receipts_receipt_number_idx on public.receipts (receipt_number);
 create index if not exists receipts_invoice_id_idx on public.receipts (invoice_id);
+create index if not exists receipts_client_email_idx on public.receipts (lower(client_email));
 create index if not exists inbound_emails_received_at_idx on public.inbound_emails (received_at desc);
 create index if not exists inbound_emails_read_at_idx on public.inbound_emails (read_at);
 create index if not exists inbound_emails_from_email_idx on public.inbound_emails (from_email);
@@ -353,3 +358,17 @@ alter table public.invoices
   drop constraint if exists invoices_status_check,
   add constraint invoices_status_check
   check (status in ('draft', 'sent', 'paid', 'cancelled'));
+
+alter table public.invoices
+  drop constraint if exists invoices_money_check,
+  add constraint invoices_money_check
+  check (subtotal >= 0 and tax >= 0 and total >= 0);
+
+alter table public.receipts
+  drop constraint if exists receipts_amount_check,
+  add constraint receipts_amount_check
+  check (amount >= 0);
+
+alter table public.admin_users
+  drop constraint if exists admin_users_email_unique,
+  add constraint admin_users_email_unique unique (email);

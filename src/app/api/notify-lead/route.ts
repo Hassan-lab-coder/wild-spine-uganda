@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cleanMultilineText, cleanText, isAllowedBrowserOrigin, readJsonObject } from "@/lib/server-validation";
 
 type LeadPayload = {
   type: string;
@@ -13,15 +14,34 @@ type LeadPayload = {
 };
 
 export async function POST(request: Request) {
-  const payload = (await request.json()) as LeadPayload;
+  if (!isAllowedBrowserOrigin(request)) {
+    return NextResponse.json({ sent: false, reason: "Origin is not allowed." }, { status: 403 });
+  }
+
+  const body = await readJsonObject(request);
   const to = process.env.LEAD_NOTIFICATION_EMAIL;
   const resendKey = process.env.RESEND_API_KEY;
+
+  if (!body) {
+    return NextResponse.json({ sent: false, reason: "Invalid JSON payload." }, { status: 400 });
+  }
 
   if (!to || !resendKey) {
     return NextResponse.json({ sent: false, reason: "Email notifications are not configured." });
   }
 
-  const subject = `New Wild Spine ${payload.type || "lead"}: ${payload.name || payload.email || "Website inquiry"}`;
+  const payload: LeadPayload = {
+    type: cleanText(body.type, 80) || "lead",
+    name: cleanText(body.name, 120),
+    email: cleanText(body.email, 160),
+    phone: cleanText(body.phone, 80),
+    route: cleanText(body.route, 120),
+    program: cleanText(body.program, 120),
+    country: cleanText(body.country, 120),
+    travelMonth: cleanText(body.travelMonth, 80),
+    message: cleanMultilineText(body.message),
+  };
+  const subject = `New Wild Spine ${payload.type}: ${payload.name || payload.email || "Website inquiry"}`;
   const text = [
     `Type: ${payload.type}`,
     `Name: ${payload.name || "Not provided"}`,

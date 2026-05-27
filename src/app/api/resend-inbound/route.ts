@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import type { Database } from "@/lib/supabase";
+import { cleanText, isLikelyUrl, readJsonObject } from "@/lib/server-validation";
 
 type ResendInboundEvent = {
   type?: string;
@@ -49,7 +50,11 @@ export async function POST(request: Request) {
   const configuredToken = process.env.INBOUND_WEBHOOK_TOKEN;
   const providedToken = new URL(request.url).searchParams.get("token") || request.headers.get("x-inbound-webhook-token");
 
-  if (configuredToken && providedToken !== configuredToken) {
+  if (!configuredToken) {
+    return NextResponse.json({ stored: false, reason: "Inbound webhook token is not configured." }, { status: 500 });
+  }
+
+  if (providedToken !== configuredToken) {
     return NextResponse.json({ stored: false, reason: "Invalid inbound webhook token." }, { status: 401 });
   }
 
@@ -61,7 +66,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ stored: false, reason: "Inbound email storage is not configured." }, { status: 500 });
   }
 
-  const event = (await request.json()) as ResendInboundEvent;
+  const body = await readJsonObject(request);
+
+  if (!body) {
+    return NextResponse.json({ stored: false, reason: "Invalid JSON payload." }, { status: 400 });
+  }
+
+  const event = body as ResendInboundEvent;
 
   if (event.type !== "email.received") {
     return NextResponse.json({ stored: false, ignored: true });
@@ -81,7 +92,7 @@ export async function POST(request: Request) {
 
   const email = emailResponse.ok ? ((await emailResponse.json()) as ReceivedEmail) : null;
   const supabase = createClient<Database>(supabaseUrl, serviceRoleKey);
-  const fromEmail = email?.from || event.data?.from || "unknown sender";
+  const fromEmail = cleanText(email?.from || event.data?.from, 320) || "unknown sender";
   const attachments = normalizeAttachments(email?.attachments || event.data?.attachments || []);
 
   const { error } = await supabase.from("inbound_emails").upsert(
@@ -97,7 +108,7 @@ export async function POST(request: Request) {
       html_body: email?.html || null,
       headers: email?.headers || null,
       attachments: attachments.length > 0 ? attachments : null,
-      raw_download_url: email?.raw?.download_url || null,
+      raw_download_url: email?.raw?.download_url && isLikelyUrl(email.raw.download_url) ? email.raw.download_url : null,
       raw_expires_at: email?.raw?.expires_at || null,
       received_at: email?.created_at || event.data?.created_at || event.created_at || new Date().toISOString(),
     },

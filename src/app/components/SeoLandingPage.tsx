@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type SeoLandingPageProps = {
   title: string;
   kicker: string;
@@ -24,7 +26,14 @@ export default function SeoLandingPage({
   return (
     <main className="min-h-screen bg-black text-white">
       <section className="relative flex min-h-[82vh] items-center overflow-hidden px-6 py-32 md:px-24">
-        <img src={image} alt={title} className="absolute inset-0 h-full w-full object-cover" />
+        <Image
+          src={image}
+          alt={title}
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
+        />
         <div className="absolute inset-0 bg-black/70" />
         <div className="relative z-10 max-w-5xl">
           <p className="section-kicker">{kicker}</p>
