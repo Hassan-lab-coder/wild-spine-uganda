@@ -782,7 +782,7 @@ function ReceiptCard({ receipt, onPrint }: { receipt: Receipt; onPrint: () => vo
 
 function InboundEmailCard({ email, onReadStateChange }: { email: InboundEmail; onReadStateChange: (read: boolean) => void }) {
   const body = email.text_body || stripHtml(email.html_body || "") || "No message body was returned by Resend.";
-  const replyHref = `mailto:${email.from_email}?subject=${encodeURIComponent(`Re: ${email.subject || "Wild Spine Uganda"}`)}`;
+  const replySubject = `Re: ${email.subject || "Wild Spine Uganda"}`;
 
   return (
     <article className={`rounded-3xl border p-6 ${email.read_at ? "border-white/10 bg-white/5" : "border-yellow-500/40 bg-yellow-500/10"}`}>
@@ -797,7 +797,6 @@ function InboundEmailCard({ email, onReadStateChange }: { email: InboundEmail; o
           <p className="mt-1 text-sm text-gray-500">Received {formatDate(email.received_at)}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <a href={replyHref} className="admin-primary-button text-sm">Reply</a>
           <button type="button" onClick={() => onReadStateChange(!email.read_at)} className="admin-outline-button text-sm">
             {email.read_at ? "Mark Unread" : "Mark Read"}
           </button>
@@ -805,6 +804,7 @@ function InboundEmailCard({ email, onReadStateChange }: { email: InboundEmail; o
       </div>
 
       <MessageBlock label="Message" value={body} />
+      <QuickActions email={email.from_email} phone={null} subject={replySubject} template={inboundReplyTemplate(email, body)} />
 
       {(email.cc_emails.length > 0 || email.attachments?.length || email.raw_download_url) && (
         <div className="mt-5 grid gap-4 md:grid-cols-3">
@@ -1325,6 +1325,19 @@ If you would like help planning gorilla trekking, Rwenzori hiking, permits, or a
 
 Warmly,
 Wild Spine Uganda`;
+}
+
+function inboundReplyTemplate(email: InboundEmail, body: string) {
+  return `Hello,
+
+Thank you for your email. We have received your message and will be happy to help.
+
+Kind regards,
+Wild Spine Uganda
+
+---
+Original message from ${email.from_email} on ${formatDate(email.received_at)}:
+${body}`;
 }
 
 function printInvoice(invoice: Invoice) {
