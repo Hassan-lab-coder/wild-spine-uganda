@@ -79,31 +79,27 @@ export async function POST(request: Request) {
     },
   });
 
-  if (!emailResponse.ok) {
-    return NextResponse.json({ stored: false, reason: await emailResponse.text() }, { status: 502 });
-  }
-
-  const email = (await emailResponse.json()) as ReceivedEmail;
+  const email = emailResponse.ok ? ((await emailResponse.json()) as ReceivedEmail) : null;
   const supabase = createClient<Database>(supabaseUrl, serviceRoleKey);
-  const fromEmail = email.from || event.data?.from || "unknown sender";
-  const attachments = normalizeAttachments(email.attachments || event.data?.attachments || []);
+  const fromEmail = email?.from || event.data?.from || "unknown sender";
+  const attachments = normalizeAttachments(email?.attachments || event.data?.attachments || []);
 
   const { error } = await supabase.from("inbound_emails").upsert(
     {
       resend_email_id: emailId,
-      message_id: email.message_id || event.data?.message_id || null,
+      message_id: email?.message_id || event.data?.message_id || null,
       from_email: fromEmail,
-      to_emails: email.to || event.data?.to || [],
-      cc_emails: email.cc || event.data?.cc || [],
-      bcc_emails: email.bcc || event.data?.bcc || [],
-      subject: email.subject || event.data?.subject || null,
-      text_body: email.text || null,
-      html_body: email.html || null,
-      headers: email.headers || null,
+      to_emails: email?.to || event.data?.to || [],
+      cc_emails: email?.cc || event.data?.cc || [],
+      bcc_emails: email?.bcc || event.data?.bcc || [],
+      subject: email?.subject || event.data?.subject || null,
+      text_body: email?.text || null,
+      html_body: email?.html || null,
+      headers: email?.headers || null,
       attachments: attachments.length > 0 ? attachments : null,
-      raw_download_url: email.raw?.download_url || null,
-      raw_expires_at: email.raw?.expires_at || null,
-      received_at: email.created_at || event.data?.created_at || event.created_at || new Date().toISOString(),
+      raw_download_url: email?.raw?.download_url || null,
+      raw_expires_at: email?.raw?.expires_at || null,
+      received_at: email?.created_at || event.data?.created_at || event.created_at || new Date().toISOString(),
     },
     { onConflict: "resend_email_id" }
   );
@@ -112,7 +108,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ stored: false, reason: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ stored: true, email_id: emailId });
+  return NextResponse.json({
+    stored: true,
+    email_id: emailId,
+    full_body: Boolean(email),
+    warning: email ? undefined : "Saved metadata only because the Resend API key could not read received email content.",
+  });
 }
 
 function normalizeAttachments(attachments: ReceivedAttachment[]) {
