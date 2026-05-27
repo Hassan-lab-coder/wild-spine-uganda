@@ -245,6 +245,45 @@ export default function AdminDashboard() {
     setNotice("Invoice status saved.");
   }
 
+  async function updateInvoiceMoney(id: string, values: InvoiceMoneyValues) {
+    setNotice("");
+    setDataError("");
+
+    const lineItems = values.lineItems
+      .filter((item) => item.description.trim())
+      .map((item) => ({
+        ...item,
+        quantity: roundMoney(Number(item.quantity || 0)),
+        unit_price: roundMoney(Number(item.unit_price || 0)),
+        total: roundMoney(Number(item.quantity || 0) * Number(item.unit_price || 0)),
+      }));
+    const subtotal = roundMoney(lineItems.reduce((sum, item) => sum + item.total, 0));
+    const tax = roundMoney(values.tax);
+    const total = roundMoney(subtotal + tax);
+
+    const result = await supabase
+      .from("invoices")
+      .update({
+        currency: values.currency,
+        subtotal,
+        tax,
+        total,
+        notes: values.notes.trim() || null,
+        line_items: lineItems,
+      })
+      .eq("id", id)
+      .select("*")
+      .single();
+
+    if (result.error) {
+      setDataError(result.error.message);
+      return;
+    }
+
+    setInvoices((current) => current.map((invoice) => invoice.id === id ? result.data : invoice));
+    setNotice("Invoice money saved.");
+  }
+
   async function createReceipt(values: ReceiptFormValues) {
     setNotice("");
     setDataError("");
@@ -466,7 +505,15 @@ export default function AdminDashboard() {
         <FinancialPanel title="Invoices" count={visibleInvoices.length}>
           <InvoiceForm key={invoiceDraft ? `request-invoice-${invoiceDraftVersion}` : "blank-invoice"} draft={invoiceDraft} invoices={invoices} onCreate={createInvoice} />
           <RecordGrid title="Invoice Records" empty="No invoices match this view." rows={visibleInvoices}>
-            {(invoice) => <InvoiceCard key={invoice.id} invoice={invoice} onStatusChange={(status) => updateInvoiceStatus(invoice.id, status)} onPrint={() => printInvoice(invoice)} />}
+            {(invoice) => (
+              <InvoiceCard
+                key={invoice.id}
+                invoice={invoice}
+                onMoneySave={(values) => updateInvoiceMoney(invoice.id, values)}
+                onStatusChange={(status) => updateInvoiceStatus(invoice.id, status)}
+                onPrint={() => printInvoice(invoice)}
+              />
+            )}
           </RecordGrid>
         </FinancialPanel>
       )}
@@ -496,6 +543,13 @@ type InvoiceFormValues = {
   currency: string;
   tax: number;
   status: InvoiceStatus;
+  notes: string;
+  lineItems: LineItem[];
+};
+
+type InvoiceMoneyValues = {
+  currency: string;
+  tax: number;
   notes: string;
   lineItems: LineItem[];
 };
@@ -615,19 +669,37 @@ function InvoiceForm({ draft, invoices, onCreate }: { draft: InvoiceDraft | null
       </div>
 
       <div className="mt-5 grid gap-3">
+        <div className="hidden px-1 text-xs font-black uppercase tracking-widest text-gray-500 md:grid md:grid-cols-[1fr_120px_160px_44px] md:gap-3">
+          <span>Description</span>
+          <span>Qty</span>
+          <span>Money / unit price</span>
+          <span />
+        </div>
         {lineItems.map((item, index) => (
           <div key={index} className="grid gap-3 md:grid-cols-[1fr_120px_160px_44px]">
-            <input required className="form-input" value={item.description} onChange={(event) => updateLineItem(index, { description: event.target.value })} placeholder="Description" />
-            <input required className="form-input" type="number" min="0" step="0.01" value={item.quantity} onChange={(event) => updateLineItem(index, { quantity: Number(event.target.value) })} placeholder="Qty" />
-            <input required className="form-input" type="number" min="0" step="0.01" value={item.unit_price} onChange={(event) => updateLineItem(index, { unit_price: Number(event.target.value) })} placeholder="Unit price" />
-            <button type="button" className="admin-outline-button px-0" onClick={() => setLineItems((current) => current.filter((_, itemIndex) => itemIndex !== index))}>x</button>
+            <label className="grid gap-2 md:block">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500 md:hidden">Description</span>
+              <input required className="form-input" value={item.description} onChange={(event) => updateLineItem(index, { description: event.target.value })} placeholder="Description" />
+            </label>
+            <label className="grid gap-2 md:block">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500 md:hidden">Qty</span>
+              <input required className="form-input" type="number" min="0" step="0.01" value={item.quantity} onChange={(event) => updateLineItem(index, { quantity: Number(event.target.value) })} placeholder="Qty" />
+            </label>
+            <label className="grid gap-2 md:block">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500 md:hidden">Money / unit price</span>
+              <input required className="form-input" type="number" min="0" step="0.01" value={item.unit_price} onChange={(event) => updateLineItem(index, { unit_price: Number(event.target.value) })} placeholder="Amount" />
+            </label>
+            <button type="button" aria-label="Remove invoice line" className="admin-outline-button px-0" onClick={() => setLineItems((current) => current.filter((_, itemIndex) => itemIndex !== index))}>x</button>
           </div>
         ))}
       </div>
 
       <div className="mt-5 grid gap-4 md:grid-cols-[1fr_180px_180px]">
         <textarea className="form-input min-h-24" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Invoice notes, payment terms, bank details..." />
-        <input className="form-input" type="number" min="0" step="0.01" value={tax} onChange={(event) => setTax(event.target.value)} placeholder="Tax / fees" />
+        <label className="grid gap-2">
+          <span className="text-xs font-black uppercase tracking-widest text-gray-500">Tax / extra fees</span>
+          <input className="form-input" type="number" min="0" step="0.01" value={tax} onChange={(event) => setTax(event.target.value)} placeholder="Tax / fees" />
+        </label>
         <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
           <p className="text-xs uppercase tracking-widest text-gray-500">Subtotal</p>
           <p className="mt-2 font-black">{formatMoney(subtotal, currency)}</p>
@@ -730,7 +802,32 @@ function ReceiptForm({ invoices, receipts, onCreate }: { invoices: Invoice[]; re
   );
 }
 
-function InvoiceCard({ invoice, onStatusChange, onPrint }: { invoice: Invoice; onStatusChange: (status: InvoiceStatus) => void; onPrint: () => void }) {
+function InvoiceCard({ invoice, onMoneySave, onStatusChange, onPrint }: {
+  invoice: Invoice;
+  onMoneySave: (values: InvoiceMoneyValues) => void;
+  onStatusChange: (status: InvoiceStatus) => void;
+  onPrint: () => void;
+}) {
+  const [editingMoney, setEditingMoney] = useState(false);
+  const [currency, setCurrency] = useState(invoice.currency);
+  const [tax, setTax] = useState(String(invoice.tax));
+  const [notes, setNotes] = useState(invoice.notes || "");
+  const [lineItems, setLineItems] = useState<LineItem[]>(
+    invoice.line_items.length > 0
+      ? invoice.line_items
+      : [{ description: "Private Uganda travel services", quantity: 1, unit_price: invoice.total, total: invoice.total }]
+  );
+  const subtotal = roundMoney(lineItems.reduce((sum, item) => sum + Number(item.quantity || 0) * Number(item.unit_price || 0), 0));
+  const total = roundMoney(subtotal + Number(tax || 0));
+
+  function updateLineItem(index: number, values: Partial<LineItem>) {
+    setLineItems((current) => current.map((item, itemIndex) => {
+      if (itemIndex !== index) return item;
+      const next = { ...item, ...values };
+      return { ...next, total: roundMoney(Number(next.quantity || 0) * Number(next.unit_price || 0)) };
+    }));
+  }
+
   return (
     <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -750,7 +847,66 @@ function InvoiceCard({ invoice, onStatusChange, onPrint }: { invoice: Invoice; o
       </div>
       <LineItemList items={invoice.line_items} currency={invoice.currency} />
       {invoice.notes && <MessageBlock label="Notes" value={invoice.notes} />}
+      {editingMoney && (
+        <div className="mt-5 rounded-3xl border border-yellow-500/30 bg-black/35 p-5">
+          <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-widest text-yellow-500">Edit invoice money</p>
+              <p className="mt-1 text-sm text-gray-400">Change line prices, tax, currency, and notes. Totals recalculate automatically.</p>
+            </div>
+            <p className="text-2xl font-black text-yellow-500">{formatMoney(total, currency)}</p>
+          </div>
+
+          <div className="mb-3 grid gap-3 md:grid-cols-[1fr_160px]">
+            <label className="grid gap-2">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500">Currency</span>
+              <select className="form-input" value={currency} onChange={(event) => setCurrency(event.target.value)}>
+                <option>USD</option>
+                <option>UGX</option>
+                <option>EUR</option>
+                <option>GBP</option>
+              </select>
+            </label>
+            <label className="grid gap-2">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500">Tax / extra fees</span>
+              <input className="form-input" type="number" min="0" step="0.01" value={tax} onChange={(event) => setTax(event.target.value)} />
+            </label>
+          </div>
+
+          <div className="grid gap-3">
+            <div className="hidden px-1 text-xs font-black uppercase tracking-widest text-gray-500 md:grid md:grid-cols-[1fr_110px_150px_44px] md:gap-3">
+              <span>Description</span>
+              <span>Qty</span>
+              <span>Money / unit price</span>
+              <span />
+            </div>
+            {lineItems.map((item, index) => (
+              <div key={index} className="grid gap-3 md:grid-cols-[1fr_110px_150px_44px]">
+                <input className="form-input" value={item.description} onChange={(event) => updateLineItem(index, { description: event.target.value })} placeholder="Description" />
+                <input className="form-input" type="number" min="0" step="0.01" value={item.quantity} onChange={(event) => updateLineItem(index, { quantity: Number(event.target.value) })} placeholder="Qty" />
+                <input className="form-input" type="number" min="0" step="0.01" value={item.unit_price} onChange={(event) => updateLineItem(index, { unit_price: Number(event.target.value) })} placeholder="Amount" />
+                <button type="button" aria-label="Remove invoice line" className="admin-outline-button px-0" onClick={() => setLineItems((current) => current.filter((_, itemIndex) => itemIndex !== index))}>x</button>
+              </div>
+            ))}
+          </div>
+
+          <textarea className="form-input mt-4 min-h-24" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Invoice notes, payment terms, bank details..." />
+
+          <div className="mt-4 grid gap-3 rounded-2xl border border-white/10 bg-black/30 p-4 md:grid-cols-2">
+            <Field label="Subtotal" value={formatMoney(subtotal, currency)} />
+            <Field label="Total" value={formatMoney(total, currency)} />
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            <button type="button" className="admin-outline-button text-sm" onClick={() => setLineItems((current) => [...current, { description: "", quantity: 1, unit_price: 0, total: 0 }])}>Add Line</button>
+            <button type="button" className="admin-primary-button text-sm" disabled={lineItems.length === 0} onClick={() => onMoneySave({ currency, tax: Number(tax || 0), notes, lineItems })}>Save Money</button>
+          </div>
+        </div>
+      )}
       <div className="mt-5 flex flex-wrap gap-3">
+        <button type="button" onClick={() => setEditingMoney((open) => !open)} className="admin-outline-button text-sm">
+          {editingMoney ? "Close Money Editor" : "Edit Money"}
+        </button>
         <button type="button" onClick={onPrint} className="admin-primary-button text-sm">Print Invoice</button>
         {invoice.client_email && <a href={`mailto:${invoice.client_email}?subject=${encodeURIComponent(`Invoice ${invoice.invoice_number} from Wild Spine Uganda`)}`} className="admin-outline-button text-sm">Email Client</a>}
       </div>
