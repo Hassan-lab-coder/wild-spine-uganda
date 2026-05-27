@@ -367,7 +367,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-black px-6 py-10 text-white md:px-12 xl:px-20">
+    <main className="admin-surface min-h-screen bg-black px-6 py-10 text-white md:px-12 xl:px-20">
       <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="section-kicker">Wild Spine Operations</p>

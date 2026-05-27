@@ -22,16 +22,16 @@ export default function PublicSiteHeader() {
   }
 
   return (
-    <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/90 px-6 py-4 backdrop-blur md:px-10">
+    <header className="fixed left-0 top-0 z-50 w-full border-b border-[#d8cda9] bg-[#fff9ea]/92 px-6 py-4 text-[#123a2a] shadow-sm backdrop-blur md:px-10">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6">
         <a href="/" className="shrink-0" aria-label="Wild Spine Uganda home">
-          <p className="text-sm font-black tracking-[0.3em] text-white">WILD SPINE</p>
-          <p className="text-[10px] tracking-[0.35em] text-yellow-500">UGANDA</p>
+          <p className="text-sm font-black tracking-[0.3em] text-[#123a2a]">WILD SPINE</p>
+          <p className="text-[10px] tracking-[0.35em] text-[#b8860b]">UGANDA</p>
         </a>
 
-        <nav className="hidden items-center gap-7 text-xs font-bold uppercase tracking-widest text-gray-300 md:flex">
+        <nav className="hidden items-center gap-7 text-xs font-bold uppercase tracking-widest text-[#365143] md:flex">
           {navItems.map(([label, href]) => (
-            <a key={href} href={href} className="hover:text-yellow-500">
+            <a key={href} href={href} className="hover:text-[#b8860b]">
               {label}
             </a>
           ))}
@@ -40,7 +40,7 @@ export default function PublicSiteHeader() {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            className="rounded-full border border-white/20 px-4 py-3 text-xs font-black uppercase tracking-widest text-white md:hidden"
+            className="rounded-full border border-[#d8cda9] px-4 py-3 text-xs font-black uppercase tracking-widest text-[#123a2a] md:hidden"
             aria-expanded={mobileOpen}
             aria-controls="public-mobile-nav"
             onClick={() => setMobileOpen((open) => !open)}
@@ -49,7 +49,7 @@ export default function PublicSiteHeader() {
           </button>
           <a
             href="/#book"
-            className="rounded-full bg-yellow-500 px-5 py-3 text-sm font-black text-black transition hover:bg-yellow-400"
+            className="rounded-full bg-[#f5b416] px-5 py-3 text-sm font-black text-[#123a2a] transition hover:bg-[#ffd766]"
           >
             Plan Trip
           </a>
@@ -59,13 +59,13 @@ export default function PublicSiteHeader() {
       {mobileOpen && (
         <nav
           id="public-mobile-nav"
-          className="mx-auto mt-4 grid max-w-7xl gap-2 rounded-2xl border border-white/10 bg-black/95 p-3 text-sm font-bold uppercase tracking-widest text-gray-200 shadow-2xl md:hidden"
+          className="mx-auto mt-4 grid max-w-7xl gap-2 rounded-2xl border border-[#d8cda9] bg-[#fff9ea]/98 p-3 text-sm font-bold uppercase tracking-widest text-[#365143] shadow-2xl md:hidden"
         >
           {navItems.map(([label, href]) => (
             <a
               key={href}
               href={href}
-              className="rounded-xl px-4 py-3 hover:bg-white/10 hover:text-yellow-500"
+              className="rounded-xl px-4 py-3 hover:bg-[#f5b416]/20 hover:text-[#b8860b]"
               onClick={() => setMobileOpen(false)}
             >
               {label}
