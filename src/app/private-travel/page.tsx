@@ -22,7 +22,7 @@ export default function PrivateTravelPage() {
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <img
-          src="/images/rwenzori.jpg"
+          src="/images/travel/lake-boat.webp"
           alt="Private Uganda travel experience"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -101,7 +101,7 @@ export default function PrivateTravelPage() {
 
           <div className="h-[420px] rounded-3xl overflow-hidden">
             <img
-              src="/images/hiking.jpg"
+              src="/images/travel/guide-guests.jpg"
               alt="Private hiking experience"
               className="w-full h-full object-cover"
             />

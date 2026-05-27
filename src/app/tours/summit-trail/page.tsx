@@ -5,7 +5,7 @@ export default function SummitTrailPage() {
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <img
-          src="/images/hiking.jpg"
+          src="/images/travel/forest-trek.jpg"
           alt="Rwenzori hiking trail"
           className="absolute inset-0 w-full h-full object-cover"
         />

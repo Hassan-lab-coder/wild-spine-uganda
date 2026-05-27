@@ -22,7 +22,7 @@ export default function RareExperiencePage() {
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <img
-          src="/images/gorilla.jpg"
+          src="/images/travel/zebras.jpg"
           alt="Mountain gorilla encounter"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -80,7 +80,7 @@ export default function RareExperiencePage() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="h-[420px] rounded-3xl overflow-hidden">
             <img
-              src="/images/rwenzori.jpg"
+              src="/images/travel/terraced-mountains.jpg"
               alt="Rwenzori Mountains"
               className="w-full h-full object-cover"
             />

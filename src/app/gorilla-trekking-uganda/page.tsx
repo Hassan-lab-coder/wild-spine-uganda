@@ -6,7 +6,7 @@ export default function GorillaTrekkingUgandaPage() {
       kicker="Gorilla trekking Uganda"
       title="Private gorilla trekking planning in Uganda"
       description="Plan a Bwindi gorilla trekking journey with permit guidance, realistic transfer planning, lodge support, and local expertise."
-      image="/images/gorilla.jpg"
+      image="/images/travel/forest-guide.jpg"
       route="The Spine Explorer"
       cta="Plan Gorilla Trekking"
       bullets={["Permit timing guidance", "Bwindi route and lodge support", "Private driver and guide coordination", "Optional safari or lake extensions"]}

@@ -10,7 +10,7 @@ const programs = [
     title: "Community Impact",
     duration: "2–4 Weeks",
     price: "From $450 / week",
-    image: "/images/forest.jpg",
+    image: "/images/travel/lake-boat.webp",
     desc: "Support schools, youth programs, digital skills, and local community initiatives.",
     includes: [
       "Placement coordination",
@@ -23,7 +23,7 @@ const programs = [
     title: "Conservation Experience",
     duration: "2–3 Weeks",
     price: "From $550 / week",
-    image: "/images/gorilla.jpg",
+    image: "/images/travel/trail-team.jpg",
     desc: "Join eco-projects, tree planting, conservation education, and responsible nature work.",
     includes: [
       "Eco field projects",
@@ -36,7 +36,7 @@ const programs = [
     title: "Volunteer + Gorilla",
     duration: "2–3 Weeks",
     price: "From $1,800",
-    image: "/images/rwenzori.jpg",
+    image: "/images/travel/guide-guests.jpg",
     desc: "Combine volunteering with Uganda’s unforgettable gorilla trekking experience.",
     includes: [
       "Volunteer placement",
@@ -104,7 +104,7 @@ export default function VolunteerPage() {
       {/* HERO */}
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <img
-          src="/images/gorilla.jpg"
+          src="/images/travel/trail-team.jpg"
           alt="Volunteer Uganda"
           className="absolute inset-0 w-full h-full object-cover"
         />

@@ -97,9 +97,9 @@ export default function ReviewsPage() {
       <section className="px-6 py-20 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-3">
           {[
-            ["Permit days", "/images/gorilla.jpg", "Travelers remember the trek, but trust is built in the planning before it."],
-            ["Trail days", "/images/hiking.jpg", "Mountain routes need clear pacing, guide support, and realistic expectations."],
-            ["Recovery days", "/images/rwenzori.jpg", "Good itineraries leave room for weather, rest, and the journey back down."],
+            ["Permit days", "/images/travel/ranger-briefing.jpg", "Travelers remember the trek, but trust is built in the planning before it."],
+            ["Trail days", "/images/travel/boardwalk-trek.jpg", "Mountain routes need clear pacing, guide support, and realistic expectations."],
+            ["Recovery days", "/images/travel/lake-boat.webp", "Good itineraries leave room for weather, rest, and the journey back down."],
           ].map(([title, image, caption]) => (
             <figure key={title} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5">
               <div className="relative h-80 overflow-hidden">

@@ -13,6 +13,7 @@ const tours = [
     price: "From $1,400",
     desc: "Premium gorilla trekking through Bwindi with private guidance and lodge support.",
     link: "/tours/spine-explorer",
+    image: "/images/travel/forest-guide.jpg",
     inclusions: ["Gorilla permit support", "Private guide", "Premium lodge planning"],
   },
   {
@@ -21,6 +22,7 @@ const tours = [
     price: "From $3,200",
     desc: "The signature journey: gorillas, Rwenzori valleys, alpine trails, and glacier country.",
     link: "/tours/summit-trail",
+    image: "/images/travel/forest-trek.jpg",
     inclusions: ["Gorillas + Rwenzori", "Route planning", "Expedition briefing"],
   },
   {
@@ -29,6 +31,7 @@ const tours = [
     price: "From $6,000",
     desc: "Ultra-premium summit expedition to Uganda’s highest peak with private logistics.",
     link: "/tours/margherita-expedition",
+    image: "/images/travel/terraced-mountains.jpg",
     inclusions: ["Summit planning", "Private logistics", "Luxury support"],
   },
 ];
@@ -43,41 +46,41 @@ const whyCards = [
 const safariCards = [
   {
     title: "Gorilla Encounters",
-    img: "/images/gorilla.jpg",
+    img: "/images/travel/forest-guide.jpg",
     desc: "Rare moments inside Uganda’s ancient forests.",
   },
   {
     title: "Rwenzori Trails",
-    img: "/images/hiking.jpg",
+    img: "/images/travel/boardwalk-trek.jpg",
     desc: "Alpine routes, misty valleys, and serious adventure.",
   },
   {
-    title: "Mountain Wilderness",
-    img: "/images/forest.jpg",
-    desc: "Deep green landscapes built for slow discovery.",
+    title: "Savannah Wildlife",
+    img: "/images/travel/zebra-giraffe.jpg",
+    desc: "Open plains, big wildlife, and slow discovery between treks.",
   },
 ];
 
 const journeyMoments = [
   {
     title: "Forest approach",
-    img: "/images/forest.jpg",
+    img: "/images/travel/forest-trek.jpg",
     caption: "Quiet Bwindi mornings, permit timing, and the slow approach to the trek.",
   },
   {
-    title: "Gorilla encounter",
-    img: "/images/gorilla.jpg",
-    caption: "The rare moment most travelers build the whole journey around.",
+    title: "Ranger briefing",
+    img: "/images/travel/ranger-briefing.jpg",
+    caption: "A calm start with guides and rangers before the forest work begins.",
   },
   {
     title: "Rwenzori trail",
-    img: "/images/hiking.jpg",
+    img: "/images/travel/boardwalk-trek.jpg",
     caption: "Wet valleys, alpine plants, and a pace that needs honest planning.",
   },
   {
-    title: "High mountain country",
-    img: "/images/rwenzori.jpg",
-    caption: "Expedition days where weather, gear, and recovery all matter.",
+    title: "Lake recovery",
+    img: "/images/travel/lake-boat.webp",
+    caption: "Soft recovery days on Uganda's lakes help the whole route feel human.",
   },
 ];
 
@@ -86,7 +89,7 @@ const storyCards = [
     label: "Watch",
     title: "Gorilla trekking in Bwindi",
     desc: "A visual starting point for travelers who want to understand the forest experience before planning.",
-    image: "/images/gorilla.jpg",
+    image: "/images/travel/forest-guide.jpg",
     href: "https://utb.go.ug/",
     cta: "Explore Visit Uganda",
     external: true,
@@ -95,7 +98,7 @@ const storyCards = [
     label: "Read",
     title: "Gorilla Trekking Guide 2026",
     desc: "Permits, timing, trekking expectations, and how to prepare for a serious Uganda journey.",
-    image: "/images/forest.jpg",
+    image: "/images/travel/forest-trek.jpg",
     href: "/guide",
     cta: "Read Our Guide",
     external: false,
@@ -104,7 +107,7 @@ const storyCards = [
     label: "Official",
     title: "Bwindi World Heritage context",
     desc: "UNESCO background on the biodiversity and conservation value of Bwindi Impenetrable National Park.",
-    image: "/images/forest.jpg",
+    image: "/images/travel/terraced-mountains.jpg",
     href: "https://whc.unesco.org/en/list/682",
     cta: "Open UNESCO Source",
     external: true,
@@ -113,7 +116,7 @@ const storyCards = [
     label: "Official",
     title: "Permit and tracking rules",
     desc: "Uganda Wildlife Authority guidance for gorilla and chimpanzee tracking procedures.",
-    image: "/images/gorilla.jpg",
+    image: "/images/travel/ranger-briefing.jpg",
     href: "https://ugandawildlife.org/wp-content/uploads/2024/07/Guidelines-for-the-management-of-gorilla-and-chimpanzee-tracking-JULY-2024.pdf",
     cta: "View UWA Guidance",
     external: true,
@@ -122,7 +125,7 @@ const storyCards = [
     label: "Plan",
     title: "Rwenzori trail preparation",
     desc: "Mountain route planning, weather, pacing, gear expectations, and recovery days for high-country travel.",
-    image: "/images/rwenzori.jpg",
+    image: "/images/travel/boardwalk-trek.jpg",
     href: "/rwenzori-hiking-tours",
     cta: "Explore Rwenzori",
     external: false,
@@ -131,7 +134,7 @@ const storyCards = [
     label: "Private",
     title: "Build your Uganda story",
     desc: "Bring the inspiration back to a real itinerary with permits, lodges, guiding, and private logistics.",
-    image: "/images/hiking.jpg",
+    image: "/images/travel/lake-boat.webp",
     href: "/#book",
     cta: "Request Itinerary",
     external: false,
@@ -405,8 +408,8 @@ function HomeContent() {
      <section className="relative h-[80vh] flex items-center justify-center text-center text-white overflow-hidden">
 
   <img
-    src="/images/rwenzori.jpg"
-    alt="Rwenzori mountain landscape in Uganda"
+    src="/images/travel/lake-boat.webp"
+    alt="Travelers crossing a Ugandan lake by boat"
     className="absolute inset-0 w-full h-full object-cover"
   />
 
@@ -587,6 +590,9 @@ function HomeContent() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
           {tours.map((tour, index) => (
             <a key={tour.title} href={tour.link} className={`package-card group ${index === 1 ? "featured-card" : ""}`}>
+              <div className="mb-6 h-52 overflow-hidden rounded-2xl">
+                <img src={tour.image} alt={tour.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              </div>
               <p className="text-[#b8860b] text-sm mb-3">0{index + 1} / {tour.days}</p>
               <h4 className="text-2xl font-black mb-3 group-hover:text-[#2f7d4e] transition">{tour.title}</h4>
               <p className="text-[#123a2a] font-semibold mb-5">{tour.price}</p>

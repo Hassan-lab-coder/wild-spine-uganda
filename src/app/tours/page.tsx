@@ -6,7 +6,7 @@ const tours = [
     desc: "Premium gorilla trekking through Bwindi with private guidance, permit support, and curated lodge planning.",
     link: "/tours/spine-explorer",
     bestFor: "Short private gorilla journeys",
-    image: "/images/gorilla.jpg",
+    image: "/images/travel/forest-guide.jpg",
   },
   {
     title: "The Summit Trail",
@@ -15,7 +15,7 @@ const tours = [
     desc: "The signature Wild Spine journey combining gorilla forests, Rwenzori valleys, alpine trails, and glacier country.",
     link: "/tours/summit-trail",
     bestFor: "Gorillas plus serious hiking",
-    image: "/images/hiking.jpg",
+    image: "/images/travel/forest-trek.jpg",
   },
   {
     title: "Margherita Expedition",
@@ -24,7 +24,7 @@ const tours = [
     desc: "Ultra-premium summit expedition to Uganda's highest peak with private logistics and serious expedition support.",
     link: "/tours/margherita-expedition",
     bestFor: "High-altitude expedition travelers",
-    image: "/images/rwenzori.jpg",
+    image: "/images/travel/terraced-mountains.jpg",
   },
 ];
 

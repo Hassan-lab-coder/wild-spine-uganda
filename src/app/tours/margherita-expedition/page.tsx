@@ -5,7 +5,7 @@ export default function MargheritaExpeditionPage() {
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <img
-          src="/images/rwenzori.jpg"
+          src="/images/travel/terraced-mountains.jpg"
           alt="Rwenzori Mountains and Margherita expedition"
           className="absolute inset-0 w-full h-full object-cover"
         />

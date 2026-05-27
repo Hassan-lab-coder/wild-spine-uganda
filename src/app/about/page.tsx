@@ -3,7 +3,7 @@ export default function AboutPage() {
     <main className="min-h-screen bg-black text-white">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <img
-          src="/images/rwenzori.jpg"
+          src="/images/travel/terraced-mountains.jpg"
           alt="Rwenzori Mountains"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -46,7 +46,7 @@ export default function AboutPage() {
 
           <div className="h-[400px] rounded-3xl overflow-hidden">
             <img
-              src="/images/forest.jpg"
+              src="/images/travel/forest-trek.jpg"
               alt="Uganda forest"
               className="w-full h-full object-cover"
             />
@@ -58,7 +58,7 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
           <div className="group relative h-[320px] rounded-3xl overflow-hidden">
             <img
-              src="/images/gorilla.jpg"
+              src="/images/travel/forest-guide.jpg"
               alt="Mountain gorilla"
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
             />
@@ -73,7 +73,7 @@ export default function AboutPage() {
 
           <div className="group relative h-[320px] rounded-3xl overflow-hidden">
             <img
-              src="/images/hiking.jpg"
+              src="/images/travel/boardwalk-trek.jpg"
               alt="Hiking in Uganda"
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
             />
@@ -88,15 +88,15 @@ export default function AboutPage() {
 
           <div className="group relative h-[320px] rounded-3xl overflow-hidden">
             <img
-              src="/images/rwenzori.jpg"
-              alt="Rwenzori Mountains"
+              src="/images/travel/safari-elephants.jpg"
+              alt="Uganda safari elephants"
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
             />
             <div className="absolute inset-0 bg-black/60" />
             <div className="relative z-10 p-6 flex flex-col justify-end h-full">
-              <h3 className="text-2xl font-black">Summit Experiences</h3>
+              <h3 className="text-2xl font-black">Safari Extensions</h3>
               <p className="text-gray-300 text-sm mt-2">
-                Margherita Peak and beyond.
+                Open plains and wildlife days beyond the forest.
               </p>
             </div>
           </div>

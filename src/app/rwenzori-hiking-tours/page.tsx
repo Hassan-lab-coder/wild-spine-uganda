@@ -6,7 +6,7 @@ export default function RwenzoriHikingToursPage() {
       kicker="Rwenzori hiking tours"
       title="Rwenzori hiking and expedition planning"
       description="Explore Uganda's Rwenzori Mountains with route guidance, pacing advice, private transfers, and practical expedition preparation."
-      image="/images/hiking.jpg"
+      image="/images/travel/boardwalk-trek.jpg"
       route="The Summit Trail"
       cta="Plan Rwenzori Hiking"
       bullets={["Route and duration guidance", "Mountain logistics coordination", "Fitness and gear preparation", "Gorilla trekking add-on options"]}

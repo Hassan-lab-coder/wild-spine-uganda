@@ -5,7 +5,7 @@ export default function SpineExplorerPage() {
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <img
-          src="/images/gorilla.jpg"
+          src="/images/travel/forest-guide.jpg"
           alt="Mountain gorilla in Bwindi"
           className="absolute inset-0 w-full h-full object-cover"
         />

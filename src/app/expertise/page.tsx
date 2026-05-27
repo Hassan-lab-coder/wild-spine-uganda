@@ -22,7 +22,7 @@ export default function ExpertisePage() {
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <img
-          src="/images/forest.jpg"
+          src="/images/travel/ranger-briefing.jpg"
           alt="Uganda forest"
           className="absolute inset-0 w-full h-full object-cover"
         />

@@ -22,7 +22,7 @@ export default function PlanningPage() {
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <img
-          src="/images/hiking.jpg"
+          src="/images/travel/ranger-briefing.jpg"
           alt="Premium Uganda expedition planning"
           className="absolute inset-0 w-full h-full object-cover"
         />
