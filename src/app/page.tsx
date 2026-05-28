@@ -31,7 +31,7 @@ const tours = [
     price: "From $6,000",
     desc: "Ultra-premium summit expedition to Uganda’s highest peak with private logistics.",
     link: "/tours/margherita-expedition",
-    image: "/images/travel/terraced-mountains.jpg",
+    image: "/images/travel/margherita-peak.png",
     inclusions: ["Summit planning", "Private logistics", "Luxury support"],
   },
 ];

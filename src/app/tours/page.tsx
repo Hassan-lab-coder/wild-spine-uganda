@@ -24,7 +24,7 @@ const tours = [
     desc: "Ultra-premium summit expedition to Uganda's highest peak with private logistics and serious expedition support.",
     link: "/tours/margherita-expedition",
     bestFor: "High-altitude expedition travelers",
-    image: "/images/travel/terraced-mountains.jpg",
+    image: "/images/travel/margherita-peak.png",
   },
 ];
 
