@@ -612,12 +612,12 @@ function HomeContent() {
 
 <section className="relative overflow-hidden py-32 px-6 md:px-24 border-t border-[#d8cda9]">
   <img
-    src="/images/travel/traveler-trust-culture.jpg"
-    alt="Ugandan cultural performance and traditional music"
-    className="absolute inset-0 h-full w-full object-cover"
+    src="/images/travel/traveler-trust-gorilla.jpg"
+    alt="Young mountain gorilla in green forest"
+    className="absolute inset-0 h-full w-full object-cover object-[28%_center]"
   />
-  <div className="absolute inset-0 bg-[#fff9ea]/72" />
-  <div className="absolute inset-0 bg-gradient-to-r from-[#fff9ea]/92 via-[#fff9ea]/72 to-[#fff9ea]/42" />
+  <div className="absolute inset-0 bg-[#fff9ea]/40" />
+  <div className="absolute inset-0 bg-gradient-to-r from-[#fff9ea]/82 via-[#fff9ea]/46 to-[#fff9ea]/12" />
 
   <div className="relative z-10 max-w-6xl mx-auto">
     <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-14 items-start mb-16">
