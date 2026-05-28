@@ -610,8 +610,16 @@ function HomeContent() {
         </div>
       </section>
 
-<section className="py-32 px-6 md:px-24 bg-[#f8f4e8] border-t border-[#d8cda9]">
-  <div className="max-w-6xl mx-auto">
+<section className="relative overflow-hidden py-32 px-6 md:px-24 border-t border-[#d8cda9]">
+  <img
+    src="/images/travel/traveler-trust-culture.jpg"
+    alt="Ugandan cultural performance and traditional music"
+    className="absolute inset-0 h-full w-full object-cover"
+  />
+  <div className="absolute inset-0 bg-[#fff9ea]/72" />
+  <div className="absolute inset-0 bg-gradient-to-r from-[#fff9ea]/92 via-[#fff9ea]/72 to-[#fff9ea]/42" />
+
+  <div className="relative z-10 max-w-6xl mx-auto">
     <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-14 items-start mb-16">
       <div>
         <p className="section-kicker">Traveler trust</p>
@@ -627,7 +635,7 @@ function HomeContent() {
 
       <div className="grid sm:grid-cols-2 gap-4">
         {trustSignals.map(([value, label]) => (
-          <div key={value} className="rounded-2xl border border-[#d8cda9] bg-white/70 shadow-sm p-6">
+          <div key={value} className="rounded-2xl border border-[#d8cda9] bg-white/85 shadow-lg backdrop-blur-sm p-6">
             <p className="text-3xl font-black text-[#b8860b]">{value}</p>
             <p className="mt-3 text-sm leading-6 text-[#68746a]">{label}</p>
           </div>
@@ -637,7 +645,7 @@ function HomeContent() {
 
     <div className="grid md:grid-cols-3 gap-6">
       {travelerReviews.map((review) => (
-        <div key={review.name} className="rounded-2xl border border-[#d8cda9] bg-white/70 shadow-sm p-6">
+        <div key={review.name} className="rounded-2xl border border-[#d8cda9] bg-white/85 shadow-lg backdrop-blur-sm p-6">
           <p className="mb-5 text-sm font-black tracking-widest text-[#b8860b]">
             5 / 5 PRIVATE TRAVELER REVIEW
           </p>
