@@ -872,25 +872,33 @@ function HomeContent() {
   </div>
 </section>
 
-      <section id="book" className="py-32 px-6 md:px-24 bg-[#fff9ea]">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16">
+      <section id="book" className="relative overflow-hidden py-32 px-6 text-white md:px-24">
+        <img
+          src="/images/travel/booking-gorilla.jpg"
+          alt="Mountain gorilla in green forest"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[#123a2a]/58" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-[#123a2a]/15 to-black/10" />
+
+        <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-16">
           <div>
             <p className="section-kicker">Begin the crossing</p>
             <h3 className="text-4xl md:text-6xl font-black mb-8">
               Most people never find this Uganda.
             </h3>
-            <p className="text-[#68746a] text-lg leading-8">
+            <p className="text-white/80 text-lg leading-8">
               Tell us your travel dates, preferred comfort, and dream route.
             </p>
           </div>
 
           {sent ? (
-            <div className="p-10 rounded-[2rem] bg-white/70 shadow-sm border border-[#f5b416]/40">
+            <div className="p-10 rounded-[2rem] bg-white/90 shadow-2xl border border-[#f5b416]/40">
               <h4 className="text-3xl font-black text-[#b8860b] mb-4">Request received.</h4>
               <p className="text-[#3d4a41]">We’ll respond with route guidance, pricing, and permit availability.</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="p-8 rounded-[2rem] bg-white/70 shadow-sm border border-[#d8cda9]">
+            <form onSubmit={handleSubmit} className="p-8 rounded-[2rem] bg-white/90 shadow-2xl border border-white/45 backdrop-blur-sm">
               <div className="grid sm:grid-cols-2 gap-5">
                 <input required name="name" className="form-input" placeholder="Full name" />
                 <input required name="email" type="email" className="form-input" placeholder="Email address" />
