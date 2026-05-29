@@ -83,6 +83,7 @@ export default function MargheritaExpeditionPage() {
 <a
   href="https://wa.me/256751828241"
   target="_blank"
+  rel="noopener noreferrer"
   className="block mt-4 text-center border border-white/20 py-3 rounded-full text-sm hover:bg-white hover:text-black transition"
 >
   Chat on WhatsApp

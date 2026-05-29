@@ -84,6 +84,33 @@ const journeyMoments = [
   },
 ];
 
+const premiumVentures = [
+  {
+    label: "Private Expeditions",
+    title: "Plan the journey.",
+    desc: "Gorilla trekking, Rwenzori routes, private safari extensions, and premium logistics shaped around your dates, pace, and comfort level.",
+    href: "/tours",
+    image: "/images/travel/forest-guide.jpg",
+    cta: "Explore Tours",
+  },
+  {
+    label: "Executive Retreats",
+    title: "Leadership built in the wild.",
+    desc: "Private Uganda offsites for founders, boards, executives, NGOs, and senior teams who want a rare shared experience with real strategic value.",
+    href: "/corporate-retreats",
+    image: "/images/travel/corporate-retreat.jpg",
+    cta: "Explore Retreats",
+  },
+  {
+    label: "Conservation Membership",
+    title: "Support that continues after the journey.",
+    desc: "Membership circles for travelers and supporters who want field stories, impact updates, and a lasting connection to Uganda's wild places.",
+    href: "/conservation-membership",
+    image: "/images/travel/traveler-trust-gorilla.jpg",
+    cta: "Become a Guardian",
+  },
+];
+
 const storyCards = [
   {
     label: "Watch",
@@ -327,11 +354,13 @@ function HomeContent() {
           <p className="text-xs text-[#b8860b] tracking-[0.35em]">UGANDA</p>
         </a>
 
-        <div className="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest">
+        <div className="hidden md:flex items-center gap-5 text-xs uppercase tracking-widest xl:gap-8 xl:text-sm">
           <a href="#experience" className="nav-link">Experience</a>
           <a href="/volunteer" className="nav-link">Volunteer</a>
 <a href="/guide" className="nav-link">Guide</a>
 <a href="/tours" className="nav-link">Tours</a>
+          <a href="/corporate-retreats" className="nav-link">Retreats</a>
+          <a href="/conservation-membership" className="nav-link">Impact</a>
           <a href="/about" className="nav-link">About</a>
           <a href="#why" className="nav-link">Why Us</a>
           <a href="#book" className="bg-[#f5b416] text-black px-5 py-3 rounded-full font-black hover:bg-[#ffd766] transition">
@@ -357,6 +386,8 @@ function HomeContent() {
           <div className="grid gap-3 text-sm font-bold uppercase tracking-widest">
             <a href="#experience" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-white/70 px-4 py-3">Experience</a>
             <a href="/tours" className="rounded-2xl bg-white/70 px-4 py-3">Tours</a>
+            <a href="/corporate-retreats" className="rounded-2xl bg-white/70 px-4 py-3">Retreats</a>
+            <a href="/conservation-membership" className="rounded-2xl bg-white/70 px-4 py-3">Impact</a>
             <a href="/guide" className="rounded-2xl bg-white/70 px-4 py-3">Guide</a>
             <a href="/volunteer" className="rounded-2xl bg-white/70 px-4 py-3">Volunteer</a>
             <a href="/about" className="rounded-2xl bg-white/70 px-4 py-3">About</a>
@@ -609,6 +640,48 @@ function HomeContent() {
           ))}
         </div>
       </section>
+
+<section className="py-32 px-6 md:px-24 bg-[#123a2a] text-white">
+  <div className="max-w-6xl mx-auto">
+    <div className="mb-14 grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+      <div>
+        <p className="section-kicker">Beyond Safari</p>
+        <h3 className="text-4xl md:text-6xl font-black">
+          Choose how you enter Wild Spine.
+        </h3>
+      </div>
+      <p className="text-lg leading-8 text-white/70">
+        Start with a private expedition, bring a leadership team into the wilderness,
+        or stay connected through conservation membership after the journey.
+      </p>
+    </div>
+
+    <div className="grid gap-6 lg:grid-cols-3">
+      {premiumVentures.map((venture) => (
+        <a
+          key={venture.title}
+          href={venture.href}
+          className="group overflow-hidden rounded-3xl border border-white/12 bg-white/8 transition duration-500 hover:-translate-y-1 hover:border-[#f5b416]/55"
+        >
+          <div className="relative h-80 overflow-hidden">
+            <img src={venture.image} alt={venture.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
+            <p className="absolute left-6 top-6 rounded-full bg-[#f5b416] px-4 py-2 text-xs font-black uppercase tracking-widest text-black">
+              {venture.label}
+            </p>
+          </div>
+          <div className="p-7 md:p-8">
+            <h4 className="mb-4 text-3xl font-black transition group-hover:text-[#f5b416]">
+              {venture.title}
+            </h4>
+            <p className="mb-8 leading-7 text-white/70">{venture.desc}</p>
+            <p className="font-black text-[#f5b416]">{venture.cta}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
 
 <section className="relative overflow-hidden py-32 px-6 md:px-24 border-t border-[#d8cda9]">
   <img
@@ -923,6 +996,8 @@ function HomeContent() {
                   <option>The Summit Trail</option>
                   <option>Margherita Expedition</option>
                   <option>Gorilla Permit Help</option>
+                  <option>Corporate Retreat</option>
+                  <option>Conservation Membership</option>
                   <option>Custom Uganda Safari</option>
                 </select>
                 </label>

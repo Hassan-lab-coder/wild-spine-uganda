@@ -18,9 +18,18 @@ type Status = "new" | "contacted" | "qualified" | "confirmed" | "closed";
 type DateFilter = "all" | "7" | "30" | "followups";
 type SortBy = "newest" | "oldest" | "follow_up" | "status";
 type InvoiceStatus = "draft" | "sent" | "paid" | "cancelled";
+type LeadTypeFilter = "all" | "safari" | "corporate_retreat" | "conservation_membership" | "permit_help" | "other";
 
 const statuses: Status[] = ["new", "contacted", "qualified", "confirmed", "closed"];
 const invoiceStatuses: InvoiceStatus[] = ["draft", "sent", "paid", "cancelled"];
+const leadTypeOptions: Array<[LeadTypeFilter, string]> = [
+  ["all", "All lead types"],
+  ["safari", "Safari / expedition"],
+  ["corporate_retreat", "Corporate retreat"],
+  ["conservation_membership", "Conservation membership"],
+  ["permit_help", "Permit help"],
+  ["other", "Other"],
+];
 
 export default function AdminDashboard() {
   const [session, setSession] = useState<Session>(null);
@@ -40,6 +49,7 @@ export default function AdminDashboard() {
   const [invoiceDraftVersion, setInvoiceDraftVersion] = useState(0);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
+  const [leadTypeFilter, setLeadTypeFilter] = useState<LeadTypeFilter>("all");
   const [dateFilter, setDateFilter] = useState<DateFilter>("all");
   const [sortBy, setSortBy] = useState<SortBy>("newest");
   const [dashboardTime, setDashboardTime] = useState(0);
@@ -111,8 +121,9 @@ export default function AdminDashboard() {
   }, [loadDashboardData, router]);
 
   const visibleRequests = useMemo(
-    () => prepareRows(requests, query, statusFilter, dateFilter, sortBy, dashboardTime),
-    [dashboardTime, dateFilter, query, requests, sortBy, statusFilter]
+    () => prepareRows(requests, query, statusFilter, dateFilter, sortBy, dashboardTime)
+      .filter((request) => leadTypeFilter === "all" || getLeadType(request) === leadTypeFilter),
+    [dashboardTime, dateFilter, leadTypeFilter, query, requests, sortBy, statusFilter]
   );
   const visibleVolunteers = useMemo(
     () => prepareRows(volunteers, query, statusFilter, dateFilter, sortBy, dashboardTime),
@@ -139,8 +150,10 @@ export default function AdminDashboard() {
       receipts: receipts.length,
       unreadEmails: inboundEmails.filter((email) => !email.read_at).length,
       unpaid: invoices.filter((invoice) => !["paid", "cancelled"].includes(invoice.status)).length,
+      retreats: requests.filter((request) => getLeadType(request) === "corporate_retreat").length,
+      memberships: requests.filter((request) => getLeadType(request) === "conservation_membership").length,
     };
-  }, [dashboardTime, inboundEmails, invoices, operationalRows, receipts]);
+  }, [dashboardTime, inboundEmails, invoices, operationalRows, receipts, requests]);
 
   async function updateStatus(kind: "requests" | "volunteers" | "guides", id: string, status: Status) {
     await updateRecord(kind, id, { status });
@@ -367,7 +380,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="admin-surface min-h-screen bg-black px-6 py-10 text-white md:px-12 xl:px-20">
+    <main className="admin-surface min-h-screen px-6 py-10 text-white md:px-12 xl:px-20">
       <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="section-kicker">Wild Spine Operations</p>
@@ -395,11 +408,13 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      <section className="mb-6 grid gap-4 md:grid-cols-4 xl:grid-cols-8">
+      <section className="mb-6 grid gap-4 md:grid-cols-4 xl:grid-cols-10">
         <MetricCard label="Total Records" value={metrics.total} />
         <MetricCard label="New Leads" value={metrics.new} />
         <MetricCard label="Last 7 Days" value={metrics.fresh} />
         <MetricCard label="Follow-Ups Due" value={metrics.due} urgent={metrics.due > 0} />
+        <MetricCard label="Retreat Leads" value={metrics.retreats} urgent={metrics.retreats > 0} />
+        <MetricCard label="Membership Leads" value={metrics.memberships} urgent={metrics.memberships > 0} />
         <MetricCard label="Unread Inbox" value={metrics.unreadEmails} urgent={metrics.unreadEmails > 0} />
         <MetricCard label="Invoices" value={metrics.invoices} />
         <MetricCard label="Receipts" value={metrics.receipts} />
@@ -408,7 +423,7 @@ export default function AdminDashboard() {
 
       <PipelineSummary rows={operationalRows} />
 
-      <section className="mb-8 grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 xl:grid-cols-[1fr_auto_auto_auto_auto]">
+      <section className="mb-8 grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 xl:grid-cols-[1fr_auto_auto_auto_auto_auto]">
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
@@ -419,6 +434,10 @@ export default function AdminDashboard() {
         <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "all" | Status)} className="form-input xl:w-48">
           <option value="all">All statuses</option>
           {statuses.map((status) => <option key={status} value={status}>{labelStatus(status)}</option>)}
+        </select>
+
+        <select value={leadTypeFilter} onChange={(event) => setLeadTypeFilter(event.target.value as LeadTypeFilter)} className="form-input xl:w-56">
+          {leadTypeOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
         </select>
 
         <select value={dateFilter} onChange={(event) => setDateFilter(event.target.value as DateFilter)} className="form-input xl:w-48">
@@ -1004,9 +1023,15 @@ function ItineraryCard({ request, now, onStatusChange, onSave, onInvoice }: {
   onSave: (values: { admin_notes: string | null; follow_up_at: string | null }) => void;
   onInvoice: () => void;
 }) {
+  const leadType = getLeadType(request);
+
   return (
     <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
       <RecordHeader title={request.name} subtitle={request.email} status={request.status} createdAt={request.created_at} followUpAt={request.follow_up_at} now={now} onStatusChange={onStatusChange} />
+      <div className="mt-4 flex flex-wrap gap-2">
+        <LeadTypeBadge type={leadType} />
+        {request.lead_source && <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs font-black text-gray-300">{formatSource(request.lead_source)}</span>}
+      </div>
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         <Field label="Route" value={request.route || "Not selected"} />
         <Field label="Travel Month" value={request.travel_month || "Not provided"} />
@@ -1098,6 +1123,23 @@ function RecordHeader({ title, subtitle, status, createdAt, followUpAt, now, onS
         {statuses.map((item) => <option key={item} value={item}>{labelStatus(item)}</option>)}
       </select>
     </div>
+  );
+}
+
+function LeadTypeBadge({ type }: { type: LeadTypeFilter }) {
+  const styles: Record<LeadTypeFilter, string> = {
+    all: "border-white/10 bg-white/10 text-gray-200",
+    safari: "border-green-400/30 bg-green-500/10 text-green-200",
+    corporate_retreat: "border-yellow-400/40 bg-yellow-500/15 text-yellow-200",
+    conservation_membership: "border-emerald-400/40 bg-emerald-500/15 text-emerald-200",
+    permit_help: "border-sky-400/40 bg-sky-500/15 text-sky-200",
+    other: "border-white/10 bg-white/10 text-gray-200",
+  };
+
+  return (
+    <span className={`rounded-full border px-3 py-1 text-xs font-black ${styles[type]}`}>
+      {leadTypeLabel(type)}
+    </span>
   );
 }
 
@@ -1436,6 +1478,28 @@ function labelStatus(status: string) {
   return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
+function getLeadType(request: ItineraryRequest): LeadTypeFilter {
+  const source = (request.lead_source || "").toLowerCase();
+  const route = (request.route || "").toLowerCase();
+
+  if (source.includes("corporate_retreat") || route.includes("retreat")) return "corporate_retreat";
+  if (source.includes("conservation_membership") || route.includes("membership") || route.includes("guardian")) return "conservation_membership";
+  if (route.includes("permit") || source.includes("permit")) return "permit_help";
+  if (route.includes("spine") || route.includes("summit") || route.includes("margherita") || route.includes("safari") || route.includes("gorilla")) return "safari";
+  return "other";
+}
+
+function leadTypeLabel(type: LeadTypeFilter) {
+  const option = leadTypeOptions.find(([value]) => value === type);
+  return option?.[1] || "Other";
+}
+
+function formatSource(source: string) {
+  return source
+    .replaceAll("_", " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
 function stripHtml(value: string) {
   return value
     .replace(/<style[\s\S]*?<\/style>/gi, "")
@@ -1446,6 +1510,38 @@ function stripHtml(value: string) {
 }
 
 function requestReplyTemplate(request: ItineraryRequest) {
+  if (getLeadType(request) === "corporate_retreat") {
+    return `Hi ${request.name},
+
+Thank you for reaching out to Wild Spine Uganda about ${request.route || "an executive wilderness retreat"}.
+
+We received your inquiry and will help shape the right retreat format around your team size, timing, privacy needs, leadership goals, and Uganda logistics.
+
+A few quick questions:
+- How many leaders or team members will attend?
+- What outcome should the retreat create?
+- Are your dates flexible?
+
+Warmly,
+Wild Spine Uganda`;
+  }
+
+  if (getLeadType(request) === "conservation_membership") {
+    return `Hi ${request.name},
+
+Thank you for your interest in ${request.route || "Wild Spine conservation membership"}.
+
+We received your details and will help confirm the right membership level, impact reporting rhythm, and next steps for supporting Uganda's wild places.
+
+A few quick questions:
+- Is this for an individual, family, or organization?
+- Which impact area matters most to you?
+- Would you like membership connected to a future Uganda journey?
+
+Warmly,
+Wild Spine Uganda`;
+  }
+
   return `Hi ${request.name},
 
 Thank you for reaching out to Wild Spine Uganda about ${request.route || "your Uganda journey"}.

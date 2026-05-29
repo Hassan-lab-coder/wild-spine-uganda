@@ -5,6 +5,8 @@ const siteUrl = "https://www.wildspineuganda.com";
 const routes = [
   "",
   "/about",
+  "/conservation-membership",
+  "/corporate-retreats",
   "/expertise",
   "/gorilla-trekking-uganda",
   "/guide",

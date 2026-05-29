@@ -23,13 +23,15 @@ export const metadata: Metadata = {
     template: "%s | Wild Spine Uganda",
   },
   description:
-    "Luxury Uganda expeditions from Bwindi gorilla forests to the Rwenzori Mountains. Private, premium, unforgettable journeys.",
+    "Premium Uganda expeditions, executive wilderness retreats, conservation membership, and private gorilla trekking journeys from Bwindi to the Rwenzori Mountains.",
   keywords: [
     "Uganda safaris",
     "gorilla trekking Uganda",
     "Rwenzori mountains",
     "luxury Africa travel",
     "Uganda tours",
+    "corporate retreats Uganda",
+    "conservation travel Uganda",
   ],
   alternates: {
     canonical: "/",
@@ -48,7 +50,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Wild Spine Uganda",
     description:
-      "Trek the Backbone of Africa - premium gorilla & mountain expeditions.",
+      "Premium Uganda expeditions, executive retreats, conservation membership, and private gorilla trekking journeys.",
     url: "https://www.wildspineuganda.com",
     siteName: "Wild Spine Uganda",
     locale: "en_US",
@@ -66,7 +68,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Wild Spine Uganda",
     description:
-      "Private Uganda journeys for gorilla trekking, Rwenzori hiking, and luxury safaris.",
+      "Private Uganda journeys, executive wilderness retreats, conservation membership, and luxury safari planning.",
     images: ["/images/gorilla.jpg"],
   },
 };
@@ -110,6 +112,8 @@ export default function RootLayout({
               { "@type": "Offer", itemOffered: { "@type": "TouristTrip", name: "The Spine Explorer" } },
               { "@type": "Offer", itemOffered: { "@type": "TouristTrip", name: "The Summit Trail" } },
               { "@type": "Offer", itemOffered: { "@type": "TouristTrip", name: "Margherita Expedition" } },
+              { "@type": "Offer", itemOffered: { "@type": "Event", name: "Executive Wilderness Retreats" } },
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "Conservation Membership" } },
             ],
           }}
         />

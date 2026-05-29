@@ -152,6 +152,26 @@ section {
   color: #fff;
 }
 
+.admin-surface {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.80), rgba(0,0,0,0.72)),
+    linear-gradient(90deg, rgba(18,58,42,0.72), rgba(0,0,0,0.28)),
+    url("/images/travel/admin-dashboard-bg.jpg") center / cover fixed;
+}
+
+.admin-surface::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(245,180,22,0.16), transparent 26%),
+    rgba(0,0,0,0.22);
+  pointer-events: none;
+}
+
 .admin-surface .form-input::placeholder {
   color: rgba(255,255,255,0.45);
 }

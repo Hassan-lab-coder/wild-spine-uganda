@@ -40,7 +40,7 @@ export default function UgandaGorillaPermitHelpPage() {
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <a href={permitInquiryHref} className="rounded-full bg-yellow-500 px-8 py-4 font-black text-black hover:bg-yellow-400">Request Permit Help</a>
-            <a href="https://wa.me/256751828241" className="rounded-full border border-white/20 px-8 py-4 font-black hover:bg-white hover:text-black">Ask on WhatsApp</a>
+            <a href="https://wa.me/256751828241" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/20 px-8 py-4 font-black hover:bg-white hover:text-black">Ask on WhatsApp</a>
           </div>
         </div>
       </section>

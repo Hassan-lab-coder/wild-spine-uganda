@@ -7,9 +7,9 @@ const hiddenRoutes = new Set(["/", "/admin", "/login", "/reset-password"]);
 const navItems = [
   ["Tours", "/tours"],
   ["Permits", "/uganda-gorilla-permit-help"],
+  ["Retreats", "/corporate-retreats"],
+  ["Impact", "/conservation-membership"],
   ["Guide", "/guide"],
-  ["Volunteer", "/volunteer"],
-  ["Reviews", "/reviews"],
   ["About", "/about"],
 ] as const;
 
