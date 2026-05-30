@@ -258,6 +258,66 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["analytics_events"]["Insert"]>;
         Relationships: [];
       };
+      email_automation_events: {
+        Row: {
+          id: string;
+          lead_id: string;
+          lead_table: string;
+          event_type: string;
+          scheduled_for: string;
+          sent_at: string | null;
+          status: string;
+          metadata: Record<string, unknown> | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          lead_id: string;
+          lead_table: string;
+          event_type: string;
+          scheduled_for: string;
+          sent_at?: string | null;
+          status?: string;
+          metadata?: Record<string, unknown> | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["email_automation_events"]["Insert"]>;
+        Relationships: [];
+      };
+      payment_requests: {
+        Row: {
+          id: string;
+          invoice_id: string | null;
+          client_name: string;
+          client_email: string;
+          amount: number;
+          currency: string;
+          provider: string;
+          provider_reference: string | null;
+          checkout_url: string | null;
+          status: string;
+          metadata: Record<string, unknown> | null;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          invoice_id?: string | null;
+          client_name: string;
+          client_email: string;
+          amount: number;
+          currency?: string;
+          provider?: string;
+          provider_reference?: string | null;
+          checkout_url?: string | null;
+          status?: string;
+          metadata?: Record<string, unknown> | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["payment_requests"]["Insert"]>;
+        Relationships: [];
+      };
     };
     Functions: {
       is_admin: {

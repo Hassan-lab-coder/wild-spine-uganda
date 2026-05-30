@@ -14,13 +14,13 @@ type Receipt = Database["public"]["Tables"]["receipts"]["Row"];
 type InboundEmail = Database["public"]["Tables"]["inbound_emails"]["Row"];
 type LineItem = Invoice["line_items"][number];
 type TabKey = "requests" | "volunteers" | "guides" | "inbox" | "invoices" | "receipts" | "analytics";
-type Status = "new" | "contacted" | "qualified" | "confirmed" | "closed";
+type Status = "pending" | "new" | "contacted" | "qualified" | "confirmed" | "paid" | "closed";
 type DateFilter = "all" | "7" | "30" | "followups";
 type SortBy = "newest" | "oldest" | "follow_up" | "status";
 type InvoiceStatus = "draft" | "sent" | "paid" | "cancelled";
 type LeadTypeFilter = "all" | "safari" | "corporate_retreat" | "conservation_membership" | "permit_help" | "other";
 
-const statuses: Status[] = ["new", "contacted", "qualified", "confirmed", "closed"];
+const statuses: Status[] = ["pending", "new", "contacted", "qualified", "confirmed", "paid", "closed"];
 const invoiceStatuses: InvoiceStatus[] = ["draft", "sent", "paid", "cancelled"];
 const leadTypeOptions: Array<[LeadTypeFilter, string]> = [
   ["all", "All lead types"],
@@ -929,7 +929,94 @@ function InvoiceCard({ invoice, onMoneySave, onStatusChange, onPrint }: {
         <button type="button" onClick={onPrint} className="admin-primary-button text-sm">Print Invoice</button>
         {invoice.client_email && <a href={`mailto:${invoice.client_email}?subject=${encodeURIComponent(`Invoice ${invoice.invoice_number} from Wild Spine Uganda`)}`} className="admin-outline-button text-sm">Email Client</a>}
       </div>
+      <PaymentLinkPanel invoice={invoice} />
     </article>
+  );
+}
+
+function PaymentLinkPanel({ invoice }: { invoice: Invoice }) {
+  const [provider, setProvider] = useState<"stripe" | "flutterwave" | "manual">("stripe");
+  const [creating, setCreating] = useState(false);
+  const [result, setResult] = useState("");
+  const [error, setError] = useState("");
+
+  async function createPaymentLink() {
+    setCreating(true);
+    setResult("");
+    setError("");
+
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+
+    if (!token) {
+      setCreating(false);
+      setError("Admin session expired. Sign in again before creating a payment link.");
+      return;
+    }
+
+    const response = await fetch("/api/payment-links", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        invoice_id: invoice.id,
+        client_name: invoice.client_name,
+        client_email: invoice.client_email,
+        amount: invoice.total,
+        currency: invoice.currency,
+        trip_name: invoice.trip_name || invoice.invoice_number,
+        provider,
+      }),
+    });
+    const json = await response.json().catch(() => null) as {
+      ok?: boolean;
+      reason?: string;
+      payment_request?: { checkout_url?: string | null; provider_reference?: string | null };
+    } | null;
+
+    setCreating(false);
+
+    if (!response.ok || !json?.ok) {
+      setError(json?.reason || "Payment link could not be created.");
+      return;
+    }
+
+    const checkoutUrl = json.payment_request?.checkout_url;
+    if (checkoutUrl) {
+      await navigator.clipboard.writeText(checkoutUrl);
+      setResult(`Payment link copied: ${checkoutUrl}`);
+      return;
+    }
+
+    setResult(`Manual payment request recorded: ${json.payment_request?.provider_reference || invoice.invoice_number}`);
+  }
+
+  return (
+    <div className="mt-5 rounded-3xl border border-white/10 bg-black/25 p-5">
+      <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-widest text-yellow-500">Payment readiness</p>
+          <p className="mt-1 text-sm text-gray-400">Create a tracked payment request for Stripe, Flutterwave, or manual follow-up.</p>
+        </div>
+        <select value={provider} onChange={(event) => setProvider(event.target.value as "stripe" | "flutterwave" | "manual")} className="form-input md:w-44">
+          <option value="stripe">Stripe</option>
+          <option value="flutterwave">Flutterwave</option>
+          <option value="manual">Manual</option>
+        </select>
+      </div>
+      <button
+        type="button"
+        onClick={createPaymentLink}
+        disabled={creating || !invoice.client_email || invoice.total <= 0}
+        className="admin-primary-button text-sm disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {creating ? "Creating..." : "Create Payment Request"}
+      </button>
+      {result && <p className="mt-4 rounded-xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm text-green-200">{result}</p>}
+      {error && <p className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}
+    </div>
   );
 }
 

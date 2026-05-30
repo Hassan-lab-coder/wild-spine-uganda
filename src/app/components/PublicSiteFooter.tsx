@@ -43,6 +43,9 @@ export default function PublicSiteFooter() {
             <a href="/gorilla-trekking-uganda" className="hover:text-[#f5b416]">Gorilla Trekking</a>
             <a href="/rwenzori-hiking-tours" className="hover:text-[#f5b416]">Rwenzori Hiking</a>
             <a href="/uganda-luxury-safari" className="hover:text-[#f5b416]">Luxury Safari</a>
+            <a href="/insights/gorilla-trekking-cost-uganda" className="hover:text-[#f5b416]">Gorilla Trekking Cost</a>
+            <a href="/insights/best-time-to-visit-bwindi" className="hover:text-[#f5b416]">Best Time for Bwindi</a>
+            <a href="/insights/is-uganda-safe-for-tourists" className="hover:text-[#f5b416]">Uganda Safety Guide</a>
             <a href="/#book" className="hover:text-[#f5b416]">Request Itinerary</a>
             <a href="/terms" className="hover:text-[#f5b416]">Booking Terms</a>
           </div>

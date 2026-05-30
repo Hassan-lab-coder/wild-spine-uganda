@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
 
 export default function Guide() {
@@ -15,29 +14,25 @@ export default function Guide() {
     setSubmitting(true);
     setError("");
 
-    const { error: insertError } = await supabase.from("guide_leads").insert({
-      email: email.trim(),
-      source: "guide",
+    const response = await fetch("/api/guide-leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email.trim(),
+        source: "guide",
+      }),
     });
+    const result = await response.json().catch(() => null) as { ok?: boolean; reason?: string } | null;
 
     setSubmitting(false);
 
-    if (insertError && insertError.code !== "23505") {
-      setError("We could not save your email. Please try again.");
+    if (!response.ok || !result?.ok) {
+      setError(result?.reason || "We could not save your email. Please try again.");
       return;
     }
 
     setUnlocked(true);
     trackEvent("guide_download_unlocked");
-    fetch("/api/notify-lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "guide download",
-        email: email.trim(),
-        message: "A traveler unlocked the Uganda travel guide.",
-      }),
-    });
   }
 
   return (

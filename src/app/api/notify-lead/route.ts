@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/rate-limit";
 import { cleanMultilineText, cleanText, isAllowedBrowserOrigin, readJsonObject } from "@/lib/server-validation";
 
 type LeadPayload = {
@@ -14,6 +15,12 @@ type LeadPayload = {
 };
 
 export async function POST(request: Request) {
+  const limit = rateLimit(request, { key: "notify_lead", limit: 20, windowMs: 10 * 60 * 1000 });
+
+  if (!limit.ok) {
+    return NextResponse.json({ sent: false, reason: "Too many notification requests." }, { status: 429 });
+  }
+
   if (!isAllowedBrowserOrigin(request)) {
     return NextResponse.json({ sent: false, reason: "Origin is not allowed." }, { status: 403 });
   }

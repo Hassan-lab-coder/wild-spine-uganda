@@ -3,8 +3,8 @@
 import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
+import { submitItineraryLead } from "@/lib/lead-capture";
 
 const tours = [
   {
@@ -294,49 +294,17 @@ function HomeContent() {
       lead_source: leadSource,
     };
 
-    if (!isSupabaseConfigured) {
-      setSubmitting(false);
-      setError("Database is not configured on this deployment. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel.");
-      return;
-    }
-
-    const { error: insertError } = await supabase.from("itinerary_requests").insert(payload);
+    const result = await submitItineraryLead({ ...payload, lead_type: "itinerary request" });
 
     setSubmitting(false);
 
-    if (insertError) {
-      console.error("Itinerary request save failed:", insertError);
-
-      const isSchemaIssue =
-        insertError.message.includes("schema cache") ||
-        insertError.message.includes("Could not find the table") ||
-        insertError.message.includes("column");
-
-      setError(
-        isSchemaIssue
-          ? `Database setup issue: ${insertError.message}`
-          : "We could not save your request. Please try again or contact us on WhatsApp."
-      );
+    if (!result.ok) {
+      setError(result.reason || "We could not save your request. Please try again or contact us on WhatsApp.");
       return;
     }
 
     setSent(true);
     trackEvent("itinerary_request_submitted", { route: payload.route, country: payload.country, source: leadSource });
-    fetch("/api/notify-lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "itinerary request",
-        name: payload.name,
-        email: payload.email,
-        phone: payload.phone,
-        country: payload.country,
-        route: payload.route,
-        travelMonth: payload.travel_month,
-        source: leadSource,
-        message: payload.message,
-      }),
-    });
     router.push(`/thank-you?type=itinerary&source=${encodeURIComponent(leadSource)}${payload.route ? `&route=${encodeURIComponent(payload.route)}` : ""}`);
   }
 

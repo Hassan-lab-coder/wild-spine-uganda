@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
+import { submitItineraryLead } from "@/lib/lead-capture";
 
 type PremiumLeadFormProps = {
   leadSource: string;
@@ -66,18 +66,12 @@ export default function PremiumLeadForm({
       lead_source: leadSource,
     };
 
-    if (!isSupabaseConfigured) {
-      setSubmitting(false);
-      setError("Database is not configured on this deployment. Add Supabase environment variables before collecting live inquiries.");
-      return;
-    }
-
-    const { error: insertError } = await supabase.from("itinerary_requests").insert(payload);
+    const result = await submitItineraryLead({ ...payload, lead_type: type });
 
     setSubmitting(false);
 
-    if (insertError) {
-      setError("We could not save your request. Please try again or contact us on WhatsApp.");
+    if (!result.ok) {
+      setError(result.reason || "We could not save your request. Please try again or contact us on WhatsApp.");
       return;
     }
 
@@ -87,21 +81,6 @@ export default function PremiumLeadForm({
       route: payload.route,
       country: payload.country,
       source: leadSource,
-    });
-    fetch("/api/notify-lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type,
-        name: payload.name,
-        email: payload.email,
-        phone: payload.phone,
-        country: payload.country,
-        route: payload.route,
-        travelMonth: payload.travel_month,
-        source: leadSource,
-        message: payload.message,
-      }),
     });
     router.push(`/thank-you?type=${encodeURIComponent(successType)}&source=${encodeURIComponent(leadSource)}${payload.route ? `&route=${encodeURIComponent(payload.route)}` : ""}`);
   }

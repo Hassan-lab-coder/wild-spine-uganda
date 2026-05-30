@@ -122,6 +122,34 @@ create table if not exists public.analytics_events (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.email_automation_events (
+  id uuid primary key default gen_random_uuid(),
+  lead_id uuid not null,
+  lead_table text not null,
+  event_type text not null,
+  scheduled_for timestamptz not null,
+  sent_at timestamptz,
+  status text not null default 'scheduled',
+  metadata jsonb,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.payment_requests (
+  id uuid primary key default gen_random_uuid(),
+  invoice_id uuid references public.invoices(id) on delete set null,
+  client_name text not null,
+  client_email text not null,
+  amount numeric(12,2) not null,
+  currency text not null default 'USD',
+  provider text not null default 'manual',
+  provider_reference text,
+  checkout_url text,
+  status text not null default 'pending',
+  metadata jsonb,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+
 create or replace function public.is_admin()
 returns boolean
 language sql
@@ -143,6 +171,8 @@ alter table public.receipts enable row level security;
 alter table public.inbound_emails enable row level security;
 alter table public.admin_users enable row level security;
 alter table public.analytics_events enable row level security;
+alter table public.email_automation_events enable row level security;
+alter table public.payment_requests enable row level security;
 
 grant usage on schema public to anon, authenticated;
 grant execute on function public.is_admin() to anon, authenticated;
@@ -158,6 +188,8 @@ grant select, update on public.inbound_emails to authenticated;
 grant select on public.admin_users to authenticated;
 grant insert on public.analytics_events to anon, authenticated;
 grant select on public.analytics_events to authenticated;
+grant select, update on public.email_automation_events to authenticated;
+grant select, insert, update on public.payment_requests to authenticated;
 
 drop policy if exists "Anyone can create itinerary requests" on public.itinerary_requests;
 drop policy if exists "Public can create itinerary requests" on public.itinerary_requests;
@@ -314,6 +346,45 @@ create policy "Admins can read analytics events"
   to authenticated
   using (public.is_admin());
 
+drop policy if exists "Public can schedule automation events" on public.email_automation_events;
+
+drop policy if exists "Admins can read automation events" on public.email_automation_events;
+create policy "Admins can read automation events"
+  on public.email_automation_events
+  for select
+  to authenticated
+  using (public.is_admin());
+
+drop policy if exists "Admins can update automation events" on public.email_automation_events;
+create policy "Admins can update automation events"
+  on public.email_automation_events
+  for update
+  to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
+
+drop policy if exists "Admins can read payment requests" on public.payment_requests;
+create policy "Admins can read payment requests"
+  on public.payment_requests
+  for select
+  to authenticated
+  using (public.is_admin());
+
+drop policy if exists "Admins can create payment requests" on public.payment_requests;
+create policy "Admins can create payment requests"
+  on public.payment_requests
+  for insert
+  to authenticated
+  with check (public.is_admin());
+
+drop policy if exists "Admins can update payment requests" on public.payment_requests;
+create policy "Admins can update payment requests"
+  on public.payment_requests
+  for update
+  to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create index if not exists itinerary_requests_created_at_idx on public.itinerary_requests (created_at desc);
 create index if not exists itinerary_requests_status_idx on public.itinerary_requests (status);
 create index if not exists itinerary_requests_lead_source_idx on public.itinerary_requests (lead_source);
@@ -338,21 +409,27 @@ create index if not exists inbound_emails_received_at_idx on public.inbound_emai
 create index if not exists inbound_emails_read_at_idx on public.inbound_emails (read_at);
 create index if not exists inbound_emails_from_email_idx on public.inbound_emails (from_email);
 create index if not exists analytics_events_created_at_idx on public.analytics_events (created_at desc);
+create index if not exists email_automation_events_scheduled_for_idx on public.email_automation_events (scheduled_for);
+create index if not exists email_automation_events_status_idx on public.email_automation_events (status);
+create index if not exists email_automation_events_lead_idx on public.email_automation_events (lead_table, lead_id);
+create index if not exists payment_requests_created_at_idx on public.payment_requests (created_at desc);
+create index if not exists payment_requests_status_idx on public.payment_requests (status);
+create index if not exists payment_requests_invoice_id_idx on public.payment_requests (invoice_id);
 
 alter table public.itinerary_requests
   drop constraint if exists itinerary_requests_status_check,
   add constraint itinerary_requests_status_check
-  check (status in ('new', 'contacted', 'qualified', 'confirmed', 'closed'));
+  check (status in ('pending', 'new', 'contacted', 'qualified', 'confirmed', 'paid', 'closed'));
 
 alter table public.guide_leads
   drop constraint if exists guide_leads_status_check,
   add constraint guide_leads_status_check
-  check (status in ('new', 'contacted', 'qualified', 'confirmed', 'closed'));
+  check (status in ('pending', 'new', 'contacted', 'qualified', 'confirmed', 'paid', 'closed'));
 
 alter table public.volunteer_applications
   drop constraint if exists volunteer_applications_status_check,
   add constraint volunteer_applications_status_check
-  check (status in ('new', 'contacted', 'qualified', 'confirmed', 'closed'));
+  check (status in ('pending', 'new', 'contacted', 'qualified', 'confirmed', 'paid', 'closed'));
 
 alter table public.invoices
   drop constraint if exists invoices_status_check,
@@ -368,6 +445,26 @@ alter table public.receipts
   drop constraint if exists receipts_amount_check,
   add constraint receipts_amount_check
   check (amount >= 0);
+
+alter table public.email_automation_events
+  drop constraint if exists email_automation_events_status_check,
+  add constraint email_automation_events_status_check
+  check (status in ('scheduled', 'sent', 'failed', 'cancelled'));
+
+alter table public.payment_requests
+  drop constraint if exists payment_requests_status_check,
+  add constraint payment_requests_status_check
+  check (status in ('pending', 'paid', 'failed', 'cancelled', 'expired'));
+
+alter table public.payment_requests
+  drop constraint if exists payment_requests_provider_check,
+  add constraint payment_requests_provider_check
+  check (provider in ('manual', 'stripe', 'flutterwave'));
+
+alter table public.payment_requests
+  drop constraint if exists payment_requests_amount_check,
+  add constraint payment_requests_amount_check
+  check (amount > 0);
 
 alter table public.admin_users
   drop constraint if exists admin_users_email_unique,
