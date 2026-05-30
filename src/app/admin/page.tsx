@@ -423,38 +423,40 @@ export default function AdminDashboard() {
 
       <PipelineSummary rows={operationalRows} />
 
-      <section className="mb-8 grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 xl:grid-cols-[1fr_auto_auto_auto_auto_auto]">
-        <input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          className="form-input"
-          placeholder="Search name, email, country, route, program, notes, message..."
-        />
+      <section className="mb-8 grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-5">
+        <div className="grid gap-4 xl:grid-cols-[minmax(280px,1fr)_180px_220px_180px_180px]">
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            className="form-input"
+            placeholder="Search name, email, country, route, program, notes, message..."
+          />
 
-        <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "all" | Status)} className="form-input xl:w-48">
-          <option value="all">All statuses</option>
-          {statuses.map((status) => <option key={status} value={status}>{labelStatus(status)}</option>)}
-        </select>
+          <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "all" | Status)} className="form-input min-w-0">
+            <option value="all">All statuses</option>
+            {statuses.map((status) => <option key={status} value={status}>{labelStatus(status)}</option>)}
+          </select>
 
-        <select value={leadTypeFilter} onChange={(event) => setLeadTypeFilter(event.target.value as LeadTypeFilter)} className="form-input xl:w-56">
-          {leadTypeOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-        </select>
+          <select value={leadTypeFilter} onChange={(event) => setLeadTypeFilter(event.target.value as LeadTypeFilter)} className="form-input min-w-0">
+            {leadTypeOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+          </select>
 
-        <select value={dateFilter} onChange={(event) => setDateFilter(event.target.value as DateFilter)} className="form-input xl:w-48">
-          <option value="all">All dates</option>
-          <option value="7">Last 7 days</option>
-          <option value="30">Last 30 days</option>
-          <option value="followups">Follow-ups due</option>
-        </select>
+          <select value={dateFilter} onChange={(event) => setDateFilter(event.target.value as DateFilter)} className="form-input min-w-0">
+            <option value="all">All dates</option>
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+            <option value="followups">Follow-ups due</option>
+          </select>
 
-        <select value={sortBy} onChange={(event) => setSortBy(event.target.value as SortBy)} className="form-input xl:w-48">
-          <option value="newest">Newest first</option>
-          <option value="oldest">Oldest first</option>
-          <option value="follow_up">Follow-up date</option>
-          <option value="status">Status</option>
-        </select>
+          <select value={sortBy} onChange={(event) => setSortBy(event.target.value as SortBy)} className="form-input min-w-0">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="follow_up">Follow-up date</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
 
-        <div className="grid grid-cols-2 rounded-2xl border border-white/10 bg-black/40 p-1 md:grid-cols-7">
+        <div className="grid grid-cols-2 gap-1 rounded-2xl border border-white/10 bg-black/40 p-1 sm:grid-cols-3 lg:grid-cols-7">
           <TabButton active={activeTab === "requests"} onClick={() => setActiveTab("requests")}>Requests</TabButton>
           <TabButton active={activeTab === "volunteers"} onClick={() => setActiveTab("volunteers")}>Volunteers</TabButton>
           <TabButton active={activeTab === "guides"} onClick={() => setActiveTab("guides")}>Guides</TabButton>
@@ -1413,7 +1415,7 @@ function MetricCard({ label, value, urgent = false }: { label: string; value: nu
 
 function TabButton({ active, children, onClick }: { active: boolean; children: React.ReactNode; onClick: () => void }) {
   return (
-    <button onClick={onClick} className={`rounded-xl px-4 py-3 text-sm font-black transition ${active ? "bg-yellow-500 text-black" : "text-gray-300 hover:bg-white/10"}`}>
+    <button onClick={onClick} className={`min-w-0 rounded-xl px-3 py-3 text-center text-xs font-black transition sm:text-sm ${active ? "bg-yellow-500 text-black" : "text-gray-300 hover:bg-white/10"}`}>
       {children}
     </button>
   );
