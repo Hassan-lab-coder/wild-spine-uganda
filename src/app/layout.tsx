@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { defaultOgImage, siteUrl } from "@/lib/seo";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 import JsonLd from "./components/JsonLd";
 import PublicSiteFooter from "./components/PublicSiteFooter";
@@ -17,13 +18,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.wildspineuganda.com"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Wild Spine Uganda | Gorilla Trekking & Rwenzori Expeditions",
+    default: "Wild Spine Uganda | Gorilla Trekking Uganda & Rwenzori Expeditions",
     template: "%s | Wild Spine Uganda",
   },
   description:
-    "Premium Uganda expeditions, executive wilderness retreats, conservation membership, and private gorilla trekking journeys from Bwindi to the Rwenzori Mountains.",
+    "Private gorilla trekking Uganda, Bwindi forest experiences, Rwenzori mountains hiking, luxury Uganda safari planning, and premium expedition support.",
   keywords: [
     "Uganda safaris",
     "gorilla trekking Uganda",
@@ -33,9 +34,6 @@ export const metadata: Metadata = {
     "corporate retreats Uganda",
     "conservation travel Uganda",
   ],
-  alternates: {
-    canonical: "/",
-  },
   robots: {
     index: true,
     follow: true,
@@ -48,16 +46,16 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Wild Spine Uganda",
+    title: "Wild Spine Uganda | Gorilla Trekking Uganda & Rwenzori Expeditions",
     description:
-      "Premium Uganda expeditions, executive retreats, conservation membership, and private gorilla trekking journeys.",
-    url: "https://www.wildspineuganda.com",
+      "Private gorilla trekking, Bwindi permit help, Rwenzori hiking, and luxury Uganda safari planning.",
+    url: siteUrl,
     siteName: "Wild Spine Uganda",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/images/gorilla.jpg",
+        url: defaultOgImage,
         width: 1200,
         height: 630,
         alt: "Mountain gorilla in Uganda",
@@ -66,10 +64,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wild Spine Uganda",
+    title: "Wild Spine Uganda | Gorilla Trekking Uganda & Rwenzori Expeditions",
     description:
-      "Private Uganda journeys, executive wilderness retreats, conservation membership, and luxury safari planning.",
-    images: ["/images/gorilla.jpg"],
+      "Private Uganda journeys for gorilla trekking, Rwenzori hiking, Bwindi permit help, and luxury safari planning.",
+    images: [defaultOgImage],
+  },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
   },
 };
 export default function RootLayout({
@@ -87,8 +88,11 @@ export default function RootLayout({
           data={{
             "@context": "https://schema.org",
             "@type": "TravelAgency",
+            "@id": `${siteUrl}/#organization`,
             name: "Wild Spine Uganda",
-            url: "https://www.wildspineuganda.com",
+            url: siteUrl,
+            logo: `${siteUrl}/images/gorilla.jpg`,
+            image: `${siteUrl}/images/gorilla.jpg`,
             areaServed: "Uganda",
             description:
               "Private Uganda journeys for gorilla trekking, Rwenzori hiking, luxury safaris, and permit planning.",
@@ -115,6 +119,22 @@ export default function RootLayout({
               { "@type": "Offer", itemOffered: { "@type": "Event", name: "Executive Wilderness Retreats" } },
               { "@type": "Offer", itemOffered: { "@type": "Service", name: "Conservation Membership" } },
             ],
+            sameAs: [
+              "https://www.wildspineuganda.com",
+            ],
+          }}
+        />
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": `${siteUrl}/#website`,
+            name: "Wild Spine Uganda",
+            url: siteUrl,
+            publisher: {
+              "@id": `${siteUrl}/#organization`,
+            },
+            inLanguage: "en",
           }}
         />
         <AnalyticsTracker />

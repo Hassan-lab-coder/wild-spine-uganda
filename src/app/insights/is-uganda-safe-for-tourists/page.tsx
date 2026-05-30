@@ -1,11 +1,14 @@
-import type { Metadata } from "next";
+import { seoMetadata } from "@/lib/seo";
 import InsightArticle from "../InsightArticle";
 
-export const metadata: Metadata = {
+export const metadata = seoMetadata({
   title: "Is Uganda Safe for Tourists?",
-  description: "Practical safety guidance for private Uganda travel, gorilla trekking, transfers, and expedition planning.",
-  alternates: { canonical: "/insights/is-uganda-safe-for-tourists" },
-};
+  description:
+    "Practical safety guidance for private Uganda travel, gorilla trekking, transfers, park procedures, and expedition planning.",
+  path: "/insights/is-uganda-safe-for-tourists",
+  image: "/images/travel/trail-team.jpg",
+  keywords: ["is Uganda safe for tourists", "Uganda travel safety", "gorilla trekking Uganda safety", "private Uganda travel"],
+});
 
 export default function IsUgandaSafeForTouristsPage() {
   return (
@@ -15,6 +18,7 @@ export default function IsUgandaSafeForTouristsPage() {
       description="Safety is not a slogan. It comes from realistic routing, local support, clear communication, and careful decisions before arrival."
       image="/images/travel/trail-team.jpg"
       route="Custom Uganda Safari"
+      path="/insights/is-uganda-safe-for-tourists"
       sections={[
         {
           heading: "Good planning reduces avoidable risk",

@@ -1,11 +1,14 @@
-import type { Metadata } from "next";
+import { seoMetadata } from "@/lib/seo";
 import InsightArticle from "../InsightArticle";
 
-export const metadata: Metadata = {
+export const metadata = seoMetadata({
   title: "Gorilla Trekking Cost Uganda 2026",
-  description: "A practical guide to Uganda gorilla trekking costs, permits, lodges, transfers, and private safari planning.",
-  alternates: { canonical: "/insights/gorilla-trekking-cost-uganda" },
-};
+  description:
+    "A practical guide to Uganda gorilla trekking costs, permits, Bwindi sectors, lodges, transfers, and private safari planning.",
+  path: "/insights/gorilla-trekking-cost-uganda",
+  image: "/images/travel/forest-guide.jpg",
+  keywords: ["gorilla trekking cost Uganda", "Uganda gorilla permit cost", "Bwindi gorilla trekking", "Uganda safari cost"],
+});
 
 export default function GorillaTrekkingCostUgandaPage() {
   return (
@@ -15,6 +18,7 @@ export default function GorillaTrekkingCostUgandaPage() {
       description="Understand the real cost drivers before choosing a cheap package or locking in a permit date."
       image="/images/travel/forest-guide.jpg"
       route="Gorilla Permit Help"
+      path="/insights/gorilla-trekking-cost-uganda"
       sections={[
         {
           heading: "The permit is only one part of the cost",

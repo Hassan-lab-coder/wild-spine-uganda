@@ -1,4 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
 import SeoLandingPage from "../components/SeoLandingPage";
+
+export const metadata = seoMetadata({
+  title: "Gorilla Trekking Uganda | Private Bwindi Forest Planning",
+  description:
+    "Plan private gorilla trekking in Uganda with Bwindi permit guidance, sector advice, lodge planning, safe transfers, and local Wild Spine Uganda expertise.",
+  path: "/gorilla-trekking-uganda",
+  image: "/images/travel/forest-guide.jpg",
+  keywords: ["gorilla trekking Uganda", "Bwindi forest experience", "Uganda gorilla permit", "private Uganda safari"],
+});
 
 export default function GorillaTrekkingUgandaPage() {
   return (

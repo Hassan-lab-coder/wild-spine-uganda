@@ -1,4 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
 import SeoLandingPage from "../components/SeoLandingPage";
+
+export const metadata = seoMetadata({
+  title: "Uganda Luxury Safari | Private Gorilla & Rwenzori Travel",
+  description:
+    "Design a private luxury Uganda safari with gorilla trekking, premium lodges, Rwenzori landscapes, private transfers, and careful local planning.",
+  path: "/uganda-luxury-safari",
+  image: "/images/travel/safari-elephants.jpg",
+  keywords: ["Uganda luxury safari", "private Uganda safari", "gorilla trekking Uganda", "luxury Africa travel"],
+});
 
 export default function UgandaLuxurySafariPage() {
   return (

@@ -1,4 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
 import TourConversionSections from "../TourConversionSections";
+
+export const metadata = seoMetadata({
+  title: "Margherita Expedition | Private Rwenzori Summit Planning",
+  description:
+    "Plan a private Margherita Peak expedition in Uganda's Rwenzori Mountains with premium logistics, mountain preparation, and expert route support.",
+  path: "/tours/margherita-expedition",
+  image: "/images/travel/margherita-peak.png",
+  keywords: ["Margherita Peak expedition", "Rwenzori mountains hiking", "Rwenzori expedition", "Uganda trekking"],
+});
 
 export default function MargheritaExpeditionPage() {
   return (

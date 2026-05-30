@@ -1,3 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
+
+export const metadata = seoMetadata({
+  title: "Private Uganda Travel | Tailored Gorilla & Safari Planning",
+  description:
+    "Plan private Uganda travel with tailored gorilla trekking, Rwenzori hiking, luxury safari routing, local support, and clear communication.",
+  path: "/private-travel",
+  image: "/images/travel/lake-boat.webp",
+  keywords: ["private Uganda travel", "private Uganda safari", "gorilla trekking Uganda", "luxury Africa travel"],
+});
+
 export default function PrivateTravelPage() {
   const pillars = [
     {

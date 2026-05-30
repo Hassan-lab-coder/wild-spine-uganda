@@ -1,11 +1,14 @@
-import type { Metadata } from "next";
+import { seoMetadata } from "@/lib/seo";
 import InsightArticle from "../InsightArticle";
 
-export const metadata: Metadata = {
+export const metadata = seoMetadata({
   title: "Best Time to Visit Bwindi for Gorilla Trekking",
-  description: "Plan the best season, route, and trekking pace for Bwindi gorilla trekking in Uganda.",
-  alternates: { canonical: "/insights/best-time-to-visit-bwindi" },
-};
+  description:
+    "Plan the best season, route, Bwindi sector, lodge timing, and trekking pace for gorilla trekking in Uganda.",
+  path: "/insights/best-time-to-visit-bwindi",
+  image: "/images/travel/ranger-briefing.jpg",
+  keywords: ["best time to visit Bwindi", "Bwindi gorilla trekking", "gorilla trekking Uganda", "Bwindi forest experience"],
+});
 
 export default function BestTimeToVisitBwindiPage() {
   return (
@@ -15,6 +18,7 @@ export default function BestTimeToVisitBwindiPage() {
       description="Season matters, but permit availability, lodge choice, road time, and your wider Uganda route matter just as much."
       image="/images/travel/ranger-briefing.jpg"
       route="The Spine Explorer"
+      path="/insights/best-time-to-visit-bwindi"
       sections={[
         {
           heading: "Drier months are popular for a reason",

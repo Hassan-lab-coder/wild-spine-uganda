@@ -1,9 +1,12 @@
+import JsonLd from "../components/JsonLd";
+
 type InsightArticleProps = {
   kicker: string;
   title: string;
   description: string;
   image: string;
   route: string;
+  path: string;
   sections: Array<{
     heading: string;
     body: string[];
@@ -11,11 +14,43 @@ type InsightArticleProps = {
   faqs: Array<[string, string]>;
 };
 
-export default function InsightArticle({ kicker, title, description, image, route, sections, faqs }: InsightArticleProps) {
+export default function InsightArticle({ kicker, title, description, image, route, path, sections, faqs }: InsightArticleProps) {
   const href = `/?source=${encodeURIComponent(kicker.toLowerCase().replaceAll(" ", "_"))}&route=${encodeURIComponent(route)}#book`;
 
   return (
     <main className="bg-[#f8f4e8] text-[#123a2a]">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: title,
+          description,
+          image: `${siteOrigin()}${image}`,
+          author: {
+            "@type": "Organization",
+            name: "Wild Spine Uganda",
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "Wild Spine Uganda",
+          },
+          mainEntityOfPage: `${siteOrigin()}${path}`,
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map(([question, answer]) => ({
+            "@type": "Question",
+            name: question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: answer,
+            },
+          })),
+        }}
+      />
       <section className="relative flex min-h-[72vh] items-center overflow-hidden px-6 py-32 text-white md:px-24">
         <img src={image} alt={title} className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-black/70" />
@@ -72,4 +107,8 @@ export default function InsightArticle({ kicker, title, description, image, rout
       </article>
     </main>
   );
+}
+
+function siteOrigin() {
+  return process.env.NEXT_PUBLIC_SITE_URL || "https://www.wildspineuganda.com";
 }

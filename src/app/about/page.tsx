@@ -1,3 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
+
+export const metadata = seoMetadata({
+  title: "About Wild Spine Uganda | Local Gorilla & Rwenzori Experts",
+  description:
+    "Meet Wild Spine Uganda, local specialists in private gorilla trekking, Bwindi permit planning, Rwenzori expeditions, and premium Uganda safari travel.",
+  path: "/about",
+  image: "/images/travel/terraced-mountains.jpg",
+  keywords: ["Wild Spine Uganda", "Uganda tour operator", "gorilla trekking Uganda", "Rwenzori expeditions"],
+});
+
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-black text-white">

@@ -1,3 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
+
+export const metadata = seoMetadata({
+  title: "Uganda Tours | Gorilla Trekking & Rwenzori Expeditions",
+  description:
+    "Explore private Uganda tours with gorilla trekking in Bwindi, Rwenzori hiking, Margherita expeditions, luxury safari extensions, and permit planning.",
+  path: "/tours",
+  image: "/images/travel/forest-guide.jpg",
+  keywords: ["Uganda tours", "gorilla trekking Uganda", "Rwenzori expeditions", "private Uganda safari"],
+});
+
 const tours = [
   {
     title: "The Spine Explorer",

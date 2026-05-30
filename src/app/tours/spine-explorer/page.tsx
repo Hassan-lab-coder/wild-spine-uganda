@@ -1,4 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
 import TourConversionSections from "../TourConversionSections";
+
+export const metadata = seoMetadata({
+  title: "The Spine Explorer | Private Bwindi Gorilla Trekking",
+  description:
+    "A 4-5 day private Bwindi gorilla trekking journey with Uganda permit help, sector planning, private guide support, and premium lodge coordination.",
+  path: "/tours/spine-explorer",
+  image: "/images/travel/forest-guide.jpg",
+  keywords: ["Bwindi gorilla trekking", "gorilla trekking Uganda", "private Uganda tour", "Uganda gorilla permit"],
+});
 
 export default function SpineExplorerPage() {
   return (

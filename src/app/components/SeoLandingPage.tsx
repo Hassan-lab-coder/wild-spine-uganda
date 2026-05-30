@@ -1,4 +1,5 @@
 import Image from "next/image";
+import JsonLd from "./JsonLd";
 
 type SeoLandingPageProps = {
   title: string;
@@ -25,6 +26,20 @@ export default function SeoLandingPage({
 
   return (
     <main className="min-h-screen bg-black text-white">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map(([question, answer]) => ({
+            "@type": "Question",
+            name: question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: answer,
+            },
+          })),
+        }}
+      />
       <section className="relative flex min-h-[82vh] items-center overflow-hidden px-6 py-32 md:px-24">
         <Image
           src={image}

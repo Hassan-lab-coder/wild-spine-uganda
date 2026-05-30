@@ -1,4 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
 import TourConversionSections from "../TourConversionSections";
+
+export const metadata = seoMetadata({
+  title: "The Summit Trail | Gorillas & Rwenzori Hiking Uganda",
+  description:
+    "A private Uganda journey combining Bwindi gorilla trekking, Rwenzori mountains hiking, alpine valleys, route planning, and premium logistics.",
+  path: "/tours/summit-trail",
+  image: "/images/travel/forest-trek.jpg",
+  keywords: ["Rwenzori mountains hiking", "gorilla trekking Uganda", "Uganda hiking tour", "private Uganda safari"],
+});
 
 export default function SummitTrailPage() {
   return (

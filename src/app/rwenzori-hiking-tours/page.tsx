@@ -1,4 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
 import SeoLandingPage from "../components/SeoLandingPage";
+
+export const metadata = seoMetadata({
+  title: "Rwenzori Mountains Hiking Tours | Private Uganda Expeditions",
+  description:
+    "Plan Rwenzori mountains hiking in Uganda with route guidance, logistics, private transfers, fitness preparation, and optional gorilla trekking add-ons.",
+  path: "/rwenzori-hiking-tours",
+  image: "/images/travel/boardwalk-trek.jpg",
+  keywords: ["Rwenzori mountains hiking", "Rwenzori hiking tours", "Uganda trekking", "Rwenzori expedition"],
+});
 
 export default function RwenzoriHikingToursPage() {
   return (

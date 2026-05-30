@@ -1,3 +1,14 @@
+import { seoMetadata } from "@/lib/seo";
+
+export const metadata = seoMetadata({
+  title: "Uganda Gorilla Permit Help | Bwindi Permit Planning",
+  description:
+    "Get help securing Uganda gorilla permits with Bwindi sector guidance, lodge timing, transfer planning, payment clarity, and private itinerary support.",
+  path: "/uganda-gorilla-permit-help",
+  image: "/images/travel/ranger-briefing.jpg",
+  keywords: ["Uganda gorilla permit", "gorilla permit help", "Bwindi permit", "gorilla trekking Uganda"],
+});
+
 const permitFacts = [
   ["Limited daily spaces", "Permit availability can shape your exact travel date, Bwindi sector, lodge options, and transfer route."],
   ["Payment matters", "A permit should only be paid for after the date, sector, terms, and surrounding logistics are clear in writing."],
