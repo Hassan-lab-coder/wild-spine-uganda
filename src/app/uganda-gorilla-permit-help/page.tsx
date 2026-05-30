@@ -1,8 +1,8 @@
 const permitFacts = [
   ["Limited daily spaces", "Permit availability can shape your exact travel date, Bwindi sector, lodge options, and transfer route."],
-  ["Payment matters", "A permit is only secure after the proper booking and payment process is completed through the authorized system."],
-  ["Sector affects logistics", "Buhoma, Ruhija, Rushaga, and Nkuringo each change lodge choice, drive times, and extension options."],
-  ["Refund rules are strict", "Gorilla permits are usually difficult or impossible to transfer or refund once secured."],
+  ["Payment matters", "A permit should only be paid for after the date, sector, terms, and surrounding logistics are clear in writing."],
+  ["Sector affects comfort", "Buhoma, Ruhija, Rushaga, and Nkuringo each change lodge choice, drive times, trek-day rhythm, and extension options."],
+  ["Changes are sensitive", "Gorilla permits can be difficult to move or refund, so the right planning order protects your money and your trip."],
 ];
 
 const sectorNotes = [
@@ -13,8 +13,8 @@ const sectorNotes = [
 ];
 
 const planningSteps = [
-  ["Share dates", "Send your travel month, group size, preferred comfort level, and whether dates are flexible."],
-  ["Check options", "We review realistic permit sectors, lodge availability, transfer timing, and route fit."],
+  ["Share dates", "Send your travel month, group size, preferred comfort level, and whether your dates are flexible."],
+  ["Check the real options", "We review realistic permit sectors, lodge availability, transfer timing, and route fit."],
   ["Confirm in writing", "You receive a clear plan with inclusions, exclusions, payment steps, and booking conditions."],
   ["Secure properly", "Once you approve, permit and travel services are secured in the right order."],
 ];
@@ -33,13 +33,13 @@ export default function UgandaGorillaPermitHelpPage() {
           <a href="/" className="text-yellow-500 hover:text-yellow-400">Back Home</a>
           <p className="section-kicker mt-16">Uganda Gorilla Permit Help</p>
           <h1 className="mt-5 max-w-4xl text-5xl font-black leading-tight md:text-7xl">
-            Secure the right permit before the rest of the trip locks you in.
+            Secure the right gorilla permit before the rest of the trip locks you in.
           </h1>
           <p className="mt-8 max-w-3xl text-lg leading-8 text-gray-300">
-            Gorilla permits are not just tickets. They determine your date, sector, lodge area, transfer route, and sometimes the whole shape of a Uganda itinerary.
+            Gorilla permits are not just tickets. They determine your date, sector, lodge area, transfer route, and sometimes the whole shape of your Uganda safari experience.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
-            <a href={permitInquiryHref} className="rounded-full bg-yellow-500 px-8 py-4 font-black text-black hover:bg-yellow-400">Request Permit Help</a>
+            <a href={permitInquiryHref} className="rounded-full bg-yellow-500 px-8 py-4 font-black text-black hover:bg-yellow-400">Secure Your Permit Plan</a>
             <a href="https://wa.me/256751828241" target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/20 px-8 py-4 font-black hover:bg-white hover:text-black">Ask on WhatsApp</a>
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function UgandaGorillaPermitHelpPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 max-w-3xl">
             <p className="section-kicker">What Travelers Need To Know</p>
-            <h2 className="mt-3 text-4xl font-black md:text-5xl">Permit clarity prevents expensive mistakes.</h2>
+            <h2 className="mt-3 text-4xl font-black md:text-5xl">Permit clarity protects the whole journey.</h2>
           </div>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {permitFacts.map(([title, text]) => (
@@ -68,7 +68,7 @@ export default function UgandaGorillaPermitHelpPage() {
             <p className="section-kicker">Bwindi Sectors</p>
             <h2 className="mt-3 text-4xl font-black md:text-5xl">The sector matters as much as the date.</h2>
             <p className="mt-6 leading-8 text-gray-400">
-              We help match permit availability to lodge style, transfer reality, route pacing, and what you want to do before or after the trek.
+              We help match permit availability to lodge style, transfer reality, route pacing, and what you want to feel before and after the trek.
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">

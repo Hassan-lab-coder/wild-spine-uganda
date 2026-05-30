@@ -11,53 +11,53 @@ const tours = [
     title: "The Spine Explorer",
     days: "4–5 Days",
     price: "From $1,400",
-    desc: "Premium gorilla trekking through Bwindi with private guidance and lodge support.",
+    desc: "A private Bwindi forest experience built around permit timing, calm transfers, and the rare hour you stand near mountain gorillas.",
     link: "/tours/spine-explorer",
     image: "/images/travel/forest-guide.jpg",
-    inclusions: ["Gorilla permit support", "Private guide", "Premium lodge planning"],
+    inclusions: ["Permit timing checked", "Private guide support", "Lodge planning by sector"],
   },
   {
     title: "The Summit Trail",
     days: "10–12 Days",
     price: "From $3,200",
-    desc: "The signature journey: gorillas, Rwenzori valleys, alpine trails, and glacier country.",
+    desc: "Gorilla trekking Uganda meets Rwenzori mountains hiking: forest silence, alpine valleys, and a route paced with care.",
     link: "/tours/summit-trail",
     image: "/images/travel/forest-trek.jpg",
-    inclusions: ["Gorillas + Rwenzori", "Route planning", "Expedition briefing"],
+    inclusions: ["Gorillas + Rwenzori", "Paced route planning", "Pre-trip briefing"],
   },
   {
     title: "Margherita Expedition",
     days: "12–14 Days",
     price: "From $6,000",
-    desc: "Ultra-premium summit expedition to Uganda’s highest peak with private logistics.",
+    desc: "A serious, high-touch expedition to Uganda's highest peak with private logistics, mountain preparation, and clear support.",
     link: "/tours/margherita-expedition",
     image: "/images/travel/margherita-peak.png",
-    inclusions: ["Summit planning", "Private logistics", "Luxury support"],
+    inclusions: ["Summit planning", "Private logistics", "Premium expedition support"],
   },
 ];
 
 const whyCards = [
-  ["Local Expertise", "Real route, permit, weather, and lodge knowledge.", "/expertise"],
-  ["Premium Planning", "Clear communication and structured itineraries.", "/planning"],
-  ["Rare Experience", "Gorillas + Rwenzori in one seamless journey.", "/rare-experience"],
-  ["Private Travel", "No mass tourism — every trip is tailored.", "/private-travel"],
+  ["Local Expertise", "Uganda-based guidance from people who understand permits, roads, weather, and trail realities.", "/expertise"],
+  ["Premium Planning", "Clear steps, written details, and no vague promises before money changes hands.", "/planning"],
+  ["Rare Experience", "Gorilla trekking, Rwenzori hiking, lakes, and savannah woven into one coherent journey.", "/rare-experience"],
+  ["Private Travel", "No mass departures. Your pace, comfort level, and travel style shape the route.", "/private-travel"],
 ];
 
 const safariCards = [
   {
     title: "Gorilla Encounters",
     img: "/images/travel/forest-guide.jpg",
-    desc: "Rare moments inside Uganda’s ancient forests.",
+    desc: "Step into Bwindi forest and feel the hush before a gorilla family appears through the leaves.",
   },
   {
     title: "Rwenzori Trails",
     img: "/images/travel/boardwalk-trek.jpg",
-    desc: "Alpine routes, misty valleys, and serious adventure.",
+    desc: "Follow boardwalks, moss, giant lobelia, and high valleys toward the glacier country of the Rwenzori.",
   },
   {
     title: "Savannah Wildlife",
     img: "/images/travel/zebra-giraffe.jpg",
-    desc: "Open plains, big wildlife, and slow discovery between treks.",
+    desc: "Slow the journey between forests and mountains with open plains, boat water, and warm Ugandan hospitality.",
   },
 ];
 
@@ -65,38 +65,38 @@ const journeyMoments = [
   {
     title: "Forest approach",
     img: "/images/travel/forest-trek.jpg",
-    caption: "Quiet Bwindi mornings, permit timing, and the slow approach to the trek.",
+    caption: "Quiet Bwindi mornings, permit timing, and a guided approach that lets the forest set the pace.",
   },
   {
     title: "Ranger briefing",
     img: "/images/travel/ranger-briefing.jpg",
-    caption: "A calm start with guides and rangers before the forest work begins.",
+    caption: "A calm start with rangers and guides, so you understand the rules, terrain, and rhythm before entering.",
   },
   {
     title: "Rwenzori trail",
     img: "/images/travel/boardwalk-trek.jpg",
-    caption: "Wet valleys, alpine plants, and a pace that needs honest planning.",
+    caption: "Wet valleys, alpine plants, and a mountain pace planned honestly around fitness and weather.",
   },
   {
     title: "Lake recovery",
     img: "/images/travel/lake-boat.webp",
-    caption: "Soft recovery days on Uganda's lakes help the whole route feel human.",
+    caption: "Soft recovery days on Uganda's lakes help the whole route breathe after the big moments.",
   },
 ];
 
 const premiumVentures = [
   {
     label: "Private Expeditions",
-    title: "Plan the journey.",
-    desc: "Gorilla trekking, Rwenzori routes, private safari extensions, and premium logistics shaped around your dates, pace, and comfort level.",
+    title: "Enter Uganda privately.",
+    desc: "Gorilla trekking, Rwenzori routes, safari extensions, and premium logistics shaped around your dates, pace, comfort level, and appetite for wild places.",
     href: "/tours",
     image: "/images/travel/forest-guide.jpg",
-    cta: "Explore Tours",
+    cta: "Explore Private Routes",
   },
   {
     label: "Executive Retreats",
     title: "Leadership built in the wild.",
-    desc: "Private Uganda offsites for founders, boards, executives, NGOs, and senior teams who want a rare shared experience with real strategic value.",
+    desc: "Private Uganda offsites for founders, boards, executives, NGOs, and senior teams who want silence, perspective, and a shared experience with real strategic value.",
     href: "/corporate-retreats",
     image: "/images/travel/corporate-retreat.jpg",
     cta: "Explore Retreats",
@@ -104,7 +104,7 @@ const premiumVentures = [
   {
     label: "Conservation Membership",
     title: "Support that continues after the journey.",
-    desc: "Membership circles for travelers and supporters who want field stories, impact updates, and a lasting connection to Uganda's wild places.",
+    desc: "Membership circles for travelers and supporters who want field stories, impact updates, and a lasting connection to Uganda's wild places after the journey ends.",
     href: "/conservation-membership",
     image: "/images/travel/traveler-trust-gorilla.jpg",
     cta: "Become a Guardian",
@@ -115,7 +115,7 @@ const storyCards = [
   {
     label: "Watch",
     title: "Gorilla trekking in Bwindi",
-    desc: "A visual starting point for travelers who want to understand the forest experience before planning.",
+    desc: "A visual starting point for travelers who want to understand the Bwindi forest experience before choosing dates.",
     image: "/images/travel/forest-guide.jpg",
     href: "https://utb.go.ug/",
     cta: "Explore Visit Uganda",
@@ -124,7 +124,7 @@ const storyCards = [
   {
     label: "Read",
     title: "Gorilla Trekking Guide 2026",
-    desc: "Permits, timing, trekking expectations, and how to prepare for a serious Uganda journey.",
+    desc: "Permit timing, trek expectations, route choices, and preparation for a serious Uganda safari experience.",
     image: "/images/travel/forest-trek.jpg",
     href: "/guide",
     cta: "Read Our Guide",
@@ -151,7 +151,7 @@ const storyCards = [
   {
     label: "Plan",
     title: "Rwenzori trail preparation",
-    desc: "Mountain route planning, weather, pacing, gear expectations, and recovery days for high-country travel.",
+    desc: "Weather, pacing, gear expectations, and recovery days for Rwenzori mountains hiking.",
     image: "/images/travel/boardwalk-trek.jpg",
     href: "/rwenzori-hiking-tours",
     cta: "Explore Rwenzori",
@@ -160,10 +160,10 @@ const storyCards = [
   {
     label: "Private",
     title: "Build your Uganda story",
-    desc: "Bring the inspiration back to a real itinerary with permits, lodges, guiding, and private logistics.",
+    desc: "Turn the inspiration into a real itinerary with permits, lodges, guiding, and private logistics checked before you commit.",
     image: "/images/travel/lake-boat.webp",
     href: "/#book",
-    cta: "Request Itinerary",
+    cta: "Start Private Planning",
     external: false,
   },
 ];
@@ -196,21 +196,21 @@ const travelerReviews = [
 ];
 
 const trustSignals = [
-  ["12+ years", "Local expedition planning experience across Uganda's gorilla and mountain routes."],
-  ["500+ encounters", "Gorilla trekking experiences planned with permit timing and route support."],
+  ["12+ years", "Local expedition planning experience across Uganda's gorilla, safari, and mountain routes."],
+  ["500+ encounters", "Gorilla trekking experiences planned with careful permit timing and route support."],
   ["48 countries", "Travelers supported from the US, UK, Europe, Asia, Africa, and beyond."],
   ["Local team", "Ground knowledge from Uganda, not generic third-party brochure planning."],
 ];
 
 const assuranceSteps = [
-  ["1", "You send your preferred month, route, group size, and comfort level."],
-  ["2", "We check realistic permit, lodge, guide, and route availability before quoting."],
-  ["3", "You receive a clear plan with next steps, inclusions, and payment guidance."],
+  ["1", "You share your month, route interests, group size, comfort level, and what would make the trip feel unforgettable."],
+  ["2", "We check realistic permit, lodge, guide, transfer, and route availability before quoting."],
+  ["3", "You receive a clear plan with inclusions, exclusions, payment steps, and the safest next decision."],
 ];
 
 const bookingFaqs = [
-  ["Is Uganda safe for this kind of trip?", "Yes, with the right routing, local support, and realistic planning. We guide travelers through arrival, transfers, trekking logistics, and park procedures."],
-  ["When should I book gorilla permits?", "Earlier is better, especially for peak months. Permit availability can shape your exact travel dates and lodge options."],
+  ["Is Uganda safe for this kind of trip?", "Uganda rewards travelers who plan carefully. We guide arrival, transfers, trekking logistics, park procedures, and pacing so the journey feels clear before you land."],
+  ["When should I book gorilla permits?", "Earlier is better, especially for peak months. Permit availability can shape your exact travel dates, Bwindi sector, lodge options, and transfer route."],
   ["What fitness level do I need?", "Gorilla trekking can range from moderate to demanding depending on the gorilla family location. Rwenzori routes require stronger hiking fitness and preparation."],
   ["What is included in the quote?", "We clarify permits, guiding, transport, accommodation level, park logistics, and optional extensions before you commit."],
   ["Can the itinerary be private?", "Yes. Wild Spine focuses on private and tailored Uganda journeys rather than fixed mass-market departures."],
@@ -381,24 +381,24 @@ function HomeContent() {
 
         <div className="relative z-10 max-w-4xl hero-copy">
           <p className="text-[#b8860b] uppercase tracking-[0.35em] text-sm mb-5">
-            Gorilla Forests • Rwenzori Glaciers • Private Expeditions
+            Gorilla Trekking Uganda • Rwenzori Mountains • Private Safari Design
           </p>
 
           <h2 className="text-5xl md:text-8xl font-black leading-[0.95] mb-8 text-white">
-            Trek the <br /> Backbone of Africa
+            Stand where the <br /> forest breathes
           </h2>
 
           <p className="max-w-2xl text-lg md:text-xl text-white/85 mb-10 leading-8">
-            From Uganda’s ancient gorilla forests to the glacier crown of the Rwenzori,
-            Wild Spine crafts rare journeys for travelers who want more than an ordinary safari.
+            Come face to face with mountain gorillas in Bwindi, cross Uganda&apos;s wild highlands,
+            and travel with local specialists who handle the permits, pacing, and details with care.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="/tours" className="bg-[#f5b416] text-black px-8 py-4 rounded-full font-black hover:bg-[#ffd766] transition text-center">
-              Start Your Journey
+              Start Your Private Journey
             </a>
             <a href="#book" className="border border-white/30 px-8 py-4 rounded-full font-black text-white hover:bg-white hover:text-black transition text-center">
-              Request Private Itinerary
+              Request Your Gorilla Trek Plan
             </a>
           </div>
         </div>
@@ -417,27 +417,25 @@ function HomeContent() {
   <div className="relative z-10 max-w-3xl px-6">
 
     <h3 className="text-5xl md:text-6xl font-black mb-6">
-      This is not a safari.
+      This is not just a safari.
     </h3>
 
     <p className="text-xl text-white/90 leading-8">
-      It’s a moment your world slows down.
+      It is the moment your world goes quiet.
     </p>
 
     <p className="text-lg text-white/75 mt-4 leading-8">
-      Deep in the mist of Uganda’s ancient forests, you don’t just see gorillas —
-      you feel their presence. You hear the silence. You breathe something raw,
-      something real.
+      Deep in the mist of Uganda&apos;s ancient forests, you do not simply see gorillas.
+      You feel the weight of their presence, hear the forest settle, and realize how rare the moment is.
     </p>
 
     <p className="text-lg text-white/75 mt-4 leading-8">
-      This is not about ticking destinations off a list.
-      It’s about stepping into a world untouched by time —
-      and leaving with a story that will stay with you forever.
+      This is not about collecting destinations. It is about entering a living landscape with
+      people who know the trails, the timing, the park procedures, and the responsibility that comes with them.
     </p>
 
     <p className="text-[#f5b416] mt-6 font-semibold tracking-wide">
-      Limited journeys. Private experiences. Crafted for those who seek more.
+      Private journeys. Careful planning. Uganda experienced with depth, not rush.
     </p>
 
   </div>
@@ -451,7 +449,7 @@ function HomeContent() {
         Stories from the Wild
       </h3>
       <p className="text-[#68746a] max-w-2xl">
-        Real journeys, useful field notes, and trusted tourism sources for travelers planning Uganda with care.
+        Field notes, official context, and planning insight for travelers who want the Uganda safari experience to feel inspiring, safe, and well prepared.
       </p>
     </div>
 
@@ -503,12 +501,12 @@ function HomeContent() {
           <div>
             <p className="section-kicker">Two Worlds. One Uganda.</p>
             <h3 className="text-4xl md:text-6xl font-black leading-tight">
-              Where gorillas roam and glaciers glow.
+              From Bwindi forest silence to Rwenzori ice.
             </h3>
           </div>
           <p className="text-[#68746a] text-lg leading-8">
-            Jungle silence, gorilla eye contact, alpine valleys, giant lobelia forests,
-            and snow-crowned peaks on the equator — designed as one unforgettable crossing.
+            Feel the stillness of a Bwindi forest experience, then climb toward alpine valleys,
+            giant lobelia, and snow-crowned peaks on the equator. We connect the beauty with practical planning.
           </p>
         </div>
       </section>
@@ -541,13 +539,13 @@ function HomeContent() {
       <section className="py-32 px-6 md:px-24 bg-[#f8f4e8]">
   <div className="max-w-4xl">
     <h3 className="text-4xl md:text-5xl font-black mb-8">
-      Where the world goes silent
+      Where the world goes quiet
     </h3>
 
     <p className="text-[#68746a] text-lg leading-8">
-      Deep inside Uganda’s forests, something changes. The noise fades.
-      The pace slows. And for a moment, you’re no longer a visitor —
-      you’re part of the wilderness.
+      Deep inside Uganda&apos;s forests, something changes. The noise fades.
+      The pace slows. For a moment, you are no longer chasing a sighting.
+      You are present, still, and trusted to move through the wilderness with care.
     </p>
   </div>
 </section>
@@ -560,7 +558,7 @@ function HomeContent() {
         <h3 className="text-3xl md:text-5xl font-black">More than a route on paper.</h3>
       </div>
       <p className="max-w-2xl text-sm leading-6 text-[#68746a]">
-        A Wild Spine itinerary moves through real places: forest roads, misty trailheads, mountain valleys, and recovery stops that make the trip feel grounded.
+        A Wild Spine itinerary moves through real places: forest roads, ranger briefings, misty trailheads, mountain valleys, and recovery stops that keep the trip grounded.
       </p>
     </div>
     <div className="grid gap-4 md:grid-cols-4">
@@ -583,7 +581,7 @@ function HomeContent() {
 <section id="tours" className="reveal-section py-32 px-6 md:px-24 bg-[#fff9ea]">
         <div className="max-w-6xl mx-auto mb-16">
           <p className="section-kicker">Signature Expeditions</p>
-          <h3 className="text-4xl md:text-6xl font-black">Choose your journey.</h3>
+          <h3 className="text-4xl md:text-6xl font-black">Choose the route that fits your courage.</h3>
         </div>
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
@@ -615,12 +613,12 @@ function HomeContent() {
       <div>
         <p className="section-kicker">Beyond Safari</p>
         <h3 className="text-4xl md:text-6xl font-black">
-          Choose how you enter Wild Spine.
+          Choose how Uganda changes you.
         </h3>
       </div>
       <p className="text-lg leading-8 text-white/70">
         Start with a private expedition, bring a leadership team into the wilderness,
-        or stay connected through conservation membership after the journey.
+        or stay connected through conservation. Each path is planned with clarity before you commit.
       </p>
     </div>
 
@@ -665,12 +663,11 @@ function HomeContent() {
       <div>
         <p className="section-kicker">Traveler trust</p>
         <h3 className="text-4xl md:text-5xl font-black mb-6">
-          Proof before promises.
+          Trust before the trail.
         </h3>
         <p className="text-[#68746a] text-lg leading-8">
-          A private Uganda journey asks for real trust. Wild Spine builds that trust through
-          clear communication, local route knowledge, careful permit planning, and honest
-          guidance before you commit.
+          A private Uganda journey asks for real trust. Wild Spine earns it through clear communication,
+          local route knowledge, careful permit planning, and honest guidance before you send a deposit.
         </p>
       </div>
 
@@ -707,12 +704,11 @@ function HomeContent() {
     <div>
       <p className="section-kicker">Booking assurance</p>
       <h3 className="text-3xl md:text-4xl font-black mb-5">
-        Know what happens before you pay.
+        Know exactly what happens before you pay.
       </h3>
       <p className="text-[#68746a] leading-8">
-        We do not rush travelers into vague packages. Every inquiry is checked against
-        the realities that matter: gorilla permit timing, lodge availability, transfer
-        distance, mountain conditions, and the level of support you want.
+        We do not rush travelers into vague packages. Every inquiry is checked against the realities that matter:
+        gorilla permit timing, lodge availability, transfer distance, mountain conditions, and the support level you expect.
       </p>
     </div>
 
@@ -733,10 +729,10 @@ function HomeContent() {
 
   <div className="max-w-6xl mx-auto text-center mb-16">
     <h3 className="text-4xl md:text-5xl font-black mb-6">
-      What Our Travelers Say
+      Travelers remember how it felt.
     </h3>
     <p className="text-[#68746a]">
-      Real experiences from clients who explored Uganda with us
+      Calm planning, reliable communication, and once-in-a-lifetime moments in Uganda.
     </p>
   </div>
 
@@ -744,17 +740,17 @@ function HomeContent() {
 
     {[
       {
-        text: "Best experience in Africa. Everything was seamless, from permits to accommodation.",
+          text: "We felt prepared before we arrived, and cared for once we landed. The gorilla trek was extraordinary.",
         name: "James Carter",
         country: "United Kingdom 🇬🇧"
       },
       {
-        text: "Seeing gorillas in Bwindi changed my life. Wild Spine handled everything perfectly.",
+          text: "Seeing gorillas in Bwindi changed my life. The permits, lodge timing, and transfers were handled with real care.",
         name: "Emily Rodriguez",
         country: "USA 🇺🇸"
       },
       {
-        text: "Professional, reliable, and deeply knowledgeable about Uganda’s wilderness.",
+          text: "Professional, reliable, and deeply knowledgeable about Uganda's wilderness. We always knew the next step.",
         name: "Lucas Meyer",
         country: "Germany 🇩🇪"
       }
@@ -775,23 +771,23 @@ function HomeContent() {
   <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6 text-center">
 
     <div className="border border-[#d8cda9] p-6 rounded-xl">
-      🔒 Secure Booking
+      Secure Booking
       <p className="text-[#68746a] text-sm mt-2">
-        Protected payments and verified processes
+        Clear invoices, written terms, and payment steps before confirmation
       </p>
     </div>
 
     <div className="border border-[#d8cda9] p-6 rounded-xl">
-      🦍 Licensed Operator
+      Park Procedure Guidance
       <p className="text-[#68746a] text-sm mt-2">
-        Working with Uganda Wildlife Authority guidelines
+        Planning aligned with Uganda Wildlife Authority tracking procedures
       </p>
     </div>
 
     <div className="border border-[#d8cda9] p-6 rounded-xl">
-      🌍 Local Expertise
+      Local Expertise
       <p className="text-[#68746a] text-sm mt-2">
-        Deep knowledge of Bwindi & Rwenzori ecosystems
+        Deep knowledge of Bwindi forest and Rwenzori mountain routes
       </p>
     </div>
 
@@ -805,11 +801,11 @@ function HomeContent() {
             <div>
               <p className="section-kicker">Trusted ecosystem</p>
               <h3 className="text-3xl font-black md:text-4xl">
-                Connected to Uganda official travel landscape.
+                Planned around Uganda&apos;s official travel landscape.
               </h3>
             </div>
             <p className="max-w-2xl text-sm leading-6 text-[#68746a]">
-              We plan trips around recognized tourism, park, conservation, and route authorities.
+              We shape trips around recognized tourism, park, conservation, and route authorities so your itinerary is beautiful and practical.
             </p>
           </div>
 
@@ -834,10 +830,10 @@ function HomeContent() {
           <div>
             <p className="section-kicker">Why Wild Spine</p>
             <h3 className="text-4xl md:text-5xl font-black leading-tight mb-6">
-              Built on ground truth, not brochures.
+              Built on ground truth, not brochure language.
             </h3>
             <p className="text-[#68746a] leading-8">
-              We are Ugandans who understand these routes from forest trails to alpine passes.
+              We are Ugandans who understand these routes from forest trails to alpine passes, and we tell you what is realistic before you book.
             </p>
           </div>
 
@@ -858,31 +854,31 @@ function HomeContent() {
   <div className="max-w-5xl">
 
     <h3 className="text-4xl md:text-5xl font-black mb-6">
-      Gorilla Permit Assistance
+      Gorilla Permit Assistance, handled properly
     </h3>
 
     <p className="text-[#68746a] text-lg mb-8">
-      Securing a gorilla trekking permit in Uganda can be complex.
-      We handle the entire process for you — ensuring availability,
-      best dates, and seamless coordination.
+      A gorilla permit is more than a ticket. It affects your Bwindi sector, lodge choice,
+      transfer route, and the rhythm of the entire journey. We help you secure the right option
+      with clear written steps before you pay.
     </p>
 
     <div className="grid md:grid-cols-2 gap-6 mb-10">
 
       <div className="border border-[#d8cda9] p-6 rounded-xl">
-        ✔ Guaranteed permit sourcing  
+        Permit availability checked before route design
       </div>
 
       <div className="border border-[#d8cda9] p-6 rounded-xl">
-        ✔ Best trekking date planning  
+        Trekking dates matched to sector and lodge logic
       </div>
 
       <div className="border border-[#d8cda9] p-6 rounded-xl">
-        ✔ Transport & lodge coordination  
+        Transport and lodge coordination around the permit
       </div>
 
       <div className="border border-[#d8cda9] p-6 rounded-xl">
-        ✔ Emergency last-minute support  
+        Last-minute guidance when dates are tight
       </div>
 
     </div>
@@ -891,7 +887,7 @@ function HomeContent() {
       href="#book"
       className="bg-[#f5b416] text-black px-8 py-4 rounded-full font-bold hover:bg-[#ffd766] transition"
     >
-      Request Permit Assistance
+      Secure Your Permit Plan
     </a>
 
   </div>
@@ -903,10 +899,10 @@ function HomeContent() {
     <div>
       <p className="section-kicker">Before you book</p>
       <h3 className="text-4xl md:text-5xl font-black mb-6">
-        Questions travelers ask first.
+        Questions careful travelers ask first.
       </h3>
       <p className="text-[#68746a] leading-8">
-        Clear answers reduce surprises. These are the questions we expect careful travelers to ask before planning a serious Uganda journey.
+        Clear answers reduce worry. These are the questions we expect thoughtful travelers to ask before planning a serious Uganda journey.
       </p>
     </div>
 
@@ -932,19 +928,19 @@ function HomeContent() {
 
         <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-16">
           <div>
-            <p className="section-kicker">Begin the crossing</p>
+            <p className="section-kicker">Start Private Planning</p>
             <h3 className="text-4xl md:text-6xl font-black mb-8">
-              Most people never find this Uganda.
+              Let us shape the Uganda you will actually remember.
             </h3>
             <p className="text-white/80 text-lg leading-8">
-              Tell us your travel dates, preferred comfort, and dream route.
+              Share your travel month, comfort level, route interests, and what would make this journey feel worth crossing the world for.
             </p>
           </div>
 
           {sent ? (
             <div className="p-10 rounded-[2rem] bg-white/90 shadow-2xl border border-[#f5b416]/40">
-              <h4 className="text-3xl font-black text-[#b8860b] mb-4">Request received.</h4>
-              <p className="text-[#3d4a41]">We’ll respond with route guidance, pricing, and permit availability.</p>
+              <h4 className="text-3xl font-black text-[#b8860b] mb-4">Your request is in careful hands.</h4>
+              <p className="text-[#3d4a41]">We will review your route, timing, comfort level, and permit needs before replying with realistic next steps.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="p-8 rounded-[2rem] bg-white/90 shadow-2xl border border-white/45 backdrop-blur-sm">
@@ -952,9 +948,9 @@ function HomeContent() {
                 <input required name="name" className="form-input" placeholder="Full name" />
                 <input required name="email" type="email" className="form-input" placeholder="Email address" />
                 <input name="phone" className="form-input" placeholder="WhatsApp / phone" />
-                <input name="country" className="form-input" placeholder="Country" />
-                <input name="travel_month" className="form-input" placeholder="Travel month" />
-                <input name="group_size" className="form-input" placeholder="Travelers" />
+                <input name="country" className="form-input" placeholder="Country of residence" />
+                <input name="travel_month" className="form-input" placeholder="Ideal travel month" />
+                <input name="group_size" className="form-input" placeholder="Number of travelers" />
 
                 <label className="grid gap-2 sm:col-span-2">
                   <span className="text-sm font-bold text-[#3d4a41]">Preferred route</span>
@@ -995,12 +991,12 @@ function HomeContent() {
                   <option>Serious expedition</option>
                 </select>
 
-                <input name="experiences" className="form-input" placeholder="Must-see: gorillas, chimps, Rwenzori..." />
+                <input name="experiences" className="form-input" placeholder="Must-see: gorillas, chimps, Rwenzori, safari..." />
 
                 <textarea
                   name="message"
                   className="form-input sm:col-span-2 min-h-32"
-                  placeholder="Tell us about your dream Uganda journey..."
+                  placeholder="Tell us what you want to feel, see, and avoid. We will turn it into a realistic Uganda plan."
                 />
               </div>
 
@@ -1011,7 +1007,7 @@ function HomeContent() {
               )}
 
               <button type="submit" disabled={submitting} className="mt-6 w-full bg-[#f5b416] text-black py-4 rounded-full font-black hover:bg-[#ffd766] disabled:cursor-not-allowed disabled:opacity-70 transition">
-                {submitting ? "Saving request..." : "Request Private Itinerary"}
+                {submitting ? "Securing your request..." : "Start Your Private Uganda Plan"}
               </button>
             </form>
           )}
@@ -1022,7 +1018,7 @@ function HomeContent() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
           <div>
             <p className="section-kicker">Contact Wild Spine</p>
-            <h2 className="text-4xl md:text-6xl font-black mb-8">Begin with a conversation.</h2>
+            <h2 className="text-4xl md:text-6xl font-black mb-8">Begin with a calm conversation.</h2>
             <p className="text-white/70 leading-8">
               Victoria Mall, Entebbe<br />
               Kingdom Kampala, Kampala<br />

@@ -37,14 +37,13 @@ export default function Guide() {
 
   return (
     <main className="bg-black text-white min-h-screen flex flex-col justify-center items-center px-6 py-28 text-center">
-      {/* TITLE */}
       <h1 className="text-4xl md:text-6xl font-black mb-6">
-        Uganda Travel Guide
+        Plan Uganda with confidence.
       </h1>
 
       <p className="text-gray-400 max-w-xl mb-10">
-        Learn how to plan your gorilla trek, Rwenzori expedition, and luxury safari experience.
-        This guide gives you real insight most tourists never get.
+        Get a practical field guide for gorilla trekking Uganda, Bwindi permit timing,
+        Rwenzori mountains hiking, and private safari planning, written for travelers who want the magic without the uncertainty.
       </p>
 
       {/* FORM */}
@@ -52,7 +51,7 @@ export default function Guide() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-sm">
           <input
             type="email"
-            placeholder="Enter your email"
+            placeholder="Email address"
             className="px-4 py-3 rounded bg-white/10 border border-white/20 focus:outline-none"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -64,7 +63,7 @@ export default function Guide() {
             disabled={submitting}
             className="bg-yellow-500 text-black py-3 rounded-full font-black hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-70 transition"
           >
-            {submitting ? "Saving..." : "Get Free Guide"}
+            {submitting ? "Preparing your guide..." : "Send Me the Uganda Planning Guide"}
           </button>
 
           {error && <p className="text-sm text-red-300">{error}</p>}
@@ -79,7 +78,7 @@ export default function Guide() {
             download
             className="bg-green-500 px-6 py-3 rounded-full font-black hover:scale-105 transition"
           >
-            Download Guide PDF
+            Download the Planning Guide
           </a>
           <a
             href="/"
@@ -91,7 +90,7 @@ export default function Guide() {
             href="/#book"
             className="bg-yellow-500 text-black px-6 py-3 rounded-full font-black hover:bg-yellow-400 transition"
           >
-            Plan My Trip
+            Start My Private Uganda Plan
           </a>
         </div>
       )}

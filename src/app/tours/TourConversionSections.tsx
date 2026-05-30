@@ -23,8 +23,8 @@ export default function TourConversionSections({
     <section className="px-6 pb-28 md:px-24">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-2">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
-          <p className="section-kicker">Why travelers book this route</p>
-          <h2 className="mb-5 mt-3 text-3xl font-black md:text-4xl">{tourName} confidence</h2>
+          <p className="section-kicker">Why travelers choose this route</p>
+          <h2 className="mb-5 mt-3 text-3xl font-black md:text-4xl">{tourName}, planned with confidence</h2>
           <p className="leading-8 text-gray-400">{proof}</p>
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
             {["Private planning", "Permit guidance", "Local support"].map((item) => (
@@ -97,7 +97,7 @@ export default function TourConversionSections({
           href={inquiryHref}
           className="mt-8 inline-block rounded-full bg-yellow-500 px-8 py-4 font-black text-black hover:bg-yellow-400"
         >
-          Request This Route
+          Request This Private Route
         </a>
       </div>
     </section>

@@ -18,10 +18,10 @@ export default function PublicSiteFooter() {
           <h3 className="text-xl font-black tracking-[0.25em]">WILD SPINE</h3>
           <p className="mt-1 text-xs tracking-[0.35em] text-[#f5b416]">UGANDA</p>
           <p className="mt-5 max-w-sm leading-7 text-gray-400">
-            Private Uganda journeys, executive wilderness retreats, conservation membership, and premium expedition planning.
+            Private Uganda journeys for travelers who want gorilla trekking, Rwenzori mountains, and safari days planned with care before they arrive.
           </p>
           <a href="/guide" className="mt-6 inline-block rounded-full bg-[#f5b416] px-6 py-3 font-black text-[#123a2a] hover:bg-[#ffd766]">
-            Get Travel Guide
+            Get the Uganda Guide
           </a>
         </div>
 
@@ -33,7 +33,7 @@ export default function PublicSiteFooter() {
             <a href="/tours/margherita-expedition" className="hover:text-[#f5b416]">Margherita Expedition</a>
             <a href="/corporate-retreats" className="hover:text-[#f5b416]">Corporate Retreats</a>
             <a href="/conservation-membership" className="hover:text-[#f5b416]">Conservation Membership</a>
-            <a href="/uganda-gorilla-permit-help" className="hover:text-[#f5b416]">Permit Help</a>
+            <a href="/uganda-gorilla-permit-help" className="hover:text-[#f5b416]">Gorilla Permit Help</a>
           </div>
         </div>
 
@@ -46,7 +46,7 @@ export default function PublicSiteFooter() {
             <a href="/insights/gorilla-trekking-cost-uganda" className="hover:text-[#f5b416]">Gorilla Trekking Cost</a>
             <a href="/insights/best-time-to-visit-bwindi" className="hover:text-[#f5b416]">Best Time for Bwindi</a>
             <a href="/insights/is-uganda-safe-for-tourists" className="hover:text-[#f5b416]">Uganda Safety Guide</a>
-            <a href="/#book" className="hover:text-[#f5b416]">Request Itinerary</a>
+            <a href="/#book" className="hover:text-[#f5b416]">Start Private Planning</a>
             <a href="/terms" className="hover:text-[#f5b416]">Booking Terms</a>
           </div>
         </div>

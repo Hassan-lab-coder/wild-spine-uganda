@@ -49,7 +49,7 @@ export default function SeoLandingPage({
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <p className="section-kicker">Why plan with Wild Spine</p>
-            <h2 className="text-4xl font-black">Local planning for serious Uganda travel.</h2>
+            <h2 className="text-4xl font-black">Local guidance for travelers who want wonder without guesswork.</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {bullets.map((item) => (
@@ -63,7 +63,7 @@ export default function SeoLandingPage({
 
       <section className="border-t border-white/10 px-6 py-24 md:px-24">
         <div className="mx-auto max-w-6xl">
-          <p className="section-kicker">Common questions</p>
+          <p className="section-kicker">Questions before you commit</p>
           <div className="grid gap-4 md:grid-cols-2">
             {faqs.map(([question, answer]) => (
               <details key={question} className="rounded-2xl border border-white/10 bg-white/5 p-5">

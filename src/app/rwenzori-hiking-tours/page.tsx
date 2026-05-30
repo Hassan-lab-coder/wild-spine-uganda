@@ -4,14 +4,14 @@ export default function RwenzoriHikingToursPage() {
   return (
     <SeoLandingPage
       kicker="Rwenzori hiking tours"
-      title="Rwenzori hiking and expedition planning"
-      description="Explore Uganda's Rwenzori Mountains with route guidance, pacing advice, private transfers, and practical expedition preparation."
+      title="Hike the Rwenzori Mountains with honest expedition planning."
+      description="Explore Uganda's Rwenzori Mountains with route guidance, pacing advice, private transfers, and practical preparation for weather, fitness, altitude, and recovery."
       image="/images/travel/boardwalk-trek.jpg"
       route="The Summit Trail"
-      cta="Plan Rwenzori Hiking"
+      cta="Plan My Rwenzori Expedition"
       bullets={["Route and duration guidance", "Mountain logistics coordination", "Fitness and gear preparation", "Gorilla trekking add-on options"]}
       faqs={[
-        ["How fit should I be?", "Good hiking fitness is important, and route choice should match your experience."],
+        ["How fit should I be?", "Good hiking fitness is important, and route choice should match your experience. We would rather be honest than oversell the mountain."],
         ["Can I combine gorillas and Rwenzori?", "Yes. The Summit Trail is built around that combination."],
         ["When is the best season?", "Drier months are preferred, though mountain weather remains variable."],
         ["Do I need technical gear?", "For higher routes and Margherita, gear planning matters. We review that early."],

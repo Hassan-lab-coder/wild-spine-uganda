@@ -126,7 +126,7 @@ export default function VolunteerPage() {
             href="#apply"
             className="bg-yellow-500 text-black px-8 py-4 rounded-full font-bold"
           >
-            Apply Now
+            Start Your Volunteer Inquiry
           </a>
         </div>
       </section>
@@ -177,7 +177,7 @@ export default function VolunteerPage() {
       {/* APPLY */}
       <section id="apply" className="py-24 px-6 md:px-24">
         <h2 className="text-4xl font-black mb-10">
-          Apply for Program
+          Apply with clarity
         </h2>
 
         {sent ? (
@@ -190,9 +190,9 @@ export default function VolunteerPage() {
         ) : (
         <form onSubmit={handleSubmit} className="grid gap-4 max-w-3xl">
           <input required name="name" className="form-input" placeholder="Full name" />
-          <input required name="email" type="email" className="form-input" placeholder="Email" />
+          <input required name="email" type="email" className="form-input" placeholder="Email address" />
           <input name="phone" className="form-input" placeholder="WhatsApp / phone" />
-          <input name="country" className="form-input" placeholder="Country" />
+          <input name="country" className="form-input" placeholder="Country of residence" />
 
           <select name="program" className="form-input">
             <option>Select Program</option>
@@ -201,7 +201,7 @@ export default function VolunteerPage() {
             <option>Volunteer + Gorilla</option>
           </select>
 
-          <textarea name="motivation" className="form-input min-h-32" placeholder="Your motivation" />
+          <textarea name="motivation" className="form-input min-h-32" placeholder="Tell us why Uganda, what you hope to contribute, and whether you want to add gorilla trekking or safari time." />
 
           {error && (
             <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
@@ -210,7 +210,7 @@ export default function VolunteerPage() {
           )}
 
           <button type="submit" disabled={submitting} className="bg-yellow-500 text-black py-4 rounded-full font-bold disabled:cursor-not-allowed disabled:opacity-70">
-            {submitting ? "Saving application..." : "Submit Application"}
+            {submitting ? "Sending your inquiry..." : "Send My Volunteer Inquiry"}
           </button>
         </form>
         )}

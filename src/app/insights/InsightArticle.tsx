@@ -25,7 +25,7 @@ export default function InsightArticle({ kicker, title, description, image, rout
           <h1 className="text-5xl font-black leading-tight md:text-7xl">{title}</h1>
           <p className="mt-8 max-w-3xl text-lg leading-8 text-white/80">{description}</p>
           <a href={href} className="mt-10 inline-block rounded-full bg-[#f5b416] px-8 py-4 font-black text-black hover:bg-[#ffd766]">
-            Plan With Wild Spine
+            Start a Private Uganda Plan
           </a>
         </div>
       </section>
@@ -58,12 +58,12 @@ export default function InsightArticle({ kicker, title, description, image, rout
 
         <aside className="h-fit rounded-3xl border border-[#d8cda9] bg-[#fff9ea] p-6 shadow-sm lg:sticky lg:top-24">
           <p className="section-kicker">Private Planning</p>
-          <h2 className="text-2xl font-black">Need a realistic Uganda route?</h2>
+          <h2 className="text-2xl font-black">Need a route you can trust?</h2>
           <p className="mt-4 leading-7 text-[#68746a]">
             Send your month, group size, comfort level, and must-see experiences. We check permits, routing, lodge fit, and next steps before you pay.
           </p>
           <a href={href} className="mt-6 block rounded-full bg-[#f5b416] px-6 py-4 text-center font-black text-black hover:bg-[#ffd766]">
-            Request Guidance
+            Request Private Guidance
           </a>
           <a href="https://wa.me/256751828241" target="_blank" rel="noopener noreferrer" className="mt-3 block rounded-full border border-[#123a2a]/20 px-6 py-4 text-center font-black hover:bg-[#123a2a] hover:text-white">
             Ask on WhatsApp

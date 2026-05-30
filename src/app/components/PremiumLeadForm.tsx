@@ -88,9 +88,9 @@ export default function PremiumLeadForm({
   if (sent) {
     return (
       <div className="rounded-[2rem] border border-[#f5b416]/40 bg-white/90 p-8 text-[#123a2a] shadow-2xl">
-        <h3 className="mb-3 text-3xl font-black text-[#b8860b]">Request received.</h3>
+        <h3 className="mb-3 text-3xl font-black text-[#b8860b]">Your request is in careful hands.</h3>
         <p className="leading-7 text-[#3d4a41]">
-          We will review the details and respond with a realistic next step, timing, and planning path.
+          We will review the details and respond with realistic next steps, timing, and a planning path you can trust.
         </p>
       </div>
     );
@@ -107,10 +107,10 @@ export default function PremiumLeadForm({
         <input required name="name" className="form-input" placeholder="Full name" />
         <input required name="email" type="email" className="form-input" placeholder="Email address" />
         <input name="phone" className="form-input" placeholder="WhatsApp / phone" />
-        <input name="country" className="form-input" placeholder="Country" />
+        <input name="country" className="form-input" placeholder="Country of residence" />
         <input name="organization" className="form-input" placeholder="Company / organization" />
         <input name="travel_month" className="form-input" placeholder="Preferred timing" />
-        <input name="group_size" className="form-input" placeholder="People / members" />
+        <input name="group_size" className="form-input" placeholder="Travelers / members" />
         <select name="budget_range" className="form-input">
           <option value="">Budget range</option>
           {budgetOptions.map((option) => (
@@ -128,8 +128,8 @@ export default function PremiumLeadForm({
           </select>
         </label>
 
-        <input name="goal" className="form-input sm:col-span-2" placeholder="Primary goal" />
-        <textarea name="message" className="form-input min-h-32 sm:col-span-2" placeholder="Share the context, dates, and what success should feel like..." />
+        <input name="goal" className="form-input sm:col-span-2" placeholder="What should this journey achieve?" />
+        <textarea name="message" className="form-input min-h-32 sm:col-span-2" placeholder="Share the context, dates, concerns, and what would make this feel exceptional..." />
       </div>
 
       {error && (
