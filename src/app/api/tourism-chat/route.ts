@@ -85,7 +85,7 @@ export async function POST(request: Request) {
 
   if (!apiKey) {
     return NextResponse.json(
-      { ok: false, reason: "OpenAI is not configured for this deployment." },
+      { ok: false, reason: "Wildspine Chatbot is temporarily in WhatsApp handoff mode." },
       { status: 500, headers: rateLimitHeaders(limit) }
     );
   }
@@ -170,7 +170,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.warn("OpenAI chat request failed:", error instanceof Error ? error.message : "request failed");
     return NextResponse.json(
-      { ok: false, reason: "The AI concierge could not reply right now." },
+      { ok: false, reason: "Wildspine Chatbot could not reply right now." },
       { status: 502, headers: rateLimitHeaders(limit) }
     );
   } finally {
@@ -182,7 +182,7 @@ export async function POST(request: Request) {
   if (!openAiResponse.ok) {
     console.warn("OpenAI chat request failed:", data?.error?.message || openAiResponse.statusText);
     return NextResponse.json(
-      { ok: false, reason: "The AI concierge could not reply right now." },
+      { ok: false, reason: "Wildspine Chatbot could not reply right now." },
       { status: 502, headers: rateLimitHeaders(limit) }
     );
   }
@@ -216,7 +216,7 @@ function systemPrompt() {
     ? "Configured knowledge may include current permit or fee details. Use only those configured details when discussing exact fees."
     : "No exact permit or government fee prices are configured. Do not provide numeric permit, park, visa, or government fee amounts.";
 
-  return `You are the Wild Spine Uganda AI tourism concierge for a premium Uganda travel company.
+  return `You are Wildspine Chatbot, the AI tourism concierge for Wild Spine Uganda, a premium Uganda travel company.
 
 Brand voice:
 - Professional, warm, calm, expert, trustworthy, and conversion-focused.

@@ -67,7 +67,7 @@ const initialMessage: ChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "Hello, I am the Wild Spine Uganda AI concierge. I can help with gorilla trekking, Bwindi and Mgahinga logistics, Rwenzori routes, safaris, packing, seasons, safety, permits, and the right planning path. What kind of Uganda journey are you considering?",
+    "Hello, I am the Wildspine Chatbot. I can help with gorilla trekking, Bwindi and Mgahinga logistics, Rwenzori routes, safaris, packing, seasons, safety, permits, and the right planning path. What kind of Uganda journey are you considering?",
 };
 
 export default function TourismChatWidget() {
@@ -161,14 +161,13 @@ export default function TourismChatWidget() {
         booking_intent: result.bookingIntent,
       });
     } catch (err) {
-      const reason = err instanceof Error ? err.message : "The concierge could not reply right now.";
-      setError(reason);
+      void err;
       setBookingIntent(true);
       setMessages((current) => [
         ...current,
         newMessage(
           "assistant",
-          "I am sorry, the AI concierge is unavailable for a moment. You can still contact the Wild Spine team on WhatsApp for fast planning help."
+          "Wildspine Chatbot is in WhatsApp handoff mode for a moment. You can still continue with the Wild Spine team for fast planning help."
         ),
       ]);
     } finally {
@@ -233,7 +232,7 @@ export default function TourismChatWidget() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.26em] text-[#f5b416]">Wild Spine</p>
-                <h2 className="mt-1 text-lg font-black">Uganda AI Concierge</h2>
+                <h2 className="mt-1 text-lg font-black">Wildspine Chatbot</h2>
                 <p className="mt-1 text-xs leading-5 text-white/70">Expert planning support before you speak with the team.</p>
               </div>
               <button
@@ -267,7 +266,7 @@ export default function TourismChatWidget() {
                   <span className="h-2 w-2 animate-pulse rounded-full bg-[#f5b416]" />
                   <span className="h-2 w-2 animate-pulse rounded-full bg-[#f5b416] [animation-delay:150ms]" />
                   <span className="h-2 w-2 animate-pulse rounded-full bg-[#f5b416] [animation-delay:300ms]" />
-                  <span className="sr-only">Concierge is typing</span>
+                  <span className="sr-only">Wildspine Chatbot is typing</span>
                 </div>
               )}
             </div>
@@ -396,7 +395,7 @@ export default function TourismChatWidget() {
               className="flex items-end gap-2"
             >
               <label className="sr-only" htmlFor="wild-spine-chat-message">
-                Message Wild Spine AI concierge
+                Message Wildspine Chatbot
               </label>
               <textarea
                 id="wild-spine-chat-message"
@@ -428,12 +427,12 @@ export default function TourismChatWidget() {
           type="button"
           onClick={() => setOpen(true)}
           className="group flex max-w-[calc(100vw-2rem)] items-center gap-3 rounded-full border border-[#d8cda9] bg-[#123a2a] px-5 py-4 text-left text-white shadow-2xl transition hover:-translate-y-0.5 hover:border-[#f5b416]"
-          aria-label="Open Wild Spine Uganda AI concierge"
+          aria-label="Open Wildspine Chatbot"
         >
           <span className="grid h-10 w-10 place-items-center rounded-full bg-[#f5b416] text-sm font-black text-[#123a2a]">AI</span>
           <span className="min-w-0">
-            <span className="block text-xs font-black uppercase tracking-[0.2em] text-[#f5b416]">Concierge</span>
-            <span className="block truncate text-sm font-black">Ask Wild Spine</span>
+            <span className="block text-xs font-black uppercase tracking-[0.2em] text-[#f5b416]">Chatbot</span>
+            <span className="block truncate text-sm font-black">Wildspine Chatbot</span>
           </span>
         </button>
       )}
@@ -459,7 +458,7 @@ async function postChat(payload: {
   if (!response.ok) {
     return {
       ok: false,
-      reason: result && "reason" in result ? result.reason : "The concierge could not reply right now.",
+      reason: result && "reason" in result ? result.reason : "Wildspine Chatbot could not reply right now.",
     };
   }
 
