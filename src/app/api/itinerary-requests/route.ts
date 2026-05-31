@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import type { Database } from "@/lib/supabase";
 import {
@@ -43,11 +44,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, reason: "Invalid JSON payload." }, { status: 400 });
   }
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseWriteKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseWriteKey) {
     return NextResponse.json({ ok: false, reason: "Supabase is not configured on this deployment." }, { status: 500 });
   }
 
+  const leadId = randomUUID();
   const payload = {
+    id: leadId,
     name: cleanText(body.name, 120),
     email: cleanText(body.email, 160).toLowerCase(),
     phone: cleanText(body.phone, 80) || null,
@@ -72,8 +78,8 @@ export async function POST(request: Request) {
   }
 
   const supabase = createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseUrl,
+    supabaseWriteKey,
     {
       auth: {
         persistSession: false,
@@ -81,17 +87,17 @@ export async function POST(request: Request) {
     }
   );
 
-  const { data, error } = await supabase
-    .from("itinerary_requests")
-    .insert(payload)
-    .select("id")
-    .single();
+  const { error } = await supabase.from("itinerary_requests").insert(payload);
 
   if (error) {
-    return NextResponse.json({ ok: false, reason: error.message }, { status: 502 });
+    console.warn("Itinerary request was not saved:", error.message);
+    return NextResponse.json(
+      { ok: false, reason: "We could not save your request. Please try again or contact us on WhatsApp." },
+      { status: 502 }
+    );
   }
 
-  await scheduleLeadAutomation(data.id, payload.lead_source, payload.route);
+  await scheduleLeadAutomation(leadId, payload.lead_source, payload.route);
 
   const leadType = cleanText(body.lead_type, 80) || "itinerary request";
 
@@ -107,7 +113,7 @@ export async function POST(request: Request) {
     message: payload.message,
   });
 
-  return NextResponse.json({ ok: true, id: data.id }, { headers: rateLimitHeaders(limit) });
+  return NextResponse.json({ ok: true, id: leadId }, { headers: rateLimitHeaders(limit) });
 }
 
 async function notifyLead(request: Request, body: Record<string, unknown>) {

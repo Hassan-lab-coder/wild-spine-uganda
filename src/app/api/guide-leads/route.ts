@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import type { Database } from "@/lib/supabase";
 import { rateLimit, rateLimitHeaders } from "@/lib/rate-limit";
@@ -24,7 +25,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, reason: "Invalid JSON payload." }, { status: 400 });
   }
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseWriteKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseWriteKey) {
     return NextResponse.json({ ok: false, reason: "Supabase is not configured on this deployment." }, { status: 500 });
   }
 
@@ -36,8 +40,8 @@ export async function POST(request: Request) {
   }
 
   const supabase = createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseUrl,
+    supabaseWriteKey,
     {
       auth: {
         persistSession: false,
@@ -45,17 +49,23 @@ export async function POST(request: Request) {
     }
   );
 
-  const { data, error } = await supabase.from("guide_leads").insert({
+  const leadId = randomUUID();
+  const { error } = await supabase.from("guide_leads").insert({
+    id: leadId,
     email,
     source,
     status: "new",
-  }).select("id").single();
+  });
 
   if (error && error.code !== "23505") {
-    return NextResponse.json({ ok: false, reason: error.message }, { status: 502 });
+    console.warn("Guide lead was not saved:", error.message);
+    return NextResponse.json(
+      { ok: false, reason: "We could not save your request. Please try again or contact us on WhatsApp." },
+      { status: 502 }
+    );
   }
 
-  if (data?.id) await scheduleGuideAutomation(data.id, source);
+  if (!error) await scheduleGuideAutomation(leadId, source);
 
   await notifyLead(request, {
     type: "guide download",
