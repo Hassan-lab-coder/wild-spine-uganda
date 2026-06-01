@@ -19,7 +19,7 @@ export default function Guide() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: email.trim(),
-        source: "guide",
+        source: "gorilla-trekking-guide-2026",
       }),
     });
     const result = await response.json().catch(() => null) as { ok?: boolean; reason?: string } | null;
@@ -32,18 +32,22 @@ export default function Guide() {
     }
 
     setUnlocked(true);
-    trackEvent("guide_download_unlocked");
+    trackEvent("guide_download_unlocked", { guide: "gorilla-trekking-2026" });
   }
 
   return (
     <main className="bg-black text-white min-h-screen flex flex-col justify-center items-center px-6 py-28 text-center">
+      <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-yellow-400">
+        Free PDF guide
+      </p>
+
       <h1 className="text-4xl md:text-6xl font-black mb-6">
-        Plan Uganda with confidence.
+        Gorilla Trekking Guide 2026
       </h1>
 
       <p className="text-gray-400 max-w-xl mb-10">
-        Get a practical field guide for gorilla trekking Uganda, Bwindi permit timing,
-        Rwenzori mountains hiking, and private safari planning, written for travelers who want the magic without the uncertainty.
+        Enter your email to unlock the Wild Spine Uganda PDF for Bwindi gorilla
+        trekking, permit timing, safety basics, packing notes, and private journey planning.
       </p>
 
       {/* FORM */}
@@ -63,7 +67,7 @@ export default function Guide() {
             disabled={submitting}
             className="bg-yellow-500 text-black py-3 rounded-full font-black hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-70 transition"
           >
-            {submitting ? "Preparing your guide..." : "Send Me the Uganda Planning Guide"}
+            {submitting ? "Preparing your guide..." : "Get the Free Gorilla Guide"}
           </button>
 
           {error && <p className="text-sm text-red-300">{error}</p>}
@@ -75,10 +79,11 @@ export default function Guide() {
         <div className="mt-6 flex flex-col items-center gap-4 sm:flex-row">
           <a
             href="/guide.pdf"
-            download
+            download="wild-spine-uganda-gorilla-trekking-guide-2026.pdf"
+            onClick={() => trackEvent("guide_pdf_download_clicked", { guide: "gorilla-trekking-2026" })}
             className="bg-green-500 px-6 py-3 rounded-full font-black hover:scale-105 transition"
           >
-            Download the Planning Guide
+            Download the PDF Guide
           </a>
           <a
             href="/"
@@ -90,7 +95,7 @@ export default function Guide() {
             href="/#book"
             className="bg-yellow-500 text-black px-6 py-3 rounded-full font-black hover:bg-yellow-400 transition"
           >
-            Start My Private Uganda Plan
+            Request a Private Gorilla Plan
           </a>
         </div>
       )}

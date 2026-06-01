@@ -125,15 +125,15 @@ async function loadLead(
 function automationMessage(event: AutomationEvent, lead: ItineraryRequest | GuideLead) {
   if (event.event_type === "guide_delivery") {
     return {
-      subject: "Your Wild Spine Uganda travel guide",
+      subject: "Your Wild Spine Uganda Gorilla Trekking Guide",
       text: `Hello,
 
-Thank you for requesting the Wild Spine Uganda travel guide.
+Thank you for requesting the Wild Spine Uganda Gorilla Trekking Guide 2026.
 
 You can download it here:
 ${siteUrl()}/guide.pdf
 
-If you want help with gorilla permits, Bwindi timing, Rwenzori hiking, or a private Uganda itinerary, reply with your travel month and number of travelers.
+If you want help with gorilla permits, Bwindi timing, or a private Uganda itinerary, reply with your travel month and number of travelers.
 
 Warmly,
 Wild Spine Uganda`,
@@ -142,10 +142,10 @@ Wild Spine Uganda`,
 
   if (event.event_type === "guide_follow_up_48h") {
     return {
-      subject: "Questions after reading the Uganda guide?",
+      subject: "Questions after reading the gorilla trekking guide?",
       text: `Hello,
 
-I hope the guide helped you understand Uganda's gorilla forests, Rwenzori routes, and planning considerations.
+I hope the guide helped you understand Uganda's gorilla forests, permit timing, safety basics, and planning considerations.
 
 If you are comparing dates or permit options, send us your preferred month, group size, and comfort level. We can help you avoid the common mistakes around sector choice, long transfers, and lodge timing.
 

@@ -1,12 +1,12 @@
 import { seoMetadata } from "@/lib/seo";
 
 export const metadata = seoMetadata({
-  title: "Uganda Travel Guide | Gorilla Trekking & Safari Planning",
+  title: "Gorilla Trekking Guide 2026 | Wild Spine Uganda",
   description:
-    "Download the Wild Spine Uganda planning guide for gorilla trekking Uganda, Bwindi permit timing, Rwenzori hiking, and private safari planning.",
+    "Download the Wild Spine Uganda Gorilla Trekking Guide 2026 for Bwindi permit timing, safety basics, packing notes, and private journey planning.",
   path: "/guide",
   image: "/images/travel/forest-trek.jpg",
-  keywords: ["Uganda travel guide", "gorilla trekking Uganda", "Bwindi permit", "Uganda safari planning"],
+  keywords: ["Gorilla Trekking Guide 2026", "gorilla trekking Uganda", "Bwindi permit", "Uganda safari planning"],
 });
 
 export default function GuideLayout({ children }: { children: React.ReactNode }) {

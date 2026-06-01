@@ -69,7 +69,7 @@ export async function POST(request: Request) {
   await notifyLead(request, {
     type: "guide download",
     email,
-    message: "A traveler unlocked the Uganda travel guide.",
+    message: "A traveler unlocked the Gorilla Trekking Guide 2026.",
   });
 
   return NextResponse.json({ ok: true }, { headers: rateLimitHeaders(limit) });

@@ -1181,7 +1181,7 @@ function GuideLeadCard({ lead, now, onStatusChange, onSave }: {
         followUpAt={lead.follow_up_at}
         onSave={onSave}
       />
-      <QuickActions email={lead.email} phone={null} subject="Wild Spine Uganda travel guide" template={guideReplyTemplate()} />
+      <QuickActions email={lead.email} phone={null} subject="Wild Spine Uganda Gorilla Trekking Guide" template={guideReplyTemplate()} />
     </article>
   );
 }
@@ -1660,9 +1660,9 @@ Wild Spine Uganda`;
 function guideReplyTemplate() {
   return `Hi,
 
-Thank you for downloading the Wild Spine Uganda guide.
+Thank you for downloading the Wild Spine Uganda Gorilla Trekking Guide 2026.
 
-If you would like help planning gorilla trekking, Rwenzori hiking, permits, or a private itinerary, reply with your travel month and number of travelers.
+If you would like help planning gorilla trekking, Bwindi permit timing, or a private itinerary, reply with your travel month and number of travelers.
 
 Warmly,
 Wild Spine Uganda`;
