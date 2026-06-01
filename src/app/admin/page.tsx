@@ -7,14 +7,13 @@ import { supabase, type Database } from "@/lib/supabase";
 type Session = Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"];
 type ItineraryRequest = Database["public"]["Tables"]["itinerary_requests"]["Row"];
 type GuideLead = Database["public"]["Tables"]["guide_leads"]["Row"];
-type ChatbotLead = Database["public"]["Tables"]["chatbot_leads"]["Row"];
 type VolunteerApplication = Database["public"]["Tables"]["volunteer_applications"]["Row"];
 type AnalyticsEvent = Database["public"]["Tables"]["analytics_events"]["Row"];
 type Invoice = Database["public"]["Tables"]["invoices"]["Row"];
 type Receipt = Database["public"]["Tables"]["receipts"]["Row"];
 type InboundEmail = Database["public"]["Tables"]["inbound_emails"]["Row"];
 type LineItem = Invoice["line_items"][number];
-type TabKey = "requests" | "chatbot" | "volunteers" | "guides" | "inbox" | "invoices" | "receipts" | "analytics";
+type TabKey = "requests" | "volunteers" | "guides" | "inbox" | "invoices" | "receipts" | "analytics";
 type Status = "pending" | "new" | "contacted" | "qualified" | "confirmed" | "paid" | "closed";
 type DateFilter = "all" | "7" | "30" | "followups";
 type SortBy = "newest" | "oldest" | "follow_up" | "status";
@@ -38,7 +37,6 @@ export default function AdminDashboard() {
   const [refreshing, setRefreshing] = useState(false);
   const [requests, setRequests] = useState<ItineraryRequest[]>([]);
   const [guideLeads, setGuideLeads] = useState<GuideLead[]>([]);
-  const [chatbotLeads, setChatbotLeads] = useState<ChatbotLead[]>([]);
   const [volunteers, setVolunteers] = useState<VolunteerApplication[]>([]);
   const [analyticsEvents, setAnalyticsEvents] = useState<AnalyticsEvent[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -62,10 +60,9 @@ export default function AdminDashboard() {
     setRefreshing(true);
     setDataError("");
 
-    const [requestResult, guideResult, chatbotResult, volunteerResult, analyticsResult, invoiceResult, receiptResult, inboundEmailResult] = await Promise.all([
+    const [requestResult, guideResult, volunteerResult, analyticsResult, invoiceResult, receiptResult, inboundEmailResult] = await Promise.all([
       supabase.from("itinerary_requests").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("guide_leads").select("*").order("created_at", { ascending: false }).limit(200),
-      supabase.from("chatbot_leads").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("volunteer_applications").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("analytics_events").select("*").order("created_at", { ascending: false }).limit(300),
       supabase.from("invoices").select("*").order("created_at", { ascending: false }).limit(200),
@@ -73,7 +70,7 @@ export default function AdminDashboard() {
       supabase.from("inbound_emails").select("*").order("received_at", { ascending: false }).limit(200),
     ]);
 
-    const firstError = requestResult.error || guideResult.error || chatbotResult.error || volunteerResult.error || invoiceResult.error || receiptResult.error || inboundEmailResult.error;
+    const firstError = requestResult.error || guideResult.error || volunteerResult.error || invoiceResult.error || receiptResult.error || inboundEmailResult.error;
 
     if (firstError) {
       setDataError(firstError.message);
@@ -83,7 +80,6 @@ export default function AdminDashboard() {
 
     setRequests(requestResult.data || []);
     setGuideLeads(guideResult.data || []);
-    setChatbotLeads(chatbotResult.data || []);
     setVolunteers(volunteerResult.data || []);
     setAnalyticsEvents(analyticsResult.error ? [] : analyticsResult.data || []);
     setInvoices(invoiceResult.data || []);
@@ -137,15 +133,10 @@ export default function AdminDashboard() {
     () => prepareRows(guideLeads, query, statusFilter, dateFilter, sortBy, dashboardTime),
     [dashboardTime, dateFilter, guideLeads, query, sortBy, statusFilter]
   );
-  const visibleChatbotLeads = useMemo(
-    () => prepareRows(chatbotLeads, query, statusFilter, dateFilter, sortBy, dashboardTime)
-      .filter((lead) => leadTypeFilter === "all" || getChatbotLeadType(lead) === leadTypeFilter),
-    [chatbotLeads, dashboardTime, dateFilter, leadTypeFilter, query, sortBy, statusFilter]
-  );
   const visibleInvoices = useMemo(() => filterRows(invoices, query), [invoices, query]);
   const visibleReceipts = useMemo(() => filterRows(receipts, query), [receipts, query]);
   const visibleInboundEmails = useMemo(() => filterRows(inboundEmails, query, "received_at"), [inboundEmails, query]);
-  const operationalRows = useMemo(() => [...requests, ...volunteers, ...guideLeads, ...chatbotLeads], [chatbotLeads, guideLeads, requests, volunteers]);
+  const operationalRows = useMemo(() => [...requests, ...volunteers, ...guideLeads], [guideLeads, requests, volunteers]);
 
   const metrics = useMemo(() => {
     const sevenDaysAgo = dashboardTime - 7 * 24 * 60 * 60 * 1000;
@@ -161,16 +152,15 @@ export default function AdminDashboard() {
       unpaid: invoices.filter((invoice) => !["paid", "cancelled"].includes(invoice.status)).length,
       retreats: requests.filter((request) => getLeadType(request) === "corporate_retreat").length,
       memberships: requests.filter((request) => getLeadType(request) === "conservation_membership").length,
-      chatbot: chatbotLeads.length,
     };
-  }, [chatbotLeads.length, dashboardTime, inboundEmails, invoices, operationalRows, receipts, requests]);
+  }, [dashboardTime, inboundEmails, invoices, operationalRows, receipts, requests]);
 
-  async function updateStatus(kind: "requests" | "chatbot" | "volunteers" | "guides", id: string, status: Status) {
+  async function updateStatus(kind: "requests" | "volunteers" | "guides", id: string, status: Status) {
     await updateRecord(kind, id, { status });
   }
 
   async function saveAdminWork(
-    kind: "requests" | "chatbot" | "volunteers" | "guides",
+    kind: "requests" | "volunteers" | "guides",
     id: string,
     values: { admin_notes: string | null; follow_up_at: string | null }
   ) {
@@ -178,7 +168,7 @@ export default function AdminDashboard() {
   }
 
   async function updateRecord(
-    kind: "requests" | "chatbot" | "volunteers" | "guides",
+    kind: "requests" | "volunteers" | "guides",
     id: string,
     values: { status?: Status; admin_notes?: string | null; follow_up_at?: string | null }
   ) {
@@ -188,8 +178,6 @@ export default function AdminDashboard() {
     const result =
       kind === "requests"
         ? await supabase.from("itinerary_requests").update(values).eq("id", id)
-        : kind === "chatbot"
-          ? await supabase.from("chatbot_leads").update(values).eq("id", id)
         : kind === "volunteers"
           ? await supabase.from("volunteer_applications").update(values).eq("id", id)
           : await supabase.from("guide_leads").update(values).eq("id", id);
@@ -200,7 +188,6 @@ export default function AdminDashboard() {
     }
 
     if (kind === "requests") setRequests((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
-    if (kind === "chatbot") setChatbotLeads((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
     if (kind === "volunteers") setVolunteers((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
     if (kind === "guides") setGuideLeads((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
     setNotice("Record saved.");
@@ -369,13 +356,12 @@ export default function AdminDashboard() {
 
   const exportRows =
     activeTab === "requests" ? visibleRequests :
-      activeTab === "chatbot" ? visibleChatbotLeads :
-        activeTab === "volunteers" ? visibleVolunteers :
-          activeTab === "guides" ? visibleGuideLeads :
-            activeTab === "invoices" ? visibleInvoices :
-              activeTab === "receipts" ? visibleReceipts :
-                activeTab === "inbox" ? visibleInboundEmails :
-                analyticsEvents;
+      activeTab === "volunteers" ? visibleVolunteers :
+        activeTab === "guides" ? visibleGuideLeads :
+          activeTab === "invoices" ? visibleInvoices :
+            activeTab === "receipts" ? visibleReceipts :
+              activeTab === "inbox" ? visibleInboundEmails :
+              analyticsEvents;
 
   if (loading) {
     return <main className="flex min-h-screen items-center justify-center bg-black text-white">Loading...</main>;
@@ -422,12 +408,11 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      <section className="mb-6 grid gap-4 md:grid-cols-4 xl:grid-cols-11">
+      <section className="mb-6 grid gap-4 md:grid-cols-4 xl:grid-cols-10">
         <MetricCard label="Total Records" value={metrics.total} />
         <MetricCard label="New Leads" value={metrics.new} />
         <MetricCard label="Last 7 Days" value={metrics.fresh} />
         <MetricCard label="Follow-Ups Due" value={metrics.due} urgent={metrics.due > 0} />
-        <MetricCard label="AI Chat Leads" value={metrics.chatbot} urgent={metrics.chatbot > 0} />
         <MetricCard label="Retreat Leads" value={metrics.retreats} urgent={metrics.retreats > 0} />
         <MetricCard label="Membership Leads" value={metrics.memberships} urgent={metrics.memberships > 0} />
         <MetricCard label="Unread Inbox" value={metrics.unreadEmails} urgent={metrics.unreadEmails > 0} />
@@ -471,9 +456,8 @@ export default function AdminDashboard() {
           </select>
         </div>
 
-        <div className="grid grid-cols-2 gap-1 rounded-2xl border border-white/10 bg-black/40 p-1 sm:grid-cols-3 lg:grid-cols-8">
+        <div className="grid grid-cols-2 gap-1 rounded-2xl border border-white/10 bg-black/40 p-1 sm:grid-cols-3 lg:grid-cols-7">
           <TabButton active={activeTab === "requests"} onClick={() => setActiveTab("requests")}>Requests</TabButton>
-          <TabButton active={activeTab === "chatbot"} onClick={() => setActiveTab("chatbot")}>AI Chat</TabButton>
           <TabButton active={activeTab === "volunteers"} onClick={() => setActiveTab("volunteers")}>Volunteers</TabButton>
           <TabButton active={activeTab === "guides"} onClick={() => setActiveTab("guides")}>Guides</TabButton>
           <TabButton active={activeTab === "inbox"} onClick={() => setActiveTab("inbox")}>Inbox</TabButton>
@@ -493,20 +477,6 @@ export default function AdminDashboard() {
               onStatusChange={(status) => updateStatus("requests", request.id, status)}
               onSave={(values) => saveAdminWork("requests", request.id, values)}
               onInvoice={() => startInvoiceFromRequest(request)}
-            />
-          )}
-        </RecordGrid>
-      )}
-
-      {activeTab === "chatbot" && (
-        <RecordGrid title="AI Chat Leads" empty="No AI chat leads match this view." rows={visibleChatbotLeads}>
-          {(lead) => (
-            <ChatbotLeadCard
-              key={lead.id}
-              lead={lead}
-              now={dashboardTime}
-              onStatusChange={(status) => updateStatus("chatbot", lead.id, status)}
-              onSave={(values) => saveAdminWork("chatbot", lead.id, values)}
             />
           )}
         </RecordGrid>
@@ -1216,44 +1186,6 @@ function GuideLeadCard({ lead, now, onStatusChange, onSave }: {
   );
 }
 
-function ChatbotLeadCard({ lead, now, onStatusChange, onSave }: {
-  lead: ChatbotLead;
-  now: number;
-  onStatusChange: (status: Status) => void;
-  onSave: (values: { admin_notes: string | null; follow_up_at: string | null }) => void;
-}) {
-  const leadType = getChatbotLeadType(lead);
-
-  return (
-    <article className="rounded-3xl border border-yellow-500/20 bg-yellow-500/10 p-6">
-      <RecordHeader title={lead.name} subtitle={lead.email} status={lead.status} createdAt={lead.created_at} followUpAt={lead.follow_up_at} now={now} onStatusChange={onStatusChange} />
-      <div className="mt-4 flex flex-wrap gap-2">
-        <LeadTypeBadge type={leadType} />
-        <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs font-black text-gray-300">
-          {formatSource(lead.lead_source || "ai_chat")}
-        </span>
-        {lead.booking_intent && <span className="rounded-full border border-green-400/30 bg-green-500/15 px-3 py-1 text-xs font-black text-green-200">Booking intent</span>}
-      </div>
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
-        <Field label="Preferred Tour" value={lead.preferred_tour || "Not selected"} />
-        <Field label="Travel Month" value={lead.travel_month || "Not provided"} />
-        <Field label="Travelers" value={lead.travelers ? String(lead.travelers) : "Not provided"} />
-        <Field label="Country" value={lead.country || "Not provided"} />
-        <Field label="Page Path" value={lead.page_path || "Not provided"} />
-        <Field label="Conversation" value={lead.conversation_id || "Not linked"} />
-      </div>
-      <MessageBlock label="AI Chat Transcript Summary" value={lead.transcript_summary || "No transcript summary saved."} />
-      <AdminWorkPanel
-        key={`${lead.admin_notes || ""}-${lead.follow_up_at || ""}`}
-        notes={lead.admin_notes}
-        followUpAt={lead.follow_up_at}
-        onSave={onSave}
-      />
-      <QuickActions email={lead.email} phone={null} subject={`Wild Spine AI chat lead: ${lead.preferred_tour || "Uganda journey"}`} template={chatbotReplyTemplate(lead)} />
-    </article>
-  );
-}
-
 function RecordHeader({ title, subtitle, status, createdAt, followUpAt, now, onStatusChange }: {
   title: string;
   subtitle: string;
@@ -1646,17 +1578,6 @@ function getLeadType(request: ItineraryRequest): LeadTypeFilter {
   return "other";
 }
 
-function getChatbotLeadType(lead: ChatbotLead): LeadTypeFilter {
-  const source = (lead.lead_source || "").toLowerCase();
-  const route = (lead.preferred_tour || "").toLowerCase();
-
-  if (source.includes("corporate_retreat") || route.includes("retreat")) return "corporate_retreat";
-  if (source.includes("conservation_membership") || route.includes("membership") || route.includes("guardian")) return "conservation_membership";
-  if (route.includes("permit") || source.includes("permit")) return "permit_help";
-  if (route.includes("spine") || route.includes("summit") || route.includes("margherita") || route.includes("safari") || route.includes("gorilla")) return "safari";
-  return "other";
-}
-
 function leadTypeLabel(type: LeadTypeFilter) {
   const option = leadTypeOptions.find(([value]) => value === type);
   return option?.[1] || "Other";
@@ -1742,22 +1663,6 @@ function guideReplyTemplate() {
 Thank you for downloading the Wild Spine Uganda guide.
 
 If you would like help planning gorilla trekking, Rwenzori hiking, permits, or a private itinerary, reply with your travel month and number of travelers.
-
-Warmly,
-Wild Spine Uganda`;
-}
-
-function chatbotReplyTemplate(lead: ChatbotLead) {
-  return `Hi ${lead.name},
-
-Thank you for chatting with the Wild Spine Uganda concierge about ${lead.preferred_tour || "your Uganda journey"}.
-
-We received your details and can help confirm the best route, realistic timing, permit considerations, accommodation level, and next planning step.
-
-A few quick questions:
-- Are your dates fixed or flexible?
-- What comfort level do you prefer?
-- Is gorilla trekking essential for this trip?
 
 Warmly,
 Wild Spine Uganda`;

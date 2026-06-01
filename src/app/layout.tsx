@@ -5,7 +5,6 @@ import AnalyticsTracker from "./components/AnalyticsTracker";
 import JsonLd from "./components/JsonLd";
 import PublicSiteFooter from "./components/PublicSiteFooter";
 import PublicSiteHeader from "./components/PublicSiteHeader";
-import TourismChatWidget from "./components/TourismChatWidget";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -142,7 +141,6 @@ export default function RootLayout({
         <PublicSiteHeader />
         {children}
         <PublicSiteFooter />
-        <TourismChatWidget />
       </body>
     </html>
   );
