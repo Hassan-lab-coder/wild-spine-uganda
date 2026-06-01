@@ -54,7 +54,6 @@ export async function POST(request: Request) {
     id: leadId,
     email,
     source,
-    status: "new",
   });
 
   if (error && error.code !== "23505") {
