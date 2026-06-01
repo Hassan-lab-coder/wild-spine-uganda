@@ -116,7 +116,7 @@ export default function RootLayout({
               { "@type": "Offer", itemOffered: { "@type": "TouristTrip", name: "The Spine Explorer" } },
               { "@type": "Offer", itemOffered: { "@type": "TouristTrip", name: "The Summit Trail" } },
               { "@type": "Offer", itemOffered: { "@type": "TouristTrip", name: "Margherita Expedition" } },
-              { "@type": "Offer", itemOffered: { "@type": "Event", name: "Executive Wilderness Retreats" } },
+              { "@type": "Offer", itemOffered: { "@type": "Service", name: "Executive Wilderness Retreats" } },
               { "@type": "Offer", itemOffered: { "@type": "Service", name: "Conservation Membership" } },
             ],
             sameAs: [

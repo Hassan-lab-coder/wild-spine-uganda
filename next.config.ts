@@ -2,6 +2,21 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "wildspineuganda.com",
+          },
+        ],
+        destination: "https://www.wildspineuganda.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
