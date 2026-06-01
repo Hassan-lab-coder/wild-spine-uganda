@@ -384,13 +384,16 @@ function HomeContent() {
             Gorilla Trekking Uganda • Rwenzori Mountains • Private Safari Design
           </p>
 
-          <h2 className="text-5xl md:text-8xl font-black leading-[0.95] mb-8 text-white">
-            Stand where the <br /> forest breathes
+          <h2 className="text-5xl md:text-8xl font-black leading-[0.92] mb-8 text-white">
+            <span className="block">Trek the </span>
+            <span className="block text-[#f5b416]">Backbone </span>
+            <span className="block">of Africa</span>
           </h2>
 
           <p className="max-w-2xl text-lg md:text-xl text-white/85 mb-10 leading-8">
-            Come face to face with mountain gorillas in Bwindi, cross Uganda&apos;s wild highlands,
-            and travel with local specialists who handle the permits, pacing, and details with care.
+            From Bwindi&apos;s gorilla forests to the Rwenzori Mountains, Wild Spine Uganda designs
+            private journeys along Africa&apos;s great highland spine with permits, pacing, lodges,
+            and local guidance handled with care.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
