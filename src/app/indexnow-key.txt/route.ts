@@ -1,16 +1,8 @@
 import { NextResponse } from "next/server";
+import { indexNowKey } from "@/lib/indexnow";
 
 export function GET() {
-  const key = process.env.INDEXNOW_KEY?.trim();
-
-  if (!key) {
-    return new NextResponse("IndexNow is not configured.", {
-      status: 404,
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-      },
-    });
-  }
+  const key = indexNowKey();
 
   return new NextResponse(key, {
     headers: {

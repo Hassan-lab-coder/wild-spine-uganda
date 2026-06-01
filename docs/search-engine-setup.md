@@ -9,9 +9,10 @@ Add these environment variables in Vercel, then redeploy:
 ```bash
 BING_SITE_VERIFICATION=
 YANDEX_SITE_VERIFICATION=
-INDEXNOW_KEY=
 INDEXNOW_SECRET=
 ```
+
+`INDEXNOW_KEY` is optional. The project already includes a public fallback key and serves it at `/indexnow-key.txt`.
 
 Use the Bing HTML meta tag value for `BING_SITE_VERIFICATION`. It renders as:
 
@@ -37,7 +38,7 @@ Bing visibility also helps Yahoo. DuckDuckGo sources many traditional web links 
 
 ## 3. Submit updated URLs with IndexNow
 
-After `INDEXNOW_KEY` and `INDEXNOW_SECRET` are live, this route submits all public sitemap URLs:
+After `INDEXNOW_SECRET` is live, this route submits all public sitemap URLs:
 
 ```bash
 curl -X POST https://www.wildspineuganda.com/api/indexnow \

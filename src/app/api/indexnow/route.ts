@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { indexNowKey } from "@/lib/indexnow";
 import { publicRoutes, publicRouteUrl } from "@/lib/public-routes";
 import { siteUrl } from "@/lib/seo";
 import { bearerToken, readJsonObject } from "@/lib/server-validation";
@@ -7,12 +8,8 @@ const indexNowEndpoint = "https://api.indexnow.org/indexnow";
 const maxSubmittedUrls = 10000;
 
 export async function POST(request: Request) {
-  const key = process.env.INDEXNOW_KEY?.trim();
+  const key = indexNowKey();
   const secret = process.env.INDEXNOW_SECRET || process.env.AUTOMATION_SECRET;
-
-  if (!key) {
-    return NextResponse.json({ ok: false, reason: "INDEXNOW_KEY is not configured." }, { status: 500 });
-  }
 
   if (!secret) {
     return NextResponse.json({ ok: false, reason: "INDEXNOW_SECRET or AUTOMATION_SECRET is required." }, { status: 500 });
