@@ -323,7 +323,7 @@ function HomeContent() {
         </a>
 
         <div className="hidden md:flex items-center gap-5 text-xs uppercase tracking-widest xl:gap-8 xl:text-sm">
-          <a href="#experience" className="nav-link">Experience</a>
+          <a href="/uganda-gorilla-permit-help" className="nav-link">Gorilla Permit</a>
           <a href="/volunteer" className="nav-link">Volunteer</a>
 <a href="/guide" className="nav-link">Guide</a>
 <a href="/tours" className="nav-link">Tours</a>
@@ -352,7 +352,7 @@ function HomeContent() {
       {mobileMenuOpen && (
         <div id="mobile-home-menu" className="fixed left-4 right-4 top-20 z-50 rounded-3xl border border-[#d8cda9] bg-[#fff9ea]/98 p-5 text-[#123a2a] shadow-2xl md:hidden">
           <div className="grid gap-3 text-sm font-bold uppercase tracking-widest">
-            <a href="#experience" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-white/70 px-4 py-3">Experience</a>
+            <a href="/uganda-gorilla-permit-help" className="rounded-2xl bg-white/70 px-4 py-3">Gorilla Permit</a>
             <a href="/tours" className="rounded-2xl bg-white/70 px-4 py-3">Tours</a>
             <a href="/corporate-retreats" className="rounded-2xl bg-white/70 px-4 py-3">Retreats</a>
             <a href="/conservation-membership" className="rounded-2xl bg-white/70 px-4 py-3">Impact</a>
