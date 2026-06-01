@@ -32,6 +32,16 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/guide.pdf",
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
+          {
+            key: "Content-Disposition",
+            value: 'attachment; filename="wild-spine-uganda-gorilla-trekking-guide-2026.pdf"',
+          },
+        ],
+      },
     ];
   },
 };

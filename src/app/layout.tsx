@@ -17,6 +17,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const otherVerification: Record<string, string> = {};
+
+if (process.env.BING_SITE_VERIFICATION) {
+  otherVerification["msvalidate.01"] = process.env.BING_SITE_VERIFICATION;
+}
+
+const verification: Metadata["verification"] = {
+  ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+  ...(process.env.YANDEX_SITE_VERIFICATION ? { yandex: process.env.YANDEX_SITE_VERIFICATION } : {}),
+  ...(Object.keys(otherVerification).length ? { other: otherVerification } : {}),
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -70,7 +82,7 @@ export const metadata: Metadata = {
     images: [defaultOgImage],
   },
   verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION,
+    ...verification,
   },
 };
 export default function RootLayout({
