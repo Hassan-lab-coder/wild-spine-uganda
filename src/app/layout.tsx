@@ -17,10 +17,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const bingSiteVerification = process.env.BING_SITE_VERIFICATION || "B6F67952A3E077FEBDC71BA4013ED7B5";
 const otherVerification: Record<string, string> = {};
 
-if (process.env.BING_SITE_VERIFICATION) {
-  otherVerification["msvalidate.01"] = process.env.BING_SITE_VERIFICATION;
+if (bingSiteVerification) {
+  otherVerification["msvalidate.01"] = bingSiteVerification;
 }
 
 const verification: Metadata["verification"] = {
