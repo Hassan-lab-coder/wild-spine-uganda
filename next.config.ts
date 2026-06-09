@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
           },
         ],
         destination: "https://www.wildspineuganda.com/:path*",
-        permanent: true,
+        statusCode: 308,
       },
     ];
   },
