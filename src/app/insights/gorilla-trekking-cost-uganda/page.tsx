@@ -39,6 +39,9 @@ export default function GorillaTrekkingCostUgandaPage() {
         ["Can Wild Spine secure permits only?", "Yes. Permit help can be treated as a planning service, or folded into a full private itinerary."],
         ["Should I book the cheapest gorilla package?", "Only if it clearly explains sector, transport, accommodation, meals, guide support, and payment terms."],
         ["When should I request pricing?", "As soon as your month and group size are known, especially for peak travel periods."],
+        ["What is included in the gorilla permit?", "The permit covers authorized tracking access and the regulated gorilla viewing experience with park guidance. It does not automatically include hotels, transfers, meals, private driver-guide support, or safari extensions."],
+        ["Why do private journeys cost more?", "Private journeys include more planning time, route control, stronger communication, lodge matching, private transport, and better handling of long transfer days."],
+        ["Can a Uganda gorilla trip start from $1,500?", "Shorter private journeys can start around $1,500+ depending on permits, season, lodge level, and transfer plan. Premium and expedition-style routes rise with comfort and complexity."],
       ]}
     />
   );

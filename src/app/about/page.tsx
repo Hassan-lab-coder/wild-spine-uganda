@@ -1,6 +1,12 @@
+import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
 
 const proofPoints = [
+  {
+    value: "12+",
+    label: "Years route experience",
+    text: "Wild Spine planning is shaped by years of Uganda field movement across gorilla, safari, and mountain travel realities.",
+  },
   {
     value: "Local",
     label: "Uganda based planning",
@@ -67,10 +73,13 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-[#07110c] text-white">
       <section className="relative flex min-h-[92vh] items-end overflow-hidden px-6 pb-20 pt-32 md:px-24 md:pb-28">
-        <img
+        <Image
           src="/images/travel/terraced-mountains.jpg"
           alt="Rwenzori Mountains rising through mist in Uganda"
-          className="absolute inset-0 h-full w-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/62 to-black/20" />
         <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#07110c] to-transparent" />
@@ -123,7 +132,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
+          <div className="mt-12 grid gap-5 md:grid-cols-4">
             {proofPoints.map((item) => (
               <article key={item.label} className="rounded-[28px] border border-white/10 bg-white/[0.06] p-7">
                 <p className="text-4xl font-black text-[#f5b416]">{item.value}</p>
@@ -131,6 +140,13 @@ export default function AboutPage() {
                 <p className="mt-4 text-sm leading-7 text-white/62">{item.text}</p>
               </article>
             ))}
+          </div>
+
+          <div className="mt-8 rounded-[28px] border border-[#f5b416]/30 bg-[#f5b416]/10 p-7">
+            <p className="text-sm font-black uppercase tracking-widest text-[#f5b416]">Real-world reference</p>
+            <p className="mt-3 max-w-4xl leading-8 text-white/72">
+              Gorilla trekking plans are built around official Uganda Wildlife Authority procedures, permit timing, park briefings, and sector logistics, not generic safari assumptions.
+            </p>
           </div>
         </div>
       </section>
@@ -177,7 +193,7 @@ export default function AboutPage() {
             {specialties.map((item) => (
               <article key={item.title} className="group overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.05]">
                 <div className="relative h-72 overflow-hidden">
-                  <img src={item.image} alt={item.alt} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                  <Image src={item.image} alt={item.alt} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/20 to-transparent" />
                 </div>
                 <div className="p-7">
@@ -191,10 +207,12 @@ export default function AboutPage() {
       </section>
 
       <section className="relative overflow-hidden bg-black px-6 py-24 md:px-24">
-        <img
+        <Image
           src="/images/travel/ranger-briefing.jpg"
           alt="Uganda ranger briefing before a guided wilderness experience"
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
+          fill
+          sizes="100vw"
+          className="absolute inset-0 object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/82 to-black/45" />
 

@@ -36,9 +36,12 @@ export default function IsUgandaSafeForTouristsPage() {
         },
       ]}
       faqs={[
+        ["Is gorilla trekking safe in Uganda?", "Gorilla trekking follows park procedures, ranger briefings, regulated viewing rules, and guided movement. The safest experience comes from clear permit planning, realistic transfers, and honest fitness expectations."],
         ["Should I use a local operator?", "For gorilla trekking and multi-region travel, local route knowledge is a major advantage."],
         ["Are long transfers normal?", "Yes. Uganda routes can involve long drives, so pacing and vehicle quality matter."],
         ["Can Wild Spine help before arrival?", "Yes. The planning process covers arrival, routing, permits, lodge fit, and practical expectations."],
+        ["How difficult is the gorilla trek?", "Difficulty changes with terrain, rain, altitude, and gorilla family location. Travelers should be prepared for uneven forest walking and should ask for realistic guidance before booking."],
+        ["What safety details should my itinerary show?", "It should show who meets you, transfer timing, lodge base, park procedure notes, emergency contacts, payment terms, and how route changes are handled."],
       ]}
     />
   );

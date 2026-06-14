@@ -42,6 +42,22 @@ export default function PremiumLeadForm({
 
     const form = new FormData(e.currentTarget);
     const route = String(form.get("route") || "");
+    const name = String(form.get("name") || "").trim();
+    const email = String(form.get("email") || "").trim();
+    const travelMonth = String(form.get("travel_month") || "").trim();
+
+    if (!name) {
+      setSubmitting(false);
+      setError("Please share your full name so we know who to contact.");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setSubmitting(false);
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     const messageParts = [
       ["Organization", String(form.get("organization") || "").trim()],
       ["Group size", String(form.get("group_size") || "").trim()],
@@ -56,11 +72,11 @@ export default function PremiumLeadForm({
       .join("\n");
 
     const payload = {
-      name: String(form.get("name") || "").trim(),
-      email: String(form.get("email") || "").trim(),
+      name,
+      email,
       phone: String(form.get("phone") || "").trim() || null,
       country: String(form.get("country") || "").trim() || null,
-      travel_month: String(form.get("travel_month") || "").trim() || null,
+      travel_month: travelMonth || null,
       route: route === routePlaceholder ? null : route,
       message: message || null,
       lead_source: leadSource,
@@ -103,6 +119,11 @@ export default function PremiumLeadForm({
         <p className="mt-2 leading-7 text-[#68746a]">{subtitle}</p>
       </div>
 
+      <div className="mb-5 rounded-2xl border border-[#d8cda9] bg-[#fff9ea]/80 p-4">
+        <p className="text-sm font-black uppercase tracking-widest text-[#b8860b]">Step 1 - Your travel details</p>
+        <p className="mt-2 text-sm leading-6 text-[#68746a]">Share who is traveling, how to reach you, and when Uganda is possible.</p>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         <input required name="name" className="form-input" placeholder="Full name" />
         <input required name="email" type="email" className="form-input" placeholder="Email address" />
@@ -111,6 +132,14 @@ export default function PremiumLeadForm({
         <input name="organization" className="form-input" placeholder="Company / organization" />
         <input name="travel_month" className="form-input" placeholder="Preferred timing" />
         <input name="group_size" className="form-input" placeholder="Travelers / members" />
+      </div>
+
+      <div className="my-5 rounded-2xl border border-[#d8cda9] bg-[#fff9ea]/80 p-4">
+        <p className="text-sm font-black uppercase tracking-widest text-[#b8860b]">Step 2 - Your experience preference</p>
+        <p className="mt-2 text-sm leading-6 text-[#68746a]">Help us understand route, budget, and what the trip must achieve.</p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
         <select name="budget_range" className="form-input">
           <option value="">Budget range</option>
           {budgetOptions.map((option) => (
@@ -130,6 +159,13 @@ export default function PremiumLeadForm({
 
         <input name="goal" className="form-input sm:col-span-2" placeholder="What should this journey achieve?" />
         <textarea name="message" className="form-input min-h-32 sm:col-span-2" placeholder="Share the context, dates, concerns, and what would make this feel exceptional..." />
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-[#d8cda9] bg-[#fff9ea]/80 p-4">
+        <p className="text-sm font-black uppercase tracking-widest text-[#b8860b]">Step 3 - Submit request</p>
+        <p className="mt-2 text-sm leading-6 text-[#68746a]">
+          We will respond with realistic next steps, timing, and planning questions within 24 hours.
+        </p>
       </div>
 
       {error && (

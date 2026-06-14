@@ -14,6 +14,12 @@ export default function Guide() {
     setSubmitting(true);
     setError("");
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setSubmitting(false);
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     const response = await fetch("/api/guide-leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -50,6 +56,19 @@ export default function Guide() {
         trekking, permit timing, safety basics, packing notes, and private journey planning.
       </p>
 
+      <div className="mb-8 grid w-full max-w-3xl gap-3 text-left md:grid-cols-3">
+        {[
+          ["Instant guide access", "Download the PDF immediately after submitting your email."],
+          ["48-hour follow-up", "We prepare a practical follow-up for permit timing and route questions."],
+          ["Private planning path", "You can request a gorilla trek plan when you are ready."],
+        ].map(([title, text]) => (
+          <div key={title} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <h2 className="font-black text-yellow-400">{title}</h2>
+            <p className="mt-2 text-sm leading-6 text-gray-400">{text}</p>
+          </div>
+        ))}
+      </div>
+
       {/* FORM */}
       {!unlocked && (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-sm">
@@ -69,6 +88,10 @@ export default function Guide() {
           >
             {submitting ? "Preparing your guide..." : "Get the Free Gorilla Guide"}
           </button>
+
+          <p className="text-xs leading-5 text-gray-500">
+            We will send practical follow-up guidance about permits and private planning. You can ask us to stop at any time.
+          </p>
 
           {error && <p className="text-sm text-red-300">{error}</p>}
         </form>
