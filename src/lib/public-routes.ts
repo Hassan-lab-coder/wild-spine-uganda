@@ -20,6 +20,7 @@ export const publicRoutes: PublicRoute[] = [
   { path: "/insights/best-time-to-visit-bwindi", changeFrequency: "monthly", priority: 0.82 },
   { path: "/insights/is-uganda-safe-for-tourists", changeFrequency: "monthly", priority: 0.82 },
   { path: "/about", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/contact", changeFrequency: "monthly", priority: 0.75 },
   { path: "/conservation-membership", changeFrequency: "monthly", priority: 0.7 },
   { path: "/corporate-retreats", changeFrequency: "monthly", priority: 0.75 },
   { path: "/expertise", changeFrequency: "monthly", priority: 0.7 },

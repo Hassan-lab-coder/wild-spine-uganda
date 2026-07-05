@@ -133,7 +133,8 @@ export default function RootLayout({
               },
               {
                 "@type": "PostalAddress",
-                streetAddress: "Kingdom Kampala",
+                streetAddress: "Kingdom Kampala, P.O. Box 25543",
+                postOfficeBoxNumber: "25543",
                 addressLocality: "Kampala",
                 addressCountry: "UG",
               },

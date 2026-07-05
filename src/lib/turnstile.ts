@@ -1,4 +1,4 @@
-import { cleanText } from "@/lib/server-validation";
+import { cleanText } from "./server-validation.ts";
 
 export async function verifyTurnstile(request: Request, tokenValue: unknown) {
   const secret = process.env.TURNSTILE_SECRET_KEY;
@@ -26,4 +26,3 @@ export async function verifyTurnstile(request: Request, tokenValue: unknown) {
 function clientIp(request: Request) {
   return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "";
 }
-

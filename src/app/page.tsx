@@ -1164,6 +1164,7 @@ function HomeContent() {
             <p className="text-white/70 leading-8">
               Planning office: Victoria Mall, Entebbe<br />
               Kampala meetings: Kingdom Kampala, Kampala<br />
+              P.O. Box 25543 Kampala, Uganda<br />
               Email: reservations@wildspineuganda.com<br />
               WhatsApp: +256 751 828 241
             </p>

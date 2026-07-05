@@ -1,0 +1,41 @@
+name: Production uptime
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check production health
+        id: health
+        continue-on-error: true
+        run: |
+          response="$(curl --fail --silent --show-error --max-time 20 \
+            https://www.wildspineuganda.com/api/health)"
+          node -e '
+            const health = JSON.parse(process.argv[1]);
+            if (health.status !== "healthy" || health.checks?.payments_enabled !== false) {
+              process.exit(1);
+            }
+          ' "$response"
+
+      - name: Send operational alert
+        if: steps.health.outcome == 'failure'
+        env:
+          ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
+        run: |
+          if [ -n "$ALERT_WEBHOOK_URL" ]; then
+            curl --silent --show-error --max-time 20 \
+              --request POST \
+              --header "content-type: application/json" \
+              --data '{"event":"production_health_check_failed","context":{"source":"github_actions"},"timestamp":"'"$(date -u +%FT%TZ)"'"}' \
+              "$ALERT_WEBHOOK_URL" || true
+          fi
+          exit 1
