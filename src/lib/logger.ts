@@ -25,11 +25,15 @@ export async function sendOperationalAlert(event: string, context: LogContext = 
   logEvent("error", event, context);
   const url = process.env.ALERT_WEBHOOK_URL;
   if (!url) return;
+  const secret = process.env.ALERT_WEBHOOK_SECRET;
 
   try {
     await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(secret ? { Authorization: `Bearer ${secret}` } : {}),
+      },
       body: JSON.stringify({ event, context: redactContext(context), timestamp: new Date().toISOString() }),
       signal: AbortSignal.timeout(4_000),
     });
@@ -47,4 +51,3 @@ function sanitizeValue(value: unknown) {
   if (typeof value === "number" || typeof value === "boolean" || value === null) return value;
   return "[redacted-complex-value]";
 }
-

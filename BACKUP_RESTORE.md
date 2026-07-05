@@ -11,3 +11,14 @@ Restore drills should run quarterly in a separate Supabase project. Restore the 
 
 If a migration fails, stop deploys and writes, preserve logs, restore to a separate database first, validate it, then switch only through an approved incident procedure.
 
+## 5 July 2026 backup verification
+
+Backup ID `20260705-205323` contains:
+
+- a transactional `restore.sql`;
+- current schema metadata, policies, grants, functions, indexes, and triggers;
+- one JSON export per public table;
+- a manifest with verified production row counts;
+- SHA-256 checksums with zero verification failures.
+
+The backup directory is outside the Git repository and Windows ACL inheritance is disabled. It contains customer data and must never be committed, emailed, or uploaded to an unapproved service.

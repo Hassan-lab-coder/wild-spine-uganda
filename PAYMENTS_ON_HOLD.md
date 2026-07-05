@@ -14,3 +14,6 @@ Activation requires:
 6. Written refund, reconciliation, incident, and customer-communication procedures.
 7. Explicit release approval before setting `PAYMENTS_ENABLED=true`.
 
+The July 2026 hardening work does not satisfy payment activation approval. Upstash, Turnstile, migrations, monitoring, and successful non-payment workflows do not authorize Tazapay. Keep `PAYMENTS_ENABLED=false` in every Vercel environment.
+
+The production health and uptime checks deliberately fail if `PAYMENTS_ENABLED` changes to true without a separately approved payment release.

@@ -19,3 +19,4 @@ npx supabase db push
 
 Never expose `SUPABASE_SERVICE_ROLE_KEY` to browser code. Generate application types after a schema change with `npx supabase gen types typescript --linked > src/lib/database.types.ts`, review the diff, and run CI.
 
+Production migration versions `202607050001` through `202607050005` were applied on 5 July 2026 after a verified backup and rollback-only execution test. Post-migration verification confirmed unchanged row counts, protected-table RLS, removed anonymous insert grants, removed broad public insert policies, and rejected anonymous insert attempts.
