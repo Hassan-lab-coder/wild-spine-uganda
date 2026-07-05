@@ -8,6 +8,7 @@ type SeoLandingPageProps = {
   kicker: string;
   description: string;
   image: string;
+  imageAlt: string;
   bullets: string[];
   faqs: Array<[string, string]>;
   cta: string;
@@ -20,6 +21,7 @@ export default function SeoLandingPage({
   kicker,
   description,
   image,
+  imageAlt,
   bullets,
   faqs,
   cta,
@@ -51,7 +53,7 @@ export default function SeoLandingPage({
       <section className="relative flex min-h-[82vh] items-center overflow-hidden px-6 py-32 md:px-24">
         <Image
           src={image}
-          alt={title}
+          alt={imageAlt}
           fill
           priority
           sizes="100vw"

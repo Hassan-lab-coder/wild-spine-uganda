@@ -1,4 +1,4 @@
--- Wild Spine Uganda production hardening
+-- Wild Spine Uganda admin RLS hardening.
 -- Apply after supabase/schema.sql. Replace the email below with the approved admin account.
 
 create or replace function public.is_admin()

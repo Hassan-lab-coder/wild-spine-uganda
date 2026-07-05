@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
 import TourConversionSections from "../TourConversionSections";
 
@@ -6,58 +7,59 @@ export const metadata = seoMetadata({
   description:
     "A 4-5 day private Bwindi gorilla trekking journey with Uganda permit help, sector planning, private guide support, and premium lodge coordination.",
   path: "/tours/spine-explorer",
-  image: "/images/travel/forest-guide.jpg",
+  image: "/images/travel/bwindi-private-gorilla-viewing.webp",
   keywords: ["Bwindi gorilla trekking", "gorilla trekking Uganda", "private Uganda tour", "Uganda gorilla permit"],
 });
 
 export default function SpineExplorerPage() {
   return (
-    <main className="bg-black text-white min-h-screen">
-      <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
-        <img
-          src="/images/travel/forest-guide.jpg"
-          alt="Mountain gorilla in Bwindi"
-          className="absolute inset-0 w-full h-full object-cover"
+    <main className="min-h-screen bg-black text-white">
+      <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-28 md:px-24">
+        <Image
+          src="/images/travel/bwindi-private-gorilla-viewing.webp"
+          alt="Traveler seated quietly near a gorilla family in Bwindi"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
         <div className="absolute inset-0 moving-mist" />
 
-        <div className="relative z-10 max-w-5xl hero-copy">
+        <div className="hero-copy relative z-10 max-w-5xl">
           <a href="/tours" className="text-yellow-500 hover:text-yellow-400">
-            ← Back to Tours
+            Back to Tours
           </a>
 
-          <p className="section-kicker mt-16">4–5 Days • Gorilla Trekking</p>
+          <p className="section-kicker mt-16">4-5 Days / Gorilla Trekking</p>
 
-          <h1 className="text-5xl md:text-8xl font-black leading-[0.95] mb-8">
+          <h1 className="mb-8 text-5xl font-black leading-[0.95] md:text-8xl">
             The Spine Explorer
           </h1>
 
-          <p className="max-w-3xl text-gray-300 text-lg md:text-xl leading-8">
+          <p className="max-w-3xl text-lg leading-8 text-gray-300 md:text-xl">
             A premium short Uganda journey built around one unforgettable moment:
-            standing face-to-face with mountain gorillas in Bwindi.
+            standing face to face with mountain gorillas in Bwindi.
           </p>
 
           <a
             href="/?route=The%20Spine%20Explorer&source=spine_explorer_page#book"
-            className="inline-block mt-10 bg-yellow-500 text-black px-8 py-4 rounded-full font-black hover:bg-yellow-400 transition"
+            className="mt-10 inline-block rounded-full bg-yellow-500 px-8 py-4 font-black text-black transition hover:bg-yellow-400"
           >
             Request This Journey
           </a>
         </div>
       </section>
 
-      <section className="py-28 px-6 md:px-24">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-3 gap-12">
+      <section className="px-6 py-28 md:px-24">
+        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <p className="section-kicker">Day-by-day</p>
-            <h2 className="text-4xl md:text-6xl font-black mb-10">
-             <p className="text-gray-400 mb-10 leading-8 text-lg">
-  This journey is designed for travelers who want a short but powerful
-  Uganda experience — centered on one of the rarest wildlife encounters on Earth.
-</p>
- Itinerary
-            </h2>
+            <h2 className="mb-6 text-4xl font-black md:text-6xl">Itinerary</h2>
+            <p className="mb-10 text-lg leading-8 text-gray-400">
+              This journey is designed for travelers who want a short but powerful
+              Uganda experience, centered on one of the rarest wildlife encounters on Earth.
+            </p>
 
             {[
               ["Day 1", "Arrival in Entebbe or Kampala, private transfer, welcome briefing."],
@@ -66,51 +68,51 @@ export default function SpineExplorerPage() {
               ["Day 4", "Slow recovery morning, cultural encounter, return journey begins."],
               ["Day 5", "Optional extension, domestic connection, or departure."],
             ].map(([day, text]) => (
-              <div key={day} className="border-l border-yellow-500 pl-6 mb-8">
-                <h3 className="text-yellow-500 font-black text-xl">{day}</h3>
-                <p className="text-gray-400 mt-2 leading-7">{text}</p>
+              <div key={day} className="mb-8 border-l border-yellow-500 pl-6">
+                <h3 className="text-xl font-black text-yellow-500">{day}</h3>
+                <p className="mt-2 leading-7 text-gray-400">{text}</p>
               </div>
             ))}
           </div>
 
-          <aside className="package-card h-fit sticky top-28">
-           <div className="mt-8">
-  <h4 className="font-bold mb-4 text-yellow-500">What’s Included</h4>
+          <aside className="package-card h-fit lg:sticky lg:top-28">
+            <div className="mb-8">
+              <h4 className="mb-4 font-bold text-yellow-500">What&apos;s Included</h4>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>Included: Gorilla permit assistance</li>
+                <li>Included: Private guide and driver coordination</li>
+                <li>Included: Lodge and accommodation planning</li>
+                <li>Included: Transport coordination</li>
+                <li>Included: Park entry logistics</li>
+              </ul>
+            </div>
 
-  <ul className="space-y-2 text-gray-300 text-sm">
-    <li>✓ Gorilla permits assistance</li>
-    <li>✓ Private guide & driver</li>
-    <li>✓ Lodge & accommodation planning</li>
-    <li>✓ Transport coordination</li>
-    <li>✓ Park entry logistics</li>
-  </ul>
-</div> 
-<h3 className="text-2xl font-black mb-6">Journey Details</h3>
-            <p className="text-gray-400 mb-3">Duration: 4–5 Days</p>
-            <p className="text-gray-400 mb-3">Focus: Gorilla Trekking</p>
-            <p className="text-gray-400 mb-3">Style: Premium Short Escape</p>
-            <p className="text-yellow-500 text-3xl font-black mt-8">From $1,400</p>
+            <h3 className="mb-6 text-2xl font-black">Journey Details</h3>
+            <p className="mb-3 text-gray-400">Duration: 4-5 Days</p>
+            <p className="mb-3 text-gray-400">Focus: Gorilla Trekking</p>
+            <p className="mb-3 text-gray-400">Style: Premium Short Escape</p>
+            <p className="mt-8 text-3xl font-black text-yellow-500">From $1,500</p>
 
             <a
               href="/?route=The%20Spine%20Explorer&source=spine_explorer_page#book"
-              className="block mt-8 text-center bg-yellow-500 text-black py-4 rounded-full font-black hover:bg-yellow-400 transition"
+              className="mt-8 block rounded-full bg-yellow-500 py-4 text-center font-black text-black transition hover:bg-yellow-400"
             >
-              Start Planning
+              Request This Journey
             </a>
-          
-<p className="text-xs text-gray-500 mt-4 text-center">
-  Limited permits available each month — early planning recommended.
-</p>
 
-<a
-  href="https://wa.me/256751828241"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="block mt-4 text-center border border-white/20 py-3 rounded-full text-sm hover:bg-white hover:text-black transition"
->
-  Chat on WhatsApp
-</a>
-</aside>
+            <p className="mt-4 text-center text-xs text-gray-500">
+              Limited permits available each month. Early planning recommended.
+            </p>
+
+            <a
+              href="https://wa.me/256751828241"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 block rounded-full border border-white/20 py-3 text-center text-sm transition hover:bg-white hover:text-black"
+            >
+              Chat on WhatsApp
+            </a>
+          </aside>
         </div>
       </section>
 

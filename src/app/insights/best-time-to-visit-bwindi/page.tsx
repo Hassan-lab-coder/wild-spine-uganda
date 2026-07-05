@@ -17,6 +17,7 @@ export default function BestTimeToVisitBwindiPage() {
       title="The best time to visit Bwindi depends on more than weather."
       description="Season matters, but permit availability, lodge choice, road time, and your wider Uganda route matter just as much."
       image="/images/travel/ranger-briefing.jpg"
+      imageAlt="Ranger briefing travelers before entering Bwindi forest"
       route="The Spine Explorer"
       path="/insights/best-time-to-visit-bwindi"
       sections={[

@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
+import { seoMetadata } from "@/lib/seo";
+import Image from "next/image";
 import PremiumLeadForm from "../components/PremiumLeadForm";
 
-export const metadata: Metadata = {
+export const metadata = seoMetadata({
   title: "Corporate Retreats in Uganda",
   description:
     "Premium executive wilderness retreats in Uganda combining gorilla trekking, leadership sessions, private logistics, and conservation impact.",
-  alternates: {
-    canonical: "/corporate-retreats",
-  },
-};
+  path: "/corporate-retreats",
+  image: "/images/travel/corporate-retreat.jpg",
+  keywords: ["corporate retreats Uganda", "executive retreat Uganda", "leadership retreat Africa"],
+});
 
 const retreatFormats = [
   {
@@ -41,10 +42,13 @@ export default function CorporateRetreatsPage() {
   return (
     <main className="min-h-screen bg-[#f8f4e8] text-[#123a2a]">
       <section className="relative min-h-screen overflow-hidden px-6 py-32 text-white md:px-24">
-        <img
+        <Image
           src="/images/travel/corporate-retreat.jpg"
           alt="Corporate retreat group on a Uganda safari plain"
-          className="absolute inset-0 h-full w-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-[#123a2a]/35 to-black/20" />
@@ -111,10 +115,13 @@ export default function CorporateRetreatsPage() {
       </section>
 
       <section className="relative overflow-hidden px-6 py-28 text-white md:px-24">
-        <img
+        <Image
           src="/images/travel/corporate-retreat.jpg"
-          alt="Corporate retreat group in Uganda wilderness"
-          className="absolute inset-0 h-full w-full object-cover"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div className="absolute inset-0 bg-[#123a2a]/82" />
         <div className="relative z-10 mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1.15fr]">

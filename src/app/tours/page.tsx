@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
 
 export const metadata = seoMetadata({
@@ -13,11 +14,12 @@ const tours = [
   {
     title: "The Spine Explorer",
     days: "4-5 Days",
-    price: "From $1,400",
+    price: "From $1,500",
     desc: "Premium gorilla trekking through Bwindi with private guidance, permit support, and curated lodge planning.",
     link: "/tours/spine-explorer",
     bestFor: "Short private gorilla journeys",
-    image: "/images/travel/forest-guide.jpg",
+    image: "/images/travel/bwindi-private-gorilla-viewing.webp",
+    imageAlt: "Traveler seated near a mountain gorilla family in Bwindi forest",
   },
   {
     title: "The Summit Trail",
@@ -27,6 +29,7 @@ const tours = [
     link: "/tours/summit-trail",
     bestFor: "Gorillas plus serious hiking",
     image: "/images/travel/forest-trek.jpg",
+    imageAlt: "Hikers following a forest trail toward the Rwenzori Mountains",
   },
   {
     title: "Margherita Expedition",
@@ -36,6 +39,7 @@ const tours = [
     link: "/tours/margherita-expedition",
     bestFor: "High-altitude expedition travelers",
     image: "/images/travel/margherita-peak.png",
+    imageAlt: "Snow-covered Margherita Peak above the Rwenzori valleys",
   },
 ];
 
@@ -61,7 +65,7 @@ export default function ToursPage() {
           {tours.map((tour, index) => (
             <a key={tour.title} href={tour.link} className={`group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition hover:-translate-y-1 hover:border-yellow-500/40 ${index === 1 ? "ring-1 ring-yellow-500/30" : ""}`}>
               <div className="relative h-64 overflow-hidden">
-                <img src={tour.image} alt={tour.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                <Image src={tour.image} alt={tour.imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 <p className="absolute left-5 top-5 rounded-full bg-black/60 px-4 py-2 text-sm font-black text-yellow-500">
                   0{index + 1} / {tour.days}

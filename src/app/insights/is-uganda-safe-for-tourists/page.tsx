@@ -17,6 +17,7 @@ export default function IsUgandaSafeForTouristsPage() {
       title="Uganda can be deeply rewarding when the route is planned properly."
       description="Safety is not a slogan. It comes from realistic routing, local support, clear communication, and careful decisions before arrival."
       image="/images/travel/trail-team.jpg"
+      imageAlt="Travelers and local guides walking together on a Uganda forest trail"
       route="Custom Uganda Safari"
       path="/insights/is-uganda-safe-for-tourists"
       sections={[

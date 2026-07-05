@@ -61,7 +61,7 @@ const specialties = [
 ];
 
 export const metadata = seoMetadata({
-  title: "About Wild Spine Uganda | Local Gorilla & Rwenzori Experts",
+  title: "About Our Local Gorilla & Rwenzori Experts",
   description:
     "Meet Wild Spine Uganda, a local premium travel team planning private gorilla trekking, Bwindi permits, Rwenzori expeditions, and high-trust Uganda safari journeys.",
   path: "/about",

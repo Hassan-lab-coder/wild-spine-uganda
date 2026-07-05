@@ -37,8 +37,6 @@ export function seoMetadata({
       images: [
         {
           url: image,
-          width: 1200,
-          height: 630,
           alt: title,
         },
       ],
@@ -58,6 +56,23 @@ export function seoMetadata({
         "max-image-preview": "large",
         "max-snippet": -1,
         "max-video-preview": -1,
+      },
+    },
+  };
+}
+
+export function noIndexMetadata(title: string, description: string): Metadata {
+  return {
+    title,
+    description,
+    robots: {
+      index: false,
+      follow: false,
+      noarchive: true,
+      googleBot: {
+        index: false,
+        follow: false,
+        noimageindex: true,
       },
     },
   };

@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
+import TurnstileField from "./components/TurnstileField";
 import { submitItineraryLead } from "@/lib/lead-capture";
 import ConversionTrustStrip from "./components/ConversionTrustStrip";
 import CtaNextStepNote from "./components/CtaNextStepNote";
@@ -13,10 +14,11 @@ const tours = [
   {
     title: "The Spine Explorer",
     days: "4-5 Days",
-    price: "From $1,400",
+    price: "From $1,500",
     desc: "A private Bwindi forest experience built around permit timing, calm transfers, and the rare hour you stand near mountain gorillas.",
     link: "/tours/spine-explorer",
-    image: "/images/travel/forest-guide.jpg",
+    image: "/images/travel/bwindi-private-gorilla-viewing.webp",
+    imageAlt: "Traveler seated near a mountain gorilla family in Bwindi forest",
     inclusions: ["Permit timing checked", "Private guide support", "Lodge planning by sector"],
   },
   {
@@ -26,6 +28,7 @@ const tours = [
     desc: "Gorilla trekking Uganda meets Rwenzori mountains hiking: forest silence, alpine valleys, and a route paced with care.",
     link: "/tours/summit-trail",
     image: "/images/travel/forest-trek.jpg",
+    imageAlt: "Hikers following a forest trail toward the Rwenzori Mountains",
     inclusions: ["Gorillas + Rwenzori", "Paced route planning", "Pre-trip briefing"],
   },
   {
@@ -35,6 +38,7 @@ const tours = [
     desc: "A serious, high-touch expedition to Uganda's highest peak with private logistics, mountain preparation, and clear support.",
     link: "/tours/margherita-expedition",
     image: "/images/travel/margherita-peak.png",
+    imageAlt: "Snow-covered Margherita Peak above the Rwenzori valleys",
     inclusions: ["Summit planning", "Private logistics", "Premium expedition support"],
   },
 ];
@@ -49,17 +53,20 @@ const whyCards = [
 const safariCards = [
   {
     title: "Gorilla Encounters",
-    img: "/images/travel/forest-guide.jpg",
+    img: "/images/travel/bwindi-close-gorilla-encounter.webp",
+    imageAlt: "Mountain gorilla resting in dense Bwindi forest vegetation",
     desc: "Step into Bwindi forest and feel the hush before a gorilla family appears through the leaves.",
   },
   {
     title: "Rwenzori Trails",
     img: "/images/travel/boardwalk-trek.jpg",
+    imageAlt: "Hikers crossing a wooden boardwalk on a Rwenzori trail",
     desc: "Follow boardwalks, moss, giant lobelia, and high valleys toward the glacier country of the Rwenzori.",
   },
   {
     title: "Savannah Wildlife",
     img: "/images/travel/zebra-giraffe.jpg",
+    imageAlt: "Zebras and giraffes together on open Uganda savanna",
     desc: "Slow the journey between forests and mountains with open plains, boat water, and warm Ugandan hospitality.",
   },
 ];
@@ -67,22 +74,26 @@ const safariCards = [
 const journeyMoments = [
   {
     title: "Forest approach",
-    img: "/images/travel/forest-trek.jpg",
+    img: "/images/travel/bwindi-trek-ranger-guests.jpg",
+    imageAlt: "Rangers leading guests into Bwindi forest for a gorilla trek",
     caption: "Quiet Bwindi mornings, permit timing, and a guided approach that lets the forest set the pace.",
   },
   {
-    title: "Ranger briefing",
-    img: "/images/travel/ranger-briefing.jpg",
-    caption: "A calm start with rangers and guides, so you understand the rules, terrain, and rhythm before entering.",
+    title: "Gorilla viewing",
+    img: "/images/travel/bwindi-private-gorilla-viewing.webp",
+    imageAlt: "Traveler seated quietly near a gorilla family in Bwindi forest",
+    caption: "A carefully guided encounter that gives the gorilla family space while keeping the moment calm and respectful.",
   },
   {
     title: "Rwenzori trail",
     img: "/images/travel/boardwalk-trek.jpg",
+    imageAlt: "Hikers moving along a wet boardwalk in the Rwenzori Mountains",
     caption: "Wet valleys, alpine plants, and a mountain pace planned honestly around fitness and weather.",
   },
   {
     title: "Lake recovery",
     img: "/images/travel/lake-boat.webp",
+    imageAlt: "Travelers crossing a calm Uganda lake by wooden boat",
     caption: "Soft recovery days on Uganda's lakes help the whole route breathe after the big moments.",
   },
 ];
@@ -94,6 +105,7 @@ const premiumVentures = [
     desc: "Gorilla trekking, Rwenzori routes, safari extensions, and premium logistics shaped around your dates, pace, comfort level, and appetite for wild places.",
     href: "/tours",
     image: "/images/travel/forest-guide.jpg",
+    imageAlt: "Uganda forest guide leading travelers along a shaded trail",
     cta: "Explore Private Routes",
   },
   {
@@ -102,6 +114,7 @@ const premiumVentures = [
     desc: "Private Uganda offsites for founders, boards, executives, NGOs, and senior teams who want silence, perspective, and a shared experience with real strategic value.",
     href: "/corporate-retreats",
     image: "/images/travel/corporate-retreat.jpg",
+    imageAlt: "Leadership retreat group gathered on Uganda savanna",
     cta: "Explore Retreats",
   },
   {
@@ -110,6 +123,7 @@ const premiumVentures = [
     desc: "Membership circles for travelers and supporters who want field stories, impact updates, and a lasting connection to Uganda's wild places after the journey ends.",
     href: "/conservation-membership",
     image: "/images/travel/traveler-trust-gorilla.jpg",
+    imageAlt: "Young mountain gorilla resting among green forest plants",
     cta: "Become a Guardian",
   },
 ];
@@ -119,7 +133,8 @@ const storyCards = [
     label: "Watch",
     title: "Gorilla trekking in Bwindi",
     desc: "A visual starting point for travelers who want to understand the Bwindi forest experience before choosing dates.",
-    image: "/images/travel/forest-guide.jpg",
+    image: "/images/travel/bwindi-trek-ranger-guests.jpg",
+    imageAlt: "Rangers guiding guests during a Bwindi gorilla trek",
     href: "https://utb.go.ug/",
     cta: "Explore Visit Uganda",
     external: true,
@@ -128,7 +143,8 @@ const storyCards = [
     label: "Read",
     title: "Gorilla Trekking Guide 2026",
     desc: "Permit timing, trek expectations, route choices, and preparation for a serious Uganda safari experience.",
-    image: "/images/travel/forest-trek.jpg",
+    image: "/images/travel/bwindi-young-gorilla-guest.jpg",
+    imageAlt: "Traveler photographing a young gorilla in Bwindi forest",
     href: "/guide",
     cta: "Read Our Guide",
     external: false,
@@ -138,6 +154,7 @@ const storyCards = [
     title: "Bwindi World Heritage context",
     desc: "UNESCO background on the biodiversity and conservation value of Bwindi Impenetrable National Park.",
     image: "/images/travel/terraced-mountains.jpg",
+    imageAlt: "Terraced green hills beneath mountain ridges in western Uganda",
     href: "https://whc.unesco.org/en/list/682",
     cta: "Open UNESCO Source",
     external: true,
@@ -147,6 +164,7 @@ const storyCards = [
     title: "Permit and tracking rules",
     desc: "Uganda Wildlife Authority guidance for gorilla and chimpanzee tracking procedures.",
     image: "/images/travel/ranger-briefing.jpg",
+    imageAlt: "Uganda ranger briefing travelers before a forest trek",
     href: "https://ugandawildlife.org/wp-content/uploads/2024/07/Guidelines-for-the-management-of-gorilla-and-chimpanzee-tracking-JULY-2024.pdf",
     cta: "View UWA Guidance",
     external: true,
@@ -156,6 +174,7 @@ const storyCards = [
     title: "Rwenzori trail preparation",
     desc: "Weather, pacing, gear expectations, and recovery days for Rwenzori mountains hiking.",
     image: "/images/travel/boardwalk-trek.jpg",
+    imageAlt: "Hikers crossing a wooden boardwalk in the Rwenzori Mountains",
     href: "/rwenzori-hiking-tours",
     cta: "Explore Rwenzori",
     external: false,
@@ -164,7 +183,8 @@ const storyCards = [
     label: "Private",
     title: "Build your Uganda story",
     desc: "Turn the inspiration into a real itinerary with permits, lodges, guiding, and private logistics checked before you commit.",
-    image: "/images/travel/lake-boat.webp",
+    image: "/images/travel/bwindi-private-gorilla-viewing.webp",
+    imageAlt: "Traveler observing a gorilla family from a respectful distance in Bwindi",
     href: "/#book",
     cta: "Start Private Planning",
     external: false,
@@ -199,9 +219,9 @@ const travelerReviews = [
 ];
 
 const trustSignals = [
-  ["12+ years", "Local expedition planning experience across Uganda's gorilla, safari, and mountain routes."],
-  ["500+ encounters", "Gorilla trekking experiences planned with careful permit timing and route support."],
-  ["48 countries", "Travelers supported from the US, UK, Europe, Asia, Africa, and beyond."],
+  ["12+ years", "Uganda route experience across gorilla, safari, and mountain travel realities."],
+  ["Permit-first", "Gorilla trekking plans shaped around availability, sector logic, and secure payment steps."],
+  ["Long-haul ready", "Planning language, pacing, and support designed for travelers flying in from abroad."],
   ["Local team", "Ground knowledge from Uganda, not generic third-party brochure planning."],
 ];
 
@@ -238,7 +258,7 @@ const entryPointPlans = [
 const confidencePoints = [
   "Permit availability checked before final route design",
   "Date-change options discussed before confirmation",
-  "Deposit and payment steps explained in writing",
+  "Deposit and secure payment steps explained in writing",
   "Private 4x4 and fly-in options compared when useful",
 ];
 
@@ -248,7 +268,7 @@ const bookingFaqs = [
   ["What fitness level do I need?", "Gorilla trekking can range from moderate to demanding depending on the gorilla family location. Rwenzori routes require stronger hiking fitness and preparation."],
   ["What is included in the quote?", "We clarify permits, guiding, transport, accommodation level, park logistics, and optional extensions before you commit."],
   ["Can the itinerary be private?", "Yes. Wild Spine focuses on private and tailored Uganda journeys rather than fixed mass-market departures."],
-  ["How do payments work?", "We confirm availability and scope first, then share clear payment steps, booking terms, and cancellation guidance."],
+  ["How do payments work?", "We confirm availability and scope first, then share clear payment steps, booking terms, and secure provider options such as Tazapay when online payment is appropriate."],
 ];
 
 const ecosystemLogos = [
@@ -348,6 +368,8 @@ function HomeContent() {
       route: route === "Choose preferred route" ? null : route,
       message: tripDetails || null,
       lead_source: leadSource,
+      website: String(form.get("website") || ""),
+      turnstile_token: String(form.get("cf-turnstile-response") || ""),
     };
 
     const result = await submitItineraryLead({ ...payload, lead_type: "itinerary request" });
@@ -457,11 +479,11 @@ function HomeContent() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <a href="/tours" className="bg-[#f5b416] text-black px-8 py-4 rounded-full font-black hover:bg-[#ffd766] transition text-center">
+            <a href="#book" className="bg-[#f5b416] text-black px-8 py-4 rounded-full font-black hover:bg-[#ffd766] transition text-center">
               Start Your Private Uganda Journey
             </a>
-            <a href="#book" className="border border-white/30 px-8 py-4 rounded-full font-black text-white hover:bg-white hover:text-black transition text-center">
-              Request Your Gorilla Trek Plan
+            <a href="/tours" className="border border-white/30 px-8 py-4 rounded-full font-black text-white hover:bg-white hover:text-black transition text-center">
+              Explore Private Routes
             </a>
           </div>
           <CtaNextStepNote />
@@ -515,11 +537,28 @@ function HomeContent() {
         </div>
       </section>
 
+      <section className="bg-[#123a2a] px-6 py-14 text-white md:px-24">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="section-kicker">Private route review</p>
+            <h2 className="mt-3 max-w-3xl text-3xl font-black leading-tight md:text-4xl">
+              Not sure whether Entebbe, Kampala, Kigali, or a fly-in route is right?
+            </h2>
+            <p className="mt-4 max-w-2xl leading-7 text-white/70">
+              Send your dates and comfort level. We will compare the practical route before you spend money on permits or lodges.
+            </p>
+          </div>
+          <a href="#book" className="shrink-0 rounded-full bg-[#f5b416] px-8 py-4 text-center font-black text-black transition hover:bg-[#ffd766]">
+            Request a Route Review
+          </a>
+        </div>
+      </section>
+
      <section className="relative h-[80vh] flex items-center justify-center text-center text-white overflow-hidden">
 
   <Image
-    src="/images/travel/lake-boat.webp"
-    alt="Travelers crossing a Ugandan lake by boat"
+    src="/images/travel/bwindi-private-gorilla-viewing.webp"
+    alt="Traveler seated quietly near a gorilla family in Bwindi forest"
     fill
     sizes="100vw"
     className="absolute inset-0 object-cover"
@@ -576,7 +615,7 @@ function HomeContent() {
           className="group overflow-hidden rounded-3xl border border-[#d8cda9] bg-white/70 shadow-sm transition duration-500 hover:-translate-y-1 hover:border-[#f5b416]/50 hover:bg-white/10"
         >
           <div className="relative h-64 overflow-hidden">
-            <Image src={story.image} alt={story.title} fill sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+            <Image src={story.image} alt={story.imageAlt} fill sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#123a2a]/85 via-[#123a2a]/20 to-transparent" />
             <div className="absolute left-5 top-5 rounded-full bg-[#f5b416] px-4 py-2 text-xs font-black uppercase tracking-widest text-black">
               {story.label}
@@ -595,16 +634,16 @@ function HomeContent() {
 <section className="px-6 md:px-24 py-12 bg-[#fff9ea] border-y border-[#d8cda9]">
         <div className="max-w-6xl mx-auto grid grid-cols-3 gap-6 text-center">
           <div>
-            <h3 className="text-3xl font-black text-[#b8860b]">500+</h3>
-            <p className="text-[#68746a]">Gorilla encounters</p>
+            <h3 className="text-3xl font-black text-[#b8860b]">Permit-first</h3>
+            <p className="text-[#68746a]">Gorilla planning</p>
           </div>
           <div>
-            <h3 className="text-3xl font-black text-[#b8860b]">48</h3>
-            <p className="text-[#68746a]">Countries served</p>
+            <h3 className="text-3xl font-black text-[#b8860b]">Private</h3>
+            <p className="text-[#68746a]">Custom routes</p>
           </div>
           <div>
-            <h3 className="text-3xl font-black text-[#b8860b]">12+</h3>
-            <p className="text-[#68746a]">Years expertise</p>
+            <h3 className="text-3xl font-black text-[#b8860b]">Local</h3>
+            <p className="text-[#68746a]">Uganda team</p>
           </div>
         </div>
       </section>
@@ -633,7 +672,7 @@ function HomeContent() {
             >
               <Image
                 src={item.img}
-                alt={item.title}
+                alt={item.imageAlt}
                 fill
                 sizes="(min-width: 768px) 33vw, 100vw"
                 className="absolute inset-0 object-cover transition duration-700 group-hover:scale-110"
@@ -680,7 +719,7 @@ function HomeContent() {
       {journeyMoments.map((moment, index) => (
         <figure key={moment.title} className={`group overflow-hidden rounded-3xl border border-[#d8cda9] bg-white/70 shadow-sm ${index === 1 ? "md:translate-y-8" : ""}`}>
           <div className="relative h-72 overflow-hidden">
-            <Image src={moment.img} alt={moment.title} fill sizes="(min-width: 768px) 25vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+            <Image src={moment.img} alt={moment.imageAlt} fill sizes="(min-width: 768px) 25vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#123a2a]/85 to-transparent" />
             <figcaption className="absolute bottom-0 p-5">
               <p className="font-black text-white">{moment.title}</p>
@@ -703,7 +742,7 @@ function HomeContent() {
           {tours.map((tour, index) => (
             <a key={tour.title} href={tour.link} className={`package-card group ${index === 1 ? "featured-card" : ""}`}>
               <div className="relative mb-6 h-52 overflow-hidden rounded-2xl">
-                <Image src={tour.image} alt={tour.title} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+                <Image src={tour.image} alt={tour.imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
               </div>
               <p className="text-[#b8860b] text-sm mb-3">0{index + 1} / {tour.days}</p>
               <h4 className="text-2xl font-black mb-3 group-hover:text-[#2f7d4e] transition">{tour.title}</h4>
@@ -716,7 +755,7 @@ function HomeContent() {
                 ))}
               </ul>
 
-              <p className="text-[#b8860b] font-black">Explore Route →</p>
+              <p className="text-[#b8860b] font-black">Explore Route -&gt;</p>
             </a>
           ))}
         </div>
@@ -745,7 +784,7 @@ function HomeContent() {
           className="group overflow-hidden rounded-3xl border border-white/12 bg-white/8 transition duration-500 hover:-translate-y-1 hover:border-[#f5b416]/55"
         >
           <div className="relative h-80 overflow-hidden">
-            <Image src={venture.image} alt={venture.title} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+            <Image src={venture.image} alt={venture.imageAlt} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
             <p className="absolute left-6 top-6 rounded-full bg-[#f5b416] px-4 py-2 text-xs font-black uppercase tracking-widest text-black">
               {venture.label}
@@ -766,8 +805,8 @@ function HomeContent() {
 
 <section className="relative overflow-hidden py-32 px-6 md:px-24 border-t border-[#d8cda9]">
   <Image
-    src="/images/travel/traveler-trust-gorilla.jpg"
-    alt="Young mountain gorilla in green forest"
+    src="/images/travel/bwindi-young-gorilla-guest.jpg"
+    alt="Traveler quietly photographing a young gorilla in Bwindi forest"
     fill
     sizes="100vw"
     className="absolute inset-0 object-cover object-[28%_center]"
@@ -784,7 +823,7 @@ function HomeContent() {
         </h3>
         <p className="text-[#68746a] text-lg leading-8">
           A private Uganda journey asks for real trust. Wild Spine earns it through clear communication,
-          local route knowledge, careful permit planning, and honest guidance before you send a deposit.
+          local route knowledge, careful permit planning, and secure payment guidance before you send a deposit.
         </p>
       </div>
 
@@ -842,55 +881,14 @@ function HomeContent() {
   </div>
 </section>
 
-<section className="py-32 px-6 md:px-24 bg-[#f8f4e8] border-t border-[#d8cda9]">
-
-  <div className="max-w-6xl mx-auto text-center mb-16">
-    <h3 className="text-4xl md:text-5xl font-black mb-6">
-      Travelers remember how it felt.
-    </h3>
-    <p className="text-[#68746a]">
-      Calm planning, reliable communication, and once-in-a-lifetime moments in Uganda.
-    </p>
-  </div>
-
-  <div className="grid md:grid-cols-3 gap-8">
-
-    {[
-      {
-          text: "We felt prepared before we arrived, and cared for once we landed. The gorilla trek was extraordinary.",
-        name: "James Carter",
-        country: "United Kingdom 🇬🇧"
-      },
-      {
-          text: "Seeing gorillas in Bwindi changed my life. The permits, lodge timing, and transfers were handled with real care.",
-        name: "Emily Rodriguez",
-        country: "USA 🇺🇸"
-      },
-      {
-          text: "Professional, reliable, and deeply knowledgeable about Uganda's wilderness. We always knew the next step.",
-        name: "Lucas Meyer",
-        country: "Germany 🇩🇪"
-      }
-    ].map((t, i) => (
-      <div key={i} className="border border-[#d8cda9] p-6 rounded-xl bg-white/70 shadow-sm">
-        <p className="text-[#3d4a41] mb-6 italic">“{t.text}”</p>
-        <h4 className="font-bold">{t.name}</h4>
-        <p className="text-sm text-[#b8860b]">{t.country}</p>
-      </div>
-    ))}
-
-  </div>
-
-</section>
-
 <section className="py-20 px-6 md:px-24 bg-[#fff9ea] border-t border-[#d8cda9]">
 
   <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6 text-center">
 
     <div className="border border-[#d8cda9] p-6 rounded-xl">
-      Secure Booking
+      Secure Payment Guidance
       <p className="text-[#68746a] text-sm mt-2">
-        Clear invoices, written terms, and payment steps before confirmation
+        Clear invoices, written terms, and Tazapay-ready online payment links before confirmation
       </p>
     </div>
 
@@ -959,7 +957,7 @@ function HomeContent() {
               <a key={title} href={link} className="premium-card">
                 <h4 className="text-2xl font-black mb-4">{title}</h4>
                 <p className="text-[#68746a] leading-7">{desc}</p>
-                <p className="text-[#b8860b] mt-8 font-black">Explore More →</p>
+                <p className="text-[#b8860b] mt-8 font-black">Explore More -&gt;</p>
               </a>
             ))}
           </div>
@@ -1038,8 +1036,8 @@ function HomeContent() {
 
       <section id="book" className="relative overflow-hidden py-32 px-6 text-white md:px-24">
         <Image
-          src="/images/travel/booking-gorilla.jpg"
-          alt="Mountain gorilla in green forest"
+          src="/images/travel/bwindi-trek-ranger-guests.jpg"
+          alt="Rangers guiding travelers during a Bwindi gorilla trekking experience"
           fill
           sizes="100vw"
           className="absolute inset-0 object-cover"
@@ -1068,17 +1066,18 @@ function HomeContent() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="p-8 rounded-[2rem] bg-white/90 shadow-2xl border border-white/45 backdrop-blur-sm">
+              <TurnstileField />
               <div className="mb-6 rounded-2xl border border-[#d8cda9] bg-[#fff9ea]/80 p-5 text-[#123a2a]">
                 <p className="text-sm font-black uppercase tracking-widest text-[#b8860b]">Step 1 - Your travel details</p>
                 <p className="mt-2 text-sm leading-6 text-[#68746a]">Tell us who is traveling and when you hope to visit Uganda.</p>
               </div>
               <div className="grid sm:grid-cols-2 gap-5">
-                <input required name="name" className="form-input" placeholder="Full name" />
-                <input required name="email" type="email" className="form-input" placeholder="Email address" />
-                <input name="phone" className="form-input" placeholder="WhatsApp / phone" />
-                <input name="country" className="form-input" placeholder="Country of residence" />
-                <input required name="travel_month" className="form-input" placeholder="Ideal travel month" />
-                <input name="group_size" className="form-input" placeholder="Number of travelers" />
+                <input required name="name" aria-label="Full name" className="form-input" placeholder="Full name" />
+                <input required name="email" type="email" aria-label="Email address" className="form-input" placeholder="Email address" />
+                <input name="phone" aria-label="WhatsApp or phone number" className="form-input" placeholder="WhatsApp / phone" />
+                <input name="country" aria-label="Country of residence" className="form-input" placeholder="Country of residence" />
+                <input required name="travel_month" aria-label="Ideal travel month" className="form-input" placeholder="Ideal travel month" />
+                <input name="group_size" aria-label="Number of travelers" className="form-input" placeholder="Number of travelers" />
               </div>
 
               <div className="my-6 rounded-2xl border border-[#d8cda9] bg-[#fff9ea]/80 p-5 text-[#123a2a]">
@@ -1102,7 +1101,7 @@ function HomeContent() {
                 </select>
                 </label>
 
-                <select name="comfort_level" className="form-input">
+                <select name="comfort_level" aria-label="Preferred comfort level" className="form-input">
                   <option value="">Comfort level</option>
                   <option>Comfort</option>
                   <option>Premium</option>
@@ -1110,16 +1109,15 @@ function HomeContent() {
                   <option>Ultra-luxury / expedition support</option>
                 </select>
 
-                <select name="budget_range" className="form-input">
+                <select name="budget_range" aria-label="Budget range per person" className="form-input">
                   <option value="">Budget range per person</option>
-                  <option>Under $1,500</option>
                   <option>$1,500 - $3,000</option>
                   <option>$3,000 - $6,000</option>
                   <option>$6,000+</option>
                   <option>Not sure yet</option>
                 </select>
 
-                <select name="pace" className="form-input">
+                <select name="pace" aria-label="Preferred travel pace" className="form-input">
                   <option value="">Travel pace</option>
                   <option>Relaxed</option>
                   <option>Balanced</option>
@@ -1127,17 +1125,18 @@ function HomeContent() {
                   <option>Serious expedition</option>
                 </select>
 
-                <input name="experiences" className="form-input" placeholder="Must-see: gorillas, chimps, Rwenzori, safari..." />
+                <input name="experiences" aria-label="Must-see experiences" className="form-input" placeholder="Must-see: gorillas, chimps, Rwenzori, safari..." />
 
                 <textarea
                   name="message"
+                  aria-label="Travel goals and preferences"
                   className="form-input sm:col-span-2 min-h-32"
                   placeholder="Tell us what you want to feel, see, and avoid. We will turn it into a realistic Uganda plan."
                 />
               </div>
 
               <div className="mt-6 rounded-2xl border border-[#d8cda9] bg-[#fff9ea]/80 p-5 text-[#123a2a]">
-                <p className="text-sm font-black uppercase tracking-widest text-[#b8860b]">Step 3 - Submit request</p>
+                <p className="text-sm font-black uppercase tracking-widest text-[#b8860b]">Step 3 - Send your travel request</p>
                 <p className="mt-2 text-sm leading-6 text-[#68746a]">
                   After you send this, we review permit timing, route fit, transfer reality, and lodge logic before replying.
                 </p>
@@ -1150,7 +1149,7 @@ function HomeContent() {
               )}
 
               <button type="submit" disabled={submitting} className="mt-6 w-full bg-[#f5b416] text-black py-4 rounded-full font-black hover:bg-[#ffd766] disabled:cursor-not-allowed disabled:opacity-70 transition">
-                {submitting ? "Securing your request..." : "Start Your Private Uganda Journey"}
+                {submitting ? "Preparing your request..." : "Start Your Private Uganda Journey"}
               </button>
             </form>
           )}
@@ -1163,8 +1162,8 @@ function HomeContent() {
             <p className="section-kicker">Contact Wild Spine</p>
             <h2 className="text-4xl md:text-6xl font-black mb-8">Begin with a calm conversation.</h2>
             <p className="text-white/70 leading-8">
-              Victoria Mall, Entebbe<br />
-              Kingdom Kampala, Kampala<br />
+              Planning office: Victoria Mall, Entebbe<br />
+              Kampala meetings: Kingdom Kampala, Kampala<br />
               Email: reservations@wildspineuganda.com<br />
               WhatsApp: +256 751 828 241
             </p>

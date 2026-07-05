@@ -17,6 +17,7 @@ export default function GorillaTrekkingCostUgandaPage() {
       title="What does gorilla trekking in Uganda really cost?"
       description="Understand the real cost drivers before choosing a cheap package or locking in a permit date."
       image="/images/travel/forest-guide.jpg"
+      imageAlt="Uganda forest guide leading travelers along a gorilla trekking trail"
       route="Gorilla Permit Help"
       path="/insights/gorilla-trekking-cost-uganda"
       sections={[

@@ -17,6 +17,7 @@ export default function UgandaLuxurySafariPage() {
       title="A private Uganda safari for travelers who want depth, not crowds."
       description="Build a premium Uganda safari experience around gorillas, Rwenzori landscapes, private transfers, carefully selected lodges, and clear planning before you commit."
       image="/images/travel/safari-elephants.jpg"
+      imageAlt="Elephants crossing open grassland during a Uganda safari"
       route="The Summit Trail"
       cta="Start Your Luxury Uganda Plan"
       bullets={["Private itinerary design around your pace", "Premium lodge planning with route logic", "Gorilla and mountain combinations", "Clear communication before booking"]}

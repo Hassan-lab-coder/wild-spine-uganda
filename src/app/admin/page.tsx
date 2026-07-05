@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase, type Database } from "@/lib/supabase";
+import { trackEvent } from "@/lib/analytics";
+import PaymentLinkPanel from "./PaymentLinkPanel";
 
 type Session = Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"];
 type ItineraryRequest = Database["public"]["Tables"]["itinerary_requests"]["Row"];
@@ -11,9 +13,11 @@ type VolunteerApplication = Database["public"]["Tables"]["volunteer_applications
 type AnalyticsEvent = Database["public"]["Tables"]["analytics_events"]["Row"];
 type Invoice = Database["public"]["Tables"]["invoices"]["Row"];
 type Receipt = Database["public"]["Tables"]["receipts"]["Row"];
+type PaymentRequest = Database["public"]["Tables"]["payment_requests"]["Row"];
+type PaymentWebhookEvent = Database["public"]["Tables"]["payment_webhook_events"]["Row"];
 type InboundEmail = Database["public"]["Tables"]["inbound_emails"]["Row"];
 type LineItem = Invoice["line_items"][number];
-type TabKey = "requests" | "volunteers" | "guides" | "inbox" | "invoices" | "receipts" | "analytics";
+type TabKey = "requests" | "volunteers" | "guides" | "inbox" | "invoices" | "payments" | "receipts" | "analytics";
 type Status = "pending" | "new" | "contacted" | "qualified" | "confirmed" | "paid" | "closed";
 type DateFilter = "all" | "7" | "30" | "followups";
 type SortBy = "newest" | "oldest" | "follow_up" | "status";
@@ -41,6 +45,8 @@ export default function AdminDashboard() {
   const [analyticsEvents, setAnalyticsEvents] = useState<AnalyticsEvent[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [receipts, setReceipts] = useState<Receipt[]>([]);
+  const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([]);
+  const [paymentEvents, setPaymentEvents] = useState<PaymentWebhookEvent[]>([]);
   const [inboundEmails, setInboundEmails] = useState<InboundEmail[]>([]);
   const [dataError, setDataError] = useState("");
   const [notice, setNotice] = useState("");
@@ -60,7 +66,7 @@ export default function AdminDashboard() {
     setRefreshing(true);
     setDataError("");
 
-    const [requestResult, guideResult, volunteerResult, analyticsResult, invoiceResult, receiptResult, inboundEmailResult] = await Promise.all([
+    const [requestResult, guideResult, volunteerResult, analyticsResult, invoiceResult, receiptResult, inboundEmailResult, paymentResult, paymentEventResult] = await Promise.all([
       supabase.from("itinerary_requests").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("guide_leads").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("volunteer_applications").select("*").order("created_at", { ascending: false }).limit(200),
@@ -68,9 +74,11 @@ export default function AdminDashboard() {
       supabase.from("invoices").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("receipts").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("inbound_emails").select("*").order("received_at", { ascending: false }).limit(200),
+      supabase.from("payment_requests").select("*").order("created_at", { ascending: false }).limit(200),
+      supabase.from("payment_webhook_events").select("*").order("created_at", { ascending: false }).limit(300),
     ]);
 
-    const firstError = requestResult.error || guideResult.error || volunteerResult.error || invoiceResult.error || receiptResult.error || inboundEmailResult.error;
+    const firstError = requestResult.error || guideResult.error || volunteerResult.error || invoiceResult.error || receiptResult.error || inboundEmailResult.error || paymentResult.error || paymentEventResult.error;
 
     if (firstError) {
       setDataError(firstError.message);
@@ -85,6 +93,8 @@ export default function AdminDashboard() {
     setInvoices(invoiceResult.data || []);
     setReceipts(receiptResult.data || []);
     setInboundEmails(inboundEmailResult.data || []);
+    setPaymentRequests(paymentResult.data || []);
+    setPaymentEvents(paymentEventResult.data || []);
     setDashboardTime(Date.now());
     setRefreshing(false);
   }, []);
@@ -156,7 +166,10 @@ export default function AdminDashboard() {
   }, [dashboardTime, inboundEmails, invoices, operationalRows, receipts, requests]);
 
   async function updateStatus(kind: "requests" | "volunteers" | "guides", id: string, status: Status) {
-    await updateRecord(kind, id, { status });
+    const saved = await updateRecord(kind, id, { status });
+    if (!saved) return;
+    if (status === "qualified") void trackEvent("lead_qualified", { kind });
+    if (status === "confirmed") void trackEvent("booking_confirmed", { kind });
   }
 
   async function saveAdminWork(
@@ -184,13 +197,14 @@ export default function AdminDashboard() {
 
     if (result.error) {
       setDataError(result.error.message);
-      return;
+      return false;
     }
 
     if (kind === "requests") setRequests((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
     if (kind === "volunteers") setVolunteers((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
     if (kind === "guides") setGuideLeads((current) => current.map((item) => item.id === id ? { ...item, ...values } : item));
     setNotice("Record saved.");
+    return true;
   }
 
   async function createInvoice(values: InvoiceFormValues) {
@@ -226,6 +240,10 @@ export default function AdminDashboard() {
 
     setInvoices((current) => [result.data, ...current]);
     setNotice("Invoice created.");
+    if (values.status === "sent") {
+      void trackEvent("quote_sent", { currency: values.currency, total, trip: values.tripName || "unspecified" });
+      void trackEvent("deposit_requested", { currency: values.currency, total, trip: values.tripName || "unspecified" });
+    }
   }
 
   async function updateInboundEmailReadState(id: string, read: boolean) {
@@ -256,6 +274,11 @@ export default function AdminDashboard() {
 
     setInvoices((current) => current.map((invoice) => invoice.id === id ? { ...invoice, status } : invoice));
     setNotice("Invoice status saved.");
+    if (status === "sent") {
+      const invoice = invoices.find((item) => item.id === id);
+      void trackEvent("quote_sent", { currency: invoice?.currency, total: invoice?.total, trip: invoice?.trip_name });
+      void trackEvent("deposit_requested", { currency: invoice?.currency, total: invoice?.total, trip: invoice?.trip_name });
+    }
   }
 
   async function updateInvoiceMoney(id: string, values: InvoiceMoneyValues) {
@@ -322,6 +345,12 @@ export default function AdminDashboard() {
     }
 
     setReceipts((current) => [result.data, ...current]);
+    void trackEvent("offline_payment_pending", {
+      currency: result.data.currency,
+      amount: result.data.amount,
+      method: result.data.payment_method,
+      trip: invoice?.trip_name,
+    });
     if (invoice && result.data.amount >= invoice.total) {
       await updateInvoiceStatus(invoice.id, "paid");
     }
@@ -462,6 +491,7 @@ export default function AdminDashboard() {
           <TabButton active={activeTab === "guides"} onClick={() => setActiveTab("guides")}>Guides</TabButton>
           <TabButton active={activeTab === "inbox"} onClick={() => setActiveTab("inbox")}>Inbox</TabButton>
           <TabButton active={activeTab === "invoices"} onClick={() => setActiveTab("invoices")}>Invoices</TabButton>
+          <TabButton active={activeTab === "payments"} onClick={() => setActiveTab("payments")}>Payments</TabButton>
           <TabButton active={activeTab === "receipts"} onClick={() => setActiveTab("receipts")}>Receipts</TabButton>
           <TabButton active={activeTab === "analytics"} onClick={() => setActiveTab("analytics")}>Analytics</TabButton>
         </div>
@@ -530,6 +560,7 @@ export default function AdminDashboard() {
               <InvoiceCard
                 key={invoice.id}
                 invoice={invoice}
+                paymentLocked={paymentRequests.some((payment) => payment.invoice_id === invoice.id && ["creating", "pending", "paid"].includes(payment.status))}
                 onMoneySave={(values) => updateInvoiceMoney(invoice.id, values)}
                 onStatusChange={(status) => updateInvoiceStatus(invoice.id, status)}
                 onPrint={() => printInvoice(invoice)}
@@ -546,6 +577,10 @@ export default function AdminDashboard() {
             {(receipt) => <ReceiptCard key={receipt.id} receipt={receipt} onPrint={() => printReceipt(receipt)} />}
           </RecordGrid>
         </FinancialPanel>
+      )}
+
+      {activeTab === "payments" && (
+        <PaymentReconciliationPanel payments={paymentRequests} events={paymentEvents} invoices={invoices} />
       )}
 
       {activeTab === "analytics" && <AnalyticsPanel events={analyticsEvents} />}
@@ -606,6 +641,59 @@ function FinancialPanel({ title, count, children }: { title: string; count: numb
       </div>
       {children}
     </section>
+  );
+}
+
+function PaymentReconciliationPanel({ payments, events, invoices }: {
+  payments: PaymentRequest[];
+  events: PaymentWebhookEvent[];
+  invoices: Invoice[];
+}) {
+  const invoiceById = new Map(invoices.map((invoice) => [invoice.id, invoice]));
+  return (
+    <FinancialPanel title="Payment Reconciliation" count={payments.length}>
+      <div className="mb-2 grid gap-4 md:grid-cols-4">
+        {["pending", "paid", "failed", "expired"].map((status) => (
+          <div key={status} className="border border-white/10 bg-white/5 p-5">
+            <p className="text-xs font-black uppercase text-gray-500">{status}</p>
+            <p className="mt-2 text-3xl font-black">{payments.filter((payment) => payment.status === status).length}</p>
+          </div>
+        ))}
+      </div>
+      <div className="grid gap-5">
+        {payments.map((payment) => {
+          const invoice = payment.invoice_id ? invoiceById.get(payment.invoice_id) : null;
+          const relatedEvents = events.filter((event) => event.payment_request_id === payment.id);
+          const needsAttention = relatedEvents.some((event) => ["failed", "rejected", "unmatched"].includes(event.processing_status));
+          return (
+            <article key={payment.id} className="border border-white/10 bg-white/5 p-6">
+              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p className="text-xs font-black uppercase text-yellow-500">{invoice?.invoice_number || "Unlinked payment"}</p>
+                  <h3 className="mt-2 text-xl font-black">{payment.client_name}</h3>
+                  <p className="mt-1 text-sm text-gray-400">{payment.client_email}</p>
+                </div>
+                <div className="text-left md:text-right">
+                  <p className="text-2xl font-black">{formatMoney(payment.amount, payment.currency)}</p>
+                  <p className="mt-1 text-sm font-bold capitalize text-gray-400">{payment.provider} · {payment.status}</p>
+                </div>
+              </div>
+              <div className="mt-5 grid gap-3 text-sm text-gray-400 md:grid-cols-3">
+                <p>Created: {formatDate(payment.created_at)}</p>
+                <p>Paid: {payment.paid_at ? formatDate(payment.paid_at) : "Not confirmed"}</p>
+                <p>Webhook events: {relatedEvents.length}</p>
+              </div>
+              {payment.provider_reference && <p className="mt-4 break-all text-xs text-gray-500">Provider reference: {payment.provider_reference}</p>}
+              {payment.checkout_url && payment.status !== "paid" && (
+                <a href={payment.checkout_url} target="_blank" rel="noopener noreferrer" className="admin-outline-button mt-5 inline-flex text-sm">Open Checkout</a>
+              )}
+              {needsAttention && <p className="mt-4 border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">Reconciliation needs attention. Review the latest webhook event.</p>}
+            </article>
+          );
+        })}
+        {payments.length === 0 && <p className="text-gray-400">No payment requests have been created.</p>}
+      </div>
+    </FinancialPanel>
   );
 }
 
@@ -813,6 +901,7 @@ function ReceiptForm({ invoices, receipts, onCreate }: { invoices: Invoice[]; re
           <option value="card">Card</option>
           <option value="mobile_money">Mobile money</option>
           <option value="paypal">PayPal</option>
+          <option value="tazapay">Tazapay</option>
           <option value="flutterwave">Flutterwave</option>
         </select>
         <input className="form-input" value={reference} onChange={(event) => setReference(event.target.value)} placeholder="Payment reference" />
@@ -823,8 +912,9 @@ function ReceiptForm({ invoices, receipts, onCreate }: { invoices: Invoice[]; re
   );
 }
 
-function InvoiceCard({ invoice, onMoneySave, onStatusChange, onPrint }: {
+function InvoiceCard({ invoice, paymentLocked, onMoneySave, onStatusChange, onPrint }: {
   invoice: Invoice;
+  paymentLocked: boolean;
   onMoneySave: (values: InvoiceMoneyValues) => void;
   onStatusChange: (status: InvoiceStatus) => void;
   onPrint: () => void;
@@ -925,100 +1015,15 @@ function InvoiceCard({ invoice, onMoneySave, onStatusChange, onPrint }: {
         </div>
       )}
       <div className="mt-5 flex flex-wrap gap-3">
-        <button type="button" onClick={() => setEditingMoney((open) => !open)} className="admin-outline-button text-sm">
+        <button type="button" disabled={paymentLocked} onClick={() => setEditingMoney((open) => !open)} className="admin-outline-button text-sm disabled:cursor-not-allowed disabled:opacity-50">
           {editingMoney ? "Close Money Editor" : "Edit Money"}
         </button>
         <button type="button" onClick={onPrint} className="admin-primary-button text-sm">Print Invoice</button>
         {invoice.client_email && <a href={`mailto:${invoice.client_email}?subject=${encodeURIComponent(`Invoice ${invoice.invoice_number} from Wild Spine Uganda`)}`} className="admin-outline-button text-sm">Email Client</a>}
       </div>
+      {paymentLocked && <p className="mt-4 text-sm text-yellow-200">Invoice money is locked while an active or paid payment request exists.</p>}
       <PaymentLinkPanel invoice={invoice} />
     </article>
-  );
-}
-
-function PaymentLinkPanel({ invoice }: { invoice: Invoice }) {
-  const [provider, setProvider] = useState<"stripe" | "flutterwave" | "manual">("stripe");
-  const [creating, setCreating] = useState(false);
-  const [result, setResult] = useState("");
-  const [error, setError] = useState("");
-
-  async function createPaymentLink() {
-    setCreating(true);
-    setResult("");
-    setError("");
-
-    const { data } = await supabase.auth.getSession();
-    const token = data.session?.access_token;
-
-    if (!token) {
-      setCreating(false);
-      setError("Admin session expired. Sign in again before creating a payment link.");
-      return;
-    }
-
-    const response = await fetch("/api/payment-links", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        invoice_id: invoice.id,
-        client_name: invoice.client_name,
-        client_email: invoice.client_email,
-        amount: invoice.total,
-        currency: invoice.currency,
-        trip_name: invoice.trip_name || invoice.invoice_number,
-        provider,
-      }),
-    });
-    const json = await response.json().catch(() => null) as {
-      ok?: boolean;
-      reason?: string;
-      payment_request?: { checkout_url?: string | null; provider_reference?: string | null };
-    } | null;
-
-    setCreating(false);
-
-    if (!response.ok || !json?.ok) {
-      setError(json?.reason || "Payment link could not be created.");
-      return;
-    }
-
-    const checkoutUrl = json.payment_request?.checkout_url;
-    if (checkoutUrl) {
-      await navigator.clipboard.writeText(checkoutUrl);
-      setResult(`Payment link copied: ${checkoutUrl}`);
-      return;
-    }
-
-    setResult(`Manual payment request recorded: ${json.payment_request?.provider_reference || invoice.invoice_number}`);
-  }
-
-  return (
-    <div className="mt-5 rounded-3xl border border-white/10 bg-black/25 p-5">
-      <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-xs font-black uppercase tracking-widest text-yellow-500">Payment readiness</p>
-          <p className="mt-1 text-sm text-gray-400">Create a tracked payment request for Stripe, Flutterwave, or manual follow-up.</p>
-        </div>
-        <select value={provider} onChange={(event) => setProvider(event.target.value as "stripe" | "flutterwave" | "manual")} className="form-input md:w-44">
-          <option value="stripe">Stripe</option>
-          <option value="flutterwave">Flutterwave</option>
-          <option value="manual">Manual</option>
-        </select>
-      </div>
-      <button
-        type="button"
-        onClick={createPaymentLink}
-        disabled={creating || !invoice.client_email || invoice.total <= 0}
-        className="admin-primary-button text-sm disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {creating ? "Creating..." : "Create Payment Request"}
-      </button>
-      {result && <p className="mt-4 rounded-xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm text-green-200">{result}</p>}
-      {error && <p className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}
-    </div>
   );
 }
 

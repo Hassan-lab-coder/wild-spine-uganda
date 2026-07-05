@@ -64,6 +64,7 @@ export type Database = {
           payment_method: string;
           reference: string | null;
           notes: string | null;
+          payment_request_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -79,6 +80,7 @@ export type Database = {
           payment_method?: string;
           reference?: string | null;
           notes?: string | null;
+          payment_request_id?: string | null;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["receipts"]["Insert"]>;
@@ -298,6 +300,11 @@ export type Database = {
           status: string;
           metadata: Record<string, unknown> | null;
           created_by: string | null;
+          public_token: string;
+          updated_at: string;
+          paid_at: string | null;
+          expires_at: string | null;
+          last_event_at: string | null;
           created_at: string;
         };
         Insert: {
@@ -313,9 +320,44 @@ export type Database = {
           status?: string;
           metadata?: Record<string, unknown> | null;
           created_by?: string | null;
+          public_token?: string;
+          updated_at?: string;
+          paid_at?: string | null;
+          expires_at?: string | null;
+          last_event_at?: string | null;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["payment_requests"]["Insert"]>;
+        Relationships: [];
+      };
+      payment_webhook_events: {
+        Row: {
+          id: string;
+          provider: string;
+          event_id: string;
+          event_type: string;
+          provider_reference: string | null;
+          payment_request_id: string | null;
+          payload: Record<string, unknown>;
+          processing_status: string;
+          processing_error: string | null;
+          processed_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          provider: string;
+          event_id: string;
+          event_type: string;
+          provider_reference?: string | null;
+          payment_request_id?: string | null;
+          payload: Record<string, unknown>;
+          processing_status?: string;
+          processing_error?: string | null;
+          processed_at?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["payment_webhook_events"]["Insert"]>;
         Relationships: [];
       };
     };

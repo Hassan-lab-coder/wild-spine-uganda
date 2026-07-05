@@ -17,6 +17,7 @@ export default function RwenzoriHikingToursPage() {
       title="Hike the Rwenzori Mountains with honest expedition planning."
       description="Explore Uganda's Rwenzori Mountains with route guidance, pacing advice, private transfers, and practical preparation for weather, fitness, altitude, and recovery."
       image="/images/travel/boardwalk-trek.jpg"
+      imageAlt="Hikers crossing a wooden boardwalk on a misty Rwenzori trail"
       route="The Summit Trail"
       cta="Plan My Rwenzori Expedition"
       bullets={["Route and duration guidance", "Mountain logistics coordination", "Fitness and gear preparation", "Gorilla trekking add-on options"]}

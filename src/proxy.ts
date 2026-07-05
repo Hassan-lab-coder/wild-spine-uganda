@@ -8,12 +8,12 @@ const canonicalPaths = new Set(publicRoutes.map((route) => route.path || "/"));
 export function proxy(request: NextRequest) {
   const url = request.nextUrl;
   const isLocalHost = ["localhost", "127.0.0.1", "::1"].includes(url.hostname);
-  const canServeLocalHost = isLocalHost && process.env.NODE_ENV !== "production";
 
-  if (!canServeLocalHost && url.host !== canonicalSite.host) {
+  if (!isLocalHost && url.host !== canonicalSite.host) {
     const redirectUrl = url.clone();
     redirectUrl.protocol = canonicalSite.protocol;
-    redirectUrl.host = canonicalSite.host;
+    redirectUrl.hostname = canonicalSite.hostname;
+    redirectUrl.port = canonicalSite.port;
     return NextResponse.redirect(redirectUrl, 308);
   }
 

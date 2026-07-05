@@ -100,22 +100,28 @@ export default function ResetPasswordPage() {
           <p className="text-gray-400">Checking reset link...</p>
         ) : ready ? (
           <form onSubmit={handleSubmit} className="grid gap-4">
-            <input
-              type="password"
-              className="form-input"
-              placeholder="New password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              className="form-input"
-              placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <label className="grid gap-2 text-sm font-bold text-gray-300">
+              New password
+              <input
+                type="password"
+                className="form-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
+                required
+              />
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-gray-300">
+              Confirm new password
+              <input
+                type="password"
+                className="form-input"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                autoComplete="new-password"
+                required
+              />
+            </label>
 
             {error && (
               <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">

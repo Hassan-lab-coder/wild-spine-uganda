@@ -1,7 +1,7 @@
 const trustItems = [
   {
     label: "Trusted by international travelers",
-    detail: "Private clients from the UK, US, Europe, and long-haul travel markets.",
+    detail: "Built for guests flying in from the UK, US, Europe, and other long-haul travel markets.",
   },
   {
     label: "Private journeys from $1,500+",

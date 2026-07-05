@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
+import { seoMetadata } from "@/lib/seo";
+import Image from "next/image";
 import PremiumLeadForm from "../components/PremiumLeadForm";
 
-export const metadata: Metadata = {
+export const metadata = seoMetadata({
   title: "Conservation Membership",
   description:
     "Become a Wild Spine conservation member and support long-term protection, local impact, and Uganda wilderness storytelling.",
-  alternates: {
-    canonical: "/conservation-membership",
-  },
-};
+  path: "/conservation-membership",
+  image: "/images/travel/traveler-trust-gorilla.jpg",
+  keywords: ["Uganda conservation membership", "responsible Uganda travel", "gorilla conservation support"],
+});
 
 const tiers = [
   {
@@ -41,10 +42,13 @@ export default function ConservationMembershipPage() {
   return (
     <main className="min-h-screen bg-[#f8f4e8] text-[#123a2a]">
       <section className="relative min-h-screen overflow-hidden px-6 py-32 text-white md:px-24">
-        <img
+        <Image
           src="/images/travel/traveler-trust-gorilla.jpg"
           alt="Young mountain gorilla in Uganda forest"
-          className="absolute inset-0 h-full w-full object-cover object-[28%_center]"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover object-[28%_center]"
         />
         <div className="absolute inset-0 bg-black/68" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#123a2a]/80 via-black/38 to-black/10" />

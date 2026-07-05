@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { trackEvent } from "@/lib/analytics";
+import TurnstileField from "../components/TurnstileField";
 
 export default function Guide() {
   const [email, setEmail] = useState("");
@@ -9,7 +11,7 @@ export default function Guide() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
     setError("");
@@ -20,12 +22,15 @@ export default function Guide() {
       return;
     }
 
+    const form = new FormData(e.currentTarget);
     const response = await fetch("/api/guide-leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: email.trim(),
         source: "gorilla-trekking-guide-2026",
+        website: String(form.get("website") || ""),
+        turnstile_token: String(form.get("cf-turnstile-response") || ""),
       }),
     });
     const result = await response.json().catch(() => null) as { ok?: boolean; reason?: string } | null;
@@ -42,7 +47,18 @@ export default function Guide() {
   }
 
   return (
-    <main className="bg-black text-white min-h-screen flex flex-col justify-center items-center px-6 py-28 text-center">
+    <main className="relative min-h-screen overflow-hidden bg-black px-6 py-28 text-center text-white">
+      <Image
+        src="/images/travel/bwindi-close-gorilla-encounter.webp"
+        alt="Traveler observing mountain gorillas during a Bwindi trek"
+        fill
+        priority
+        sizes="100vw"
+        className="absolute inset-0 object-cover"
+      />
+      <div className="absolute inset-0 bg-black/76" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/76 to-black" />
+      <div className="relative z-10 flex min-h-[calc(100vh-14rem)] flex-col items-center justify-center">
       <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-yellow-400">
         Free PDF guide
       </p>
@@ -72,8 +88,10 @@ export default function Guide() {
       {/* FORM */}
       {!unlocked && (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-sm">
+          <TurnstileField />
           <input
             type="email"
+            aria-label="Email address"
             placeholder="Email address"
             className="px-4 py-3 rounded bg-white/10 border border-white/20 focus:outline-none"
             value={email}
@@ -123,6 +141,7 @@ export default function Guide() {
         </div>
       )}
 
+      </div>
     </main>
   );
 }

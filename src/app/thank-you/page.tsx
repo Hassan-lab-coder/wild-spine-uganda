@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 
@@ -28,8 +29,20 @@ function ThankYouContent() {
   }, [program, route, searchParams, type]);
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white md:px-24">
-      <section className="mx-auto max-w-5xl">
+    <main className="relative min-h-screen overflow-hidden bg-black px-6 py-32 text-white md:px-24">
+      <Image
+        src="/images/travel/uganda-cultural-drummers.jpg"
+        alt="Ugandan cultural drummers performing in traditional dress"
+        fill
+        priority
+        sizes="100vw"
+        className="absolute inset-0 object-cover"
+      />
+      <div className="absolute inset-0 bg-black/72" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/78 to-[#123a2a]/55" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
+
+      <section className="relative z-10 mx-auto max-w-5xl">
         <p className="section-kicker">Request received</p>
         <h1 className="mb-6 text-5xl font-black leading-tight md:text-7xl">
           We have your details.
@@ -45,7 +58,7 @@ function ThankYouContent() {
             ["2", "We reply clearly", "You receive guidance on timing, comfort level, pricing, and practical next steps."],
             ["3", "You choose the pace", "Continue by email, WhatsApp, or a private planning call."],
           ].map(([step, title, text]) => (
-            <div key={step} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <div key={step} className="rounded-3xl border border-white/12 bg-black/45 p-6 shadow-2xl backdrop-blur-sm">
               <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500 font-black text-black">
                 {step}
               </div>

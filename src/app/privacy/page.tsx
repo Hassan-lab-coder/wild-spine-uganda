@@ -1,3 +1,12 @@
+import { seoMetadata } from "@/lib/seo";
+
+export const metadata = seoMetadata({
+  title: "Privacy Policy",
+  description:
+    "Read how Wild Spine Uganda collects, uses, and protects personal information submitted for travel planning and bookings.",
+  path: "/privacy",
+});
+
 export default function Privacy() {
   return (
     <main className="bg-black text-white px-6 md:px-24 py-24">

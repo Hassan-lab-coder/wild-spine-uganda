@@ -15,7 +15,7 @@ type LeadPayload = {
 };
 
 export async function POST(request: Request) {
-  const limit = rateLimit(request, { key: "notify_lead", limit: 20, windowMs: 10 * 60 * 1000 });
+  const limit = await rateLimit(request, { key: "notify_lead", limit: 20, windowMs: 10 * 60 * 1000 });
 
   if (!limit.ok) {
     return NextResponse.json({ sent: false, reason: "Too many notification requests." }, { status: 429 });

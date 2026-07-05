@@ -6,7 +6,7 @@ export const metadata = seoMetadata({
   description:
     "Plan private gorilla trekking in Uganda with Bwindi permit guidance, sector advice, lodge planning, safe transfers, and local Wild Spine Uganda expertise.",
   path: "/gorilla-trekking-uganda",
-  image: "/images/travel/forest-guide.jpg",
+  image: "/images/travel/forest-silverback-gorilla.gif",
   keywords: ["gorilla trekking Uganda", "Bwindi forest experience", "Uganda gorilla permit", "private Uganda safari"],
 });
 
@@ -16,7 +16,8 @@ export default function GorillaTrekkingUgandaPage() {
       kicker="Gorilla trekking Uganda"
       title="Stand face to face with mountain gorillas in Bwindi."
       description="Plan a private gorilla trekking Uganda journey with permit guidance, realistic transfers, carefully matched lodges, and local expertise that makes the forest feel safe, rare, and deeply moving."
-      image="/images/travel/forest-guide.jpg"
+      image="/images/travel/forest-silverback-gorilla.gif"
+      imageAlt="Silverback mountain gorilla resting in Bwindi forest vegetation"
       route="The Spine Explorer"
       cta="Request Your Gorilla Trek Plan"
       bullets={["Permit timing guidance before you commit", "Bwindi route and lodge support by sector", "Private driver and guide coordination", "Optional safari, lake, or Rwenzori extensions"]}

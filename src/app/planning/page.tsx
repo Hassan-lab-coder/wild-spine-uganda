@@ -50,7 +50,7 @@ export default function PlanningPage() {
       <section className="relative flex min-h-[86vh] items-center overflow-hidden px-6 py-28 md:px-24">
         <Image
           src="/images/travel/ranger-briefing.jpg"
-          alt="Premium Uganda expedition planning"
+          alt="Uganda ranger briefing travelers before a guided forest trek"
           fill
           priority
           sizes="100vw"

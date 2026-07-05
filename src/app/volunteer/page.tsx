@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
+import TurnstileField from "../components/TurnstileField";
 
 const programs = [
   {
@@ -11,6 +12,7 @@ const programs = [
     duration: "2–4 Weeks",
     price: "From $450 / week",
     image: "/images/travel/lake-boat.webp",
+    imageAlt: "Community volunteers traveling by boat on a Uganda lake",
     desc: "Support schools, youth programs, digital skills, and local community initiatives.",
     includes: [
       "Placement coordination",
@@ -24,6 +26,7 @@ const programs = [
     duration: "2–3 Weeks",
     price: "From $550 / week",
     image: "/images/travel/trail-team.jpg",
+    imageAlt: "Conservation volunteers and guides walking on a Uganda forest trail",
     desc: "Join eco-projects, tree planting, conservation education, and responsible nature work.",
     includes: [
       "Eco field projects",
@@ -37,6 +40,7 @@ const programs = [
     duration: "2–3 Weeks",
     price: "From $1,800",
     image: "/images/travel/guide-guests.jpg",
+    imageAlt: "Guide accompanying volunteer travelers through Uganda forest",
     desc: "Combine volunteering with Uganda’s unforgettable gorilla trekking experience.",
     includes: [
       "Volunteer placement",
@@ -68,14 +72,21 @@ export default function VolunteerPage() {
       program: program === "Select Program" ? null : program,
       motivation: String(form.get("motivation") || "").trim() || null,
       lead_source: "volunteer_page",
+      website: String(form.get("website") || ""),
+      turnstile_token: String(form.get("cf-turnstile-response") || ""),
     };
 
-    const { error: insertError } = await supabase.from("volunteer_applications").insert(payload);
+    const response = await fetch("/api/volunteer-applications", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json().catch(() => null) as { reason?: string } | null;
 
     setSubmitting(false);
 
-    if (insertError) {
-      setError("We could not save your application. Please try again or contact us directly.");
+    if (!response.ok) {
+      setError(result?.reason || "We could not save your application. Please try again or contact us directly.");
       return;
     }
 
@@ -103,10 +114,13 @@ export default function VolunteerPage() {
 
       {/* HERO */}
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
-        <img
+        <Image
           src="/images/travel/trail-team.jpg"
-          alt="Volunteer Uganda"
-          className="absolute inset-0 w-full h-full object-cover"
+          alt="Volunteer group and local guides walking together on a Uganda trail"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
 
@@ -138,7 +152,9 @@ export default function VolunteerPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {programs.map((p) => (
             <div key={p.title} className="border border-white/10 p-6 rounded-2xl">
-              <img src={p.image} alt={p.title} className="h-40 w-full object-cover rounded-xl mb-4" />
+              <div className="relative mb-4 h-40 overflow-hidden rounded-xl">
+                <Image src={p.image} alt={p.imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
+              </div>
               <h3 className="text-xl font-bold">{p.title}</h3>
               <p className="text-yellow-500">{p.duration}</p>
               <p className="text-gray-400 mb-4">{p.desc}</p>
@@ -189,19 +205,20 @@ export default function VolunteerPage() {
           </div>
         ) : (
         <form onSubmit={handleSubmit} className="grid gap-4 max-w-3xl">
-          <input required name="name" className="form-input" placeholder="Full name" />
-          <input required name="email" type="email" className="form-input" placeholder="Email address" />
-          <input name="phone" className="form-input" placeholder="WhatsApp / phone" />
-          <input name="country" className="form-input" placeholder="Country of residence" />
+          <TurnstileField />
+          <input required name="name" aria-label="Full name" className="form-input" placeholder="Full name" />
+          <input required name="email" type="email" aria-label="Email address" className="form-input" placeholder="Email address" />
+          <input name="phone" aria-label="WhatsApp or phone number" className="form-input" placeholder="WhatsApp / phone" />
+          <input name="country" aria-label="Country of residence" className="form-input" placeholder="Country of residence" />
 
-          <select name="program" className="form-input">
+          <select name="program" aria-label="Volunteer program" className="form-input">
             <option>Select Program</option>
             <option>Community Impact</option>
             <option>Conservation</option>
             <option>Volunteer + Gorilla</option>
           </select>
 
-          <textarea name="motivation" className="form-input min-h-32" placeholder="Tell us why Uganda, what you hope to contribute, and whether you want to add gorilla trekking or safari time." />
+          <textarea name="motivation" aria-label="Motivation and travel interests" className="form-input min-h-32" placeholder="Tell us why Uganda, what you hope to contribute, and whether you want to add gorilla trekking or safari time." />
 
           {error && (
             <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">

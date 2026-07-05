@@ -1,7 +1,19 @@
+import Image from "next/image";
+import { seoMetadata } from "@/lib/seo";
+
+export const metadata = seoMetadata({
+  title: "Traveler Reviews & Private Trip Feedback",
+  description:
+    "Read Wild Spine Uganda traveler feedback and practical guidance for verifying gorilla trekking, Rwenzori, and private safari planning.",
+  path: "/reviews",
+  image: "/images/travel/ranger-briefing.jpg",
+  keywords: ["Wild Spine Uganda reviews", "Uganda tour operator reviews", "gorilla trekking reviews"],
+});
+
 const proofStats = [
-  ["12+ years", "Local Uganda route and expedition planning experience."],
-  ["500+ encounters", "Gorilla trekking experiences supported with permit timing and route guidance."],
-  ["48 countries", "Travelers supported from North America, Europe, Asia, Africa, and beyond."],
+  ["12+ years", "Uganda route experience across gorilla, safari, and mountain travel realities."],
+  ["Permit-first", "Gorilla trekking plans shaped around timing, sectors, and route guidance."],
+  ["Long-haul ready", "Support designed for travelers flying in from North America, Europe, Asia, Africa, and beyond."],
   ["Local team", "Ground knowledge from Uganda, not a remote brochure desk."],
 ];
 
@@ -97,13 +109,13 @@ export default function ReviewsPage() {
       <section className="px-6 py-20 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-3">
           {[
-            ["Permit days", "/images/travel/ranger-briefing.jpg", "Travelers remember the trek, but trust is built in the planning before it."],
-            ["Trail days", "/images/travel/boardwalk-trek.jpg", "Mountain routes need clear pacing, guide support, and realistic expectations."],
-            ["Recovery days", "/images/travel/lake-boat.webp", "Good itineraries leave room for weather, rest, and the journey back down."],
-          ].map(([title, image, caption]) => (
+            ["Permit days", "/images/travel/ranger-briefing.jpg", "Uganda ranger briefing travelers before a forest trek", "Travelers remember the trek, but trust is built in the planning before it."],
+            ["Trail days", "/images/travel/boardwalk-trek.jpg", "Hikers crossing a wooden boardwalk in the Rwenzori Mountains", "Mountain routes need clear pacing, guide support, and realistic expectations."],
+            ["Recovery days", "/images/travel/lake-boat.webp", "Travelers crossing a calm Uganda lake by boat", "Good itineraries leave room for weather, rest, and the journey back down."],
+          ].map(([title, image, imageAlt, caption]) => (
             <figure key={title} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5">
               <div className="relative h-80 overflow-hidden">
-                <img src={image} alt={title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                <Image src={image} alt={imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                 <figcaption className="absolute bottom-0 p-6">
                   <p className="text-2xl font-black">{title}</p>
@@ -130,7 +142,7 @@ export default function ReviewsPage() {
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {reviews.map((review) => (
               <article key={`${review.name}-${review.route}`} className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <p className="mb-5 text-sm font-black tracking-widest text-yellow-500">5 / 5 PRIVATE TRAVELER REVIEW</p>
+                <p className="mb-5 text-sm font-black tracking-widest text-yellow-500">PRIVATE TRAVELER NOTE</p>
                 <p className="leading-7 text-gray-300">&quot;{review.quote}&quot;</p>
                 <div className="mt-6 border-t border-white/10 pt-5">
                   <h3 className="font-black">{review.name}</h3>

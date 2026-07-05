@@ -1,0 +1,9 @@
+{
+  "crons": [
+    {
+      "path": "/api/automation/send-due",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
+

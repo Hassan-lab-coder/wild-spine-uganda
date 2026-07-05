@@ -9,8 +9,9 @@ type GuideLead = Database["public"]["Tables"]["guide_leads"]["Row"];
 
 export async function POST(request: Request) {
   const token = bearerToken(request) || new URL(request.url).searchParams.get("token") || "";
+  const expectedToken = process.env.CRON_SECRET || process.env.AUTOMATION_SECRET;
 
-  if (!process.env.AUTOMATION_SECRET || token !== process.env.AUTOMATION_SECRET) {
+  if (!expectedToken || token !== expectedToken) {
     return NextResponse.json({ ok: false, reason: "Automation token is invalid." }, { status: 401 });
   }
 
@@ -65,6 +66,8 @@ export async function POST(request: Request) {
 
   return NextResponse.json({ ok: true, processed: results.length, results });
 }
+
+export const GET = POST;
 
 async function sendAutomationEmail(
   supabase: ReturnType<typeof createClient<Database>>,

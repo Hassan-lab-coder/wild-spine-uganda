@@ -1,4 +1,5 @@
 import { seoMetadata } from "@/lib/seo";
+import Image from "next/image";
 import TourConversionSections from "../TourConversionSections";
 
 export const metadata = seoMetadata({
@@ -14,10 +15,13 @@ export default function MargheritaExpeditionPage() {
   return (
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
-        <img
+        <Image
           src="/images/travel/margherita-peak.png"
-          alt="Rwenzori Mountains and Margherita expedition"
-          className="absolute inset-0 w-full h-full object-cover"
+          alt="Snow-covered Margherita Peak above the Rwenzori mountain valleys"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
         <div className="absolute inset-0 moving-mist" />
