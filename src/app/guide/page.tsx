@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { trackEvent } from "@/lib/analytics";
+import TurnstileField from "../components/TurnstileField";
 
 export default function Guide() {
   const [email, setEmail] = useState("");
@@ -9,17 +11,26 @@ export default function Guide() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
     setError("");
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setSubmitting(false);
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    const form = new FormData(e.currentTarget);
     const response = await fetch("/api/guide-leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: email.trim(),
         source: "gorilla-trekking-guide-2026",
+        website: String(form.get("website") || ""),
+        turnstile_token: String(form.get("cf-turnstile-response") || ""),
       }),
     });
     const result = await response.json().catch(() => null) as { ok?: boolean; reason?: string } | null;
@@ -36,7 +47,18 @@ export default function Guide() {
   }
 
   return (
-    <main className="bg-black text-white min-h-screen flex flex-col justify-center items-center px-6 py-28 text-center">
+    <main className="relative min-h-screen overflow-hidden bg-black px-6 py-28 text-center text-white">
+      <Image
+        src="/images/travel/bwindi-close-gorilla-encounter.webp"
+        alt="Traveler observing mountain gorillas during a Bwindi trek"
+        fill
+        priority
+        sizes="100vw"
+        className="absolute inset-0 object-cover"
+      />
+      <div className="absolute inset-0 bg-black/76" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/76 to-black" />
+      <div className="relative z-10 flex min-h-[calc(100vh-14rem)] flex-col items-center justify-center">
       <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-yellow-400">
         Free PDF guide
       </p>
@@ -50,11 +72,26 @@ export default function Guide() {
         trekking, permit timing, safety basics, packing notes, and private journey planning.
       </p>
 
+      <div className="mb-8 grid w-full max-w-3xl gap-3 text-left md:grid-cols-3">
+        {[
+          ["Instant guide access", "Download the PDF immediately after submitting your email."],
+          ["48-hour follow-up", "We prepare a practical follow-up for permit timing and route questions."],
+          ["Private planning path", "You can request a gorilla trek plan when you are ready."],
+        ].map(([title, text]) => (
+          <div key={title} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <h2 className="font-black text-yellow-400">{title}</h2>
+            <p className="mt-2 text-sm leading-6 text-gray-400">{text}</p>
+          </div>
+        ))}
+      </div>
+
       {/* FORM */}
       {!unlocked && (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-sm">
+          <TurnstileField />
           <input
             type="email"
+            aria-label="Email address"
             placeholder="Email address"
             className="px-4 py-3 rounded bg-white/10 border border-white/20 focus:outline-none"
             value={email}
@@ -69,6 +106,10 @@ export default function Guide() {
           >
             {submitting ? "Preparing your guide..." : "Get the Free Gorilla Guide"}
           </button>
+
+          <p className="text-xs leading-5 text-gray-500">
+            We will send practical follow-up guidance about permits and private planning. You can ask us to stop at any time.
+          </p>
 
           {error && <p className="text-sm text-red-300">{error}</p>}
         </form>
@@ -100,6 +141,7 @@ export default function Guide() {
         </div>
       )}
 
+      </div>
     </main>
   );
 }

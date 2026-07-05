@@ -1,3 +1,15 @@
+import { seoMetadata } from "@/lib/seo";
+import Image from "next/image";
+
+export const metadata = seoMetadata({
+  title: "Rare Uganda Experiences | Gorillas, Wildlife & Rwenzori",
+  description:
+    "Explore rare Uganda experiences combining mountain gorilla forests, wildlife, Rwenzori landscapes, and private expedition planning.",
+  path: "/rare-experience",
+  image: "/images/travel/zebras.jpg",
+  keywords: ["rare Uganda experiences", "Uganda wildlife journey", "gorillas and Rwenzori"],
+});
+
 export default function RareExperiencePage() {
   const experiences = [
     {
@@ -21,10 +33,13 @@ export default function RareExperiencePage() {
   return (
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
-        <img
+        <Image
           src="/images/travel/zebras.jpg"
-          alt="Mountain gorilla encounter"
-          className="absolute inset-0 w-full h-full object-cover"
+          alt="Zebras standing together on Uganda savanna"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
         <div className="absolute inset-0 moving-mist" />
@@ -78,11 +93,13 @@ export default function RareExperiencePage() {
 
       <section className="py-28 px-6 md:px-24 bg-[#050605]">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-          <div className="h-[420px] rounded-3xl overflow-hidden">
-            <img
+          <div className="relative h-[420px] overflow-hidden rounded-3xl">
+            <Image
               src="/images/travel/terraced-mountains.jpg"
-              alt="Rwenzori Mountains"
-              className="w-full h-full object-cover"
+              alt="Terraced green foothills beneath Uganda mountain ridges"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
             />
           </div>
 

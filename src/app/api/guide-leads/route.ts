@@ -4,9 +4,10 @@ import { NextResponse } from "next/server";
 import type { Database } from "@/lib/supabase";
 import { rateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 import { cleanText, isAllowedBrowserOrigin, isEmail, readJsonObject } from "@/lib/server-validation";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export async function POST(request: Request) {
-  const limit = rateLimit(request, { key: "guide_lead", limit: 8, windowMs: 10 * 60 * 1000 });
+  const limit = await rateLimit(request, { key: "guide_lead", limit: 8, windowMs: 10 * 60 * 1000 });
 
   if (!limit.ok) {
     return NextResponse.json(
@@ -24,9 +25,12 @@ export async function POST(request: Request) {
   if (!body) {
     return NextResponse.json({ ok: false, reason: "Invalid JSON payload." }, { status: 400 });
   }
+  if (cleanText(body.website, 200)) return NextResponse.json({ ok: false, reason: "Invalid request." }, { status: 400 });
+  const turnstile = await verifyTurnstile(request, body.turnstile_token);
+  if (!turnstile.ok) return NextResponse.json({ ok: false, reason: turnstile.reason }, { status: 403 });
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseWriteKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseWriteKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !supabaseWriteKey) {
     return NextResponse.json({ ok: false, reason: "Supabase is not configured on this deployment." }, { status: 500 });

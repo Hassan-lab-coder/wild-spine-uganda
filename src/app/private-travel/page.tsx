@@ -1,4 +1,5 @@
 import { seoMetadata } from "@/lib/seo";
+import Image from "next/image";
 
 export const metadata = seoMetadata({
   title: "Private Uganda Travel | Tailored Gorilla & Safari Planning",
@@ -32,10 +33,13 @@ export default function PrivateTravelPage() {
   return (
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
-        <img
+        <Image
           src="/images/travel/lake-boat.webp"
-          alt="Private Uganda travel experience"
-          className="absolute inset-0 w-full h-full object-cover"
+          alt="Travelers crossing a calm Uganda lake by boat"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
         <div className="absolute inset-0 moving-mist" />
@@ -110,11 +114,13 @@ export default function PrivateTravelPage() {
             </a>
           </div>
 
-          <div className="h-[420px] rounded-3xl overflow-hidden">
-            <img
+          <div className="relative h-[420px] overflow-hidden rounded-3xl">
+            <Image
               src="/images/travel/guide-guests.jpg"
-              alt="Private hiking experience"
-              className="w-full h-full object-cover"
+              alt="Private guide accompanying guests on a Uganda forest trail"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
             />
           </div>
         </div>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import JsonLd from "../components/JsonLd";
 
 type InsightArticleProps = {
@@ -5,6 +6,7 @@ type InsightArticleProps = {
   title: string;
   description: string;
   image: string;
+  imageAlt: string;
   route: string;
   path: string;
   sections: Array<{
@@ -14,7 +16,7 @@ type InsightArticleProps = {
   faqs: Array<[string, string]>;
 };
 
-export default function InsightArticle({ kicker, title, description, image, route, path, sections, faqs }: InsightArticleProps) {
+export default function InsightArticle({ kicker, title, description, image, imageAlt, route, path, sections, faqs }: InsightArticleProps) {
   const href = `/?source=${encodeURIComponent(kicker.toLowerCase().replaceAll(" ", "_"))}&route=${encodeURIComponent(route)}#book`;
 
   return (
@@ -52,7 +54,7 @@ export default function InsightArticle({ kicker, title, description, image, rout
         }}
       />
       <section className="relative flex min-h-[72vh] items-center overflow-hidden px-6 py-32 text-white md:px-24">
-        <img src={image} alt={title} className="absolute inset-0 h-full w-full object-cover" />
+        <Image src={image} alt={imageAlt} fill priority sizes="100vw" className="absolute inset-0 object-cover" />
         <div className="absolute inset-0 bg-black/70" />
         <div className="absolute inset-0 moving-mist" />
         <div className="relative z-10 max-w-4xl">

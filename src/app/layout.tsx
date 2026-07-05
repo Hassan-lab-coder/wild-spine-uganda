@@ -32,6 +32,14 @@ const verification: Metadata["verification"] = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "192x192" },
+      { url: "/images/wild-spine-favicon-48.png", type: "image/png", sizes: "48x48" },
+    ],
+    apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
+  },
   title: {
     default: "Wild Spine Uganda | Gorilla Trekking Uganda & Rwenzori Expeditions",
     template: "%s | Wild Spine Uganda",
@@ -69,8 +77,6 @@ export const metadata: Metadata = {
     images: [
       {
         url: defaultOgImage,
-        width: 1200,
-        height: 630,
         alt: "Mountain gorilla in Uganda",
       },
     ],
@@ -94,9 +100,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-[#f5b416] px-5 py-3 font-black text-[#123a2a] shadow-xl transition focus:translate-y-0"
+        >
+          Skip to main content
+        </a>
         <JsonLd
           data={{
             "@context": "https://schema.org",
@@ -104,7 +117,7 @@ export default function RootLayout({
             "@id": `${siteUrl}/#organization`,
             name: "Wild Spine Uganda",
             url: siteUrl,
-            logo: `${siteUrl}/images/gorilla.jpg`,
+            logo: `${siteUrl}/images/wild-spine-logo.png`,
             image: `${siteUrl}/images/gorilla.jpg`,
             areaServed: "Uganda",
             description:
@@ -132,9 +145,6 @@ export default function RootLayout({
               { "@type": "Offer", itemOffered: { "@type": "Service", name: "Executive Wilderness Retreats" } },
               { "@type": "Offer", itemOffered: { "@type": "Service", name: "Conservation Membership" } },
             ],
-            sameAs: [
-              "https://www.wildspineuganda.com",
-            ],
           }}
         />
         <JsonLd
@@ -152,7 +162,9 @@ export default function RootLayout({
         />
         <AnalyticsTracker />
         <PublicSiteHeader />
-        {children}
+        <div id="main-content" tabIndex={-1} className="contents">
+          {children}
+        </div>
         <PublicSiteFooter />
       </body>
     </html>

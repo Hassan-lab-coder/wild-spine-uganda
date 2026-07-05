@@ -1,0 +1,36 @@
+name: Production checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "release/**"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      PAYMENTS_ENABLED: "false"
+      NEXT_PUBLIC_SITE_URL: https://www.wildspineuganda.com
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run audit:db
+      - run: npm run build
+      - run: npm run audit:site
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+

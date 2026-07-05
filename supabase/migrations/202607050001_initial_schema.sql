@@ -1,3 +1,4 @@
+-- Baseline Wild Spine schema.
 create extension if not exists "pgcrypto";
 
 create table if not exists public.itinerary_requests (
@@ -144,11 +145,33 @@ create table if not exists public.payment_requests (
   provider text not null default 'manual',
   provider_reference text,
   checkout_url text,
-  status text not null default 'pending',
+  status text not null default 'creating',
   metadata jsonb,
   created_by uuid references auth.users(id) on delete set null,
+  public_token uuid not null default gen_random_uuid(),
+  updated_at timestamptz not null default now(),
+  paid_at timestamptz,
+  expires_at timestamptz,
+  last_event_at timestamptz,
   created_at timestamptz not null default now()
 );
+
+create table if not exists public.payment_webhook_events (
+  id uuid primary key default gen_random_uuid(),
+  provider text not null,
+  event_id text not null,
+  event_type text not null,
+  provider_reference text,
+  payment_request_id uuid references public.payment_requests(id) on delete set null,
+  payload jsonb not null,
+  processing_status text not null default 'received',
+  processing_error text,
+  processed_at timestamptz,
+  created_at timestamptz not null default now(),
+  unique (provider, event_id)
+);
+
+alter table public.receipts add column if not exists payment_request_id uuid references public.payment_requests(id) on delete set null;
 
 create or replace function public.is_admin()
 returns boolean
@@ -173,6 +196,7 @@ alter table public.admin_users enable row level security;
 alter table public.analytics_events enable row level security;
 alter table public.email_automation_events enable row level security;
 alter table public.payment_requests enable row level security;
+alter table public.payment_webhook_events enable row level security;
 
 grant usage on schema public to anon, authenticated;
 grant execute on function public.is_admin() to anon, authenticated;
@@ -190,6 +214,7 @@ grant insert on public.analytics_events to anon, authenticated;
 grant select on public.analytics_events to authenticated;
 grant select, update on public.email_automation_events to authenticated;
 grant select, insert, update on public.payment_requests to authenticated;
+grant select on public.payment_webhook_events to authenticated;
 
 drop policy if exists "Anyone can create itinerary requests" on public.itinerary_requests;
 drop policy if exists "Public can create itinerary requests" on public.itinerary_requests;
@@ -385,6 +410,13 @@ create policy "Admins can update payment requests"
   using (public.is_admin())
   with check (public.is_admin());
 
+drop policy if exists "Admins can read payment webhook events" on public.payment_webhook_events;
+create policy "Admins can read payment webhook events"
+  on public.payment_webhook_events
+  for select
+  to authenticated
+  using (public.is_admin());
+
 create index if not exists itinerary_requests_created_at_idx on public.itinerary_requests (created_at desc);
 create index if not exists itinerary_requests_status_idx on public.itinerary_requests (status);
 create index if not exists itinerary_requests_lead_source_idx on public.itinerary_requests (lead_source);
@@ -415,6 +447,14 @@ create index if not exists email_automation_events_lead_idx on public.email_auto
 create index if not exists payment_requests_created_at_idx on public.payment_requests (created_at desc);
 create index if not exists payment_requests_status_idx on public.payment_requests (status);
 create index if not exists payment_requests_invoice_id_idx on public.payment_requests (invoice_id);
+create unique index if not exists payment_requests_public_token_idx on public.payment_requests (public_token);
+alter table public.receipts
+  drop constraint if exists receipts_payment_request_id_unique,
+  add constraint receipts_payment_request_id_unique unique (payment_request_id);
+create unique index if not exists payment_requests_one_active_provider_idx on public.payment_requests (invoice_id, provider)
+  where invoice_id is not null and status in ('creating', 'pending', 'paid');
+create index if not exists payment_webhook_events_created_at_idx on public.payment_webhook_events (created_at desc);
+create index if not exists payment_webhook_events_payment_request_idx on public.payment_webhook_events (payment_request_id);
 
 alter table public.itinerary_requests
   drop constraint if exists itinerary_requests_status_check,
@@ -454,12 +494,12 @@ alter table public.email_automation_events
 alter table public.payment_requests
   drop constraint if exists payment_requests_status_check,
   add constraint payment_requests_status_check
-  check (status in ('pending', 'paid', 'failed', 'cancelled', 'expired'));
+  check (status in ('creating', 'pending', 'paid', 'failed', 'cancelled', 'expired'));
 
 alter table public.payment_requests
   drop constraint if exists payment_requests_provider_check,
   add constraint payment_requests_provider_check
-  check (provider in ('manual', 'stripe', 'flutterwave'));
+  check (provider in ('manual', 'stripe', 'flutterwave', 'tazapay'));
 
 alter table public.payment_requests
   drop constraint if exists payment_requests_amount_check,

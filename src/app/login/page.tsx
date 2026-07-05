@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
@@ -18,21 +18,47 @@ export default function Login() {
       ? undefined
       : `${window.location.origin}/reset-password`;
 
+  useEffect(() => {
+    const syncModeWithHash = () => {
+      if (window.location.hash === "#auth-forgot-password") {
+        setMode("reset");
+      }
+    };
+
+    const timeout = window.setTimeout(syncModeWithHash, 0);
+    window.addEventListener("hashchange", syncModeWithHash);
+
+    return () => {
+      window.clearTimeout(timeout);
+      window.removeEventListener("hashchange", syncModeWithHash);
+    };
+  }, []);
+
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     setMessage("");
     setLoading(true);
 
-    const { error: loginError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim(), password }),
     });
+    const result = await response.json().catch(() => null) as {
+      reason?: string;
+      session?: { access_token: string; refresh_token: string };
+    } | null;
 
+    if (!response.ok || !result?.session) {
+      setLoading(false);
+      setError(result?.reason || "Sign-in failed.");
+      return;
+    }
+    const { error: sessionError } = await supabase.auth.setSession(result.session);
     setLoading(false);
-
-    if (loginError) {
-      setError(loginError.message);
+    if (sessionError) {
+      setError("The secure session could not be started.");
       return;
     }
 
@@ -45,14 +71,17 @@ export default function Login() {
     setMessage("");
     setLoading(true);
 
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: resetRedirectTo,
+    const response = await fetch("/api/auth/reset", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim(), redirect_to: resetRedirectTo }),
     });
+    const result = await response.json().catch(() => null) as { reason?: string } | null;
 
     setLoading(false);
 
-    if (resetError) {
-      setError(resetError.message);
+    if (!response.ok) {
+      setError(result?.reason || "Password reset could not be requested.");
       return;
     }
 
@@ -61,7 +90,7 @@ export default function Login() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-black px-6 text-white">
-      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8">
+      <div id="auth-forgot-password" className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8">
         <p className="section-kicker">Admin access</p>
         <h1 className="mb-3 text-3xl font-black">
           {mode === "login" ? "Sign in to Wild Spine" : "Reset your password"}

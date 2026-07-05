@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
 
 export const metadata = seoMetadata({
@@ -5,7 +6,7 @@ export const metadata = seoMetadata({
   description:
     "Get help securing Uganda gorilla permits with Bwindi sector guidance, lodge timing, transfer planning, payment clarity, and private itinerary support.",
   path: "/uganda-gorilla-permit-help",
-  image: "/images/travel/ranger-briefing.jpg",
+  image: "/images/travel/bwindi-trek-ranger-guests.jpg",
   keywords: ["Uganda gorilla permit", "gorilla permit help", "Bwindi permit", "gorilla trekking Uganda"],
 });
 
@@ -36,7 +37,7 @@ export default function UgandaGorillaPermitHelpPage() {
   return (
     <main className="min-h-screen bg-black text-white">
       <section className="relative flex min-h-[82vh] items-center overflow-hidden px-6 py-32 md:px-24">
-        <img src="/images/travel/ranger-briefing.jpg" alt="Bwindi forest gorilla permit planning" className="absolute inset-0 h-full w-full object-cover" />
+        <Image src="/images/travel/bwindi-trek-ranger-guests.jpg" alt="Rangers guiding travelers during Bwindi gorilla permit planning" fill priority sizes="100vw" className="absolute inset-0 object-cover" />
         <div className="absolute inset-0 bg-black/75" />
         <div className="absolute inset-0 moving-mist" />
 
@@ -96,7 +97,7 @@ export default function UgandaGorillaPermitHelpPage() {
       <section className="px-6 py-20 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-[1.2fr_0.8fr]">
           <figure className="relative min-h-[420px] overflow-hidden rounded-3xl border border-white/10">
-            <img src="/images/travel/forest-guide.jpg" alt="Gorilla trekking permit planning" className="absolute inset-0 h-full w-full object-cover" />
+            <Image src="/images/travel/bwindi-young-gorilla-guest.jpg" alt="Traveler photographing a young gorilla during a guided Bwindi trek" fill sizes="(min-width: 768px) 60vw, 100vw" className="absolute inset-0 object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
             <figcaption className="absolute bottom-0 max-w-xl p-8">
               <p className="section-kicker">Permit First</p>
@@ -109,11 +110,15 @@ export default function UgandaGorillaPermitHelpPage() {
 
           <div className="grid gap-5">
             <figure className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-              <img src="/images/travel/forest-trek.jpg" alt="Bwindi forest route planning" className="h-56 w-full object-cover" />
+              <div className="relative h-56">
+                <Image src="/images/travel/bwindi-private-gorilla-viewing.webp" alt="Private gorilla viewing route planning in Bwindi forest" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover" />
+              </div>
               <figcaption className="p-5 text-sm leading-6 text-gray-400">Forest access, weather, and road timing shape the comfort of the trip.</figcaption>
             </figure>
             <figure className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-              <img src="/images/travel/lake-boat.webp" alt="Uganda extension planning" className="h-56 w-full object-cover" />
+              <div className="relative h-56">
+                <Image src="/images/travel/bwindi-close-gorilla-encounter.webp" alt="Close gorilla encounter during a Uganda trekking plan" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover" />
+              </div>
               <figcaption className="p-5 text-sm leading-6 text-gray-400">Permit plans can connect naturally into hiking, safari, or lake extensions.</figcaption>
             </figure>
           </div>

@@ -1,3 +1,12 @@
+import { seoMetadata } from "@/lib/seo";
+
+export const metadata = seoMetadata({
+  title: "Refund and Cancellation Policy",
+  description:
+    "Review Wild Spine Uganda refund and cancellation guidance for deposits, permits, cancellations, no-shows, and force majeure.",
+  path: "/refund-policy",
+});
+
 export default function RefundPolicy() {
   return (
     <main className="bg-black text-white px-6 md:px-24 py-24">

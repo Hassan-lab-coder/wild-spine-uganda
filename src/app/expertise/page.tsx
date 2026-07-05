@@ -1,3 +1,15 @@
+import { seoMetadata } from "@/lib/seo";
+import Image from "next/image";
+
+export const metadata = seoMetadata({
+  title: "Uganda Travel Expertise | Permits, Routes & Local Planning",
+  description:
+    "See how Wild Spine plans Uganda travel around permits, route conditions, lodge access, safety, guides, and realistic expedition pacing.",
+  path: "/expertise",
+  image: "/images/travel/ranger-briefing.jpg",
+  keywords: ["Uganda travel experts", "gorilla permit planning", "Uganda safari route planning"],
+});
+
 export default function ExpertisePage() {
   const points = [
     {
@@ -21,10 +33,13 @@ export default function ExpertisePage() {
   return (
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
-        <img
+        <Image
           src="/images/travel/ranger-briefing.jpg"
-          alt="Uganda forest"
-          className="absolute inset-0 w-full h-full object-cover"
+          alt="Uganda ranger briefing travelers before a guided forest trek"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
         <div className="absolute inset-0 moving-mist" />
