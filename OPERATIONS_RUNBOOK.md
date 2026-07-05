@@ -2,7 +2,7 @@
 
 ## Daily
 
-Review new leads, failed email automation, unread inbound mail, health status, and production error logs. Confirm manual payments against the provider or bank before changing invoice status or issuing a receipt.
+The Vercel Cron processes due email automation once daily at 06:00 UTC. Review new leads, failed email automation, unread inbound mail, health status, and production error logs. Confirm manual payments against the provider or bank before changing invoice status or issuing a receipt.
 
 ## Lead failure
 
