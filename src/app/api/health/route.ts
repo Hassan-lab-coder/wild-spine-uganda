@@ -13,7 +13,12 @@ export async function GET() {
       process.env.TURNSTILE_REQUIRED?.toLowerCase() === "true" &&
       Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && process.env.TURNSTILE_SECRET_KEY),
     cron_secret: Boolean(process.env.CRON_SECRET),
-    operational_alerts: Boolean(process.env.ALERT_WEBHOOK_URL && process.env.ALERT_WEBHOOK_SECRET),
+    operational_alerts: Boolean(
+      process.env.ALERT_WEBHOOK_URL &&
+      process.env.ALERT_WEBHOOK_SECRET &&
+      process.env.RESEND_API_KEY &&
+      process.env.LEAD_NOTIFICATION_EMAIL
+    ),
     payments_enabled: paymentsEnabled(),
   };
 

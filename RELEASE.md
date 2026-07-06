@@ -24,4 +24,8 @@ Rollback by promoting the previous healthy Vercel Git deployment and reverting t
 - Cloudflare Turnstile was configured in Managed mode for both production hostnames. Its secret was rotated after setup, and production requires successful verification.
 - `CRON_SECRET`, the protected operational alert receiver, and `ALERT_WEBHOOK_URL` were configured without storing their values in Git.
 - GitHub's external production-uptime workflow checks `/api/health` every five minutes and fails if health degrades or payments become enabled.
-- The release candidate must pass the GitHub Production checks workflow and a Git-based Vercel preview before merging.
+- PR #2 passed GitHub Production checks and the Git-based Vercel preview, then merged as `1456ef3dd6b2`.
+- The production health endpoint returned HTTP 200 and `healthy` on that exact release; all infrastructure checks were true and payments were false.
+- Unit tests (12), E2E tests (6), typecheck, lint, build, database audit, and site audit all passed locally and in CI.
+- Production rejected an unverified public submission with HTTP 403, and Redis denied the third request in a two-request sliding window across three fresh clients.
+- The contact address and WhatsApp destination were verified live, and the existing administrator session loaded the production operations dashboard.
