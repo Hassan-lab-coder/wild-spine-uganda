@@ -29,3 +29,4 @@ Rollback by promoting the previous healthy Vercel Git deployment and reverting t
 - Unit tests (12), E2E tests (6), typecheck, lint, build, database audit, and site audit all passed locally and in CI.
 - Production rejected an unverified public submission with HTTP 403, and Redis denied the third request in a two-request sliding window across three fresh clients.
 - The contact address and WhatsApp destination were verified live, and the existing administrator session loaded the production operations dashboard.
+- A human-verified production form exposed a mismatched Turnstile secret before any lead was stored. The production secret was reconciled with the current Cloudflare widget, and health was upgraded from a presence check to an active credential probe.

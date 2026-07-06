@@ -32,6 +32,7 @@ The 5 July 2026 pre-migration backup is stored outside the repository under back
 
 - Upstash resource: `wildspine-rate-limit`; verify it with a `PING` and confirm `/api/health` reports `rate_limit: true`.
 - Turnstile widget: `WildSpine Uganda Production`, Managed mode, restricted to `wildspineuganda.com` and `www.wildspineuganda.com`.
+- After any Turnstile secret rotation, update Vercel, deploy through Git, confirm `/api/health` recognizes the credential, and complete one human-verified production form submission.
 - Keep `TURNSTILE_REQUIRED=true` and `PAYMENTS_ENABLED=false` in production.
 - Keep `CRON_SECRET` and `ALERT_WEBHOOK_SECRET` in deployment secrets only. Set `LEAD_NOTIFICATION_EMAIL` to the monitored reservations inbox; health remains degraded without it or `RESEND_API_KEY`. The application sends the alert secret as a Bearer token; the separately stored GitHub Actions webhook URL carries a masked token so the external monitor can authenticate.
 - The GitHub `Production uptime` workflow runs every five minutes. A failed health response also attempts the protected operational alert receiver and leaves a failed workflow run for independent evidence.
