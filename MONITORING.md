@@ -1,6 +1,6 @@
 # Monitoring
 
-Use `/api/health` for uptime checks. A healthy response requires Supabase connectivity, a successful Upstash `PING`, required Turnstile configuration, cron authentication, operational alerts, and payments remaining disabled. The GitHub `Production uptime` workflow checks this endpoint from outside Vercel every five minutes; its failure is independent evidence when the application cannot call its own alert receiver.
+Use `/api/health` for uptime checks. A healthy response requires Supabase connectivity, a successful Upstash `PING`, required Turnstile configuration, cron authentication, a complete alert path (`ALERT_WEBHOOK_URL`, `ALERT_WEBHOOK_SECRET`, `RESEND_API_KEY`, and `LEAD_NOTIFICATION_EMAIL`), and payments remaining disabled. The GitHub `Production uptime` workflow checks this endpoint from outside Vercel every five minutes; its failure is independent evidence when the application cannot call its own alert receiver.
 
 Server events are emitted as structured JSON in Vercel logs. Payment webhook mismatches, rejected settlement amounts, and reconciliation failures call the protected `/api/operations/alert` receiver through `ALERT_WEBHOOK_URL`; the receiver sends an operational email through Resend. The logger excludes common personal and secret-bearing fields.
 
