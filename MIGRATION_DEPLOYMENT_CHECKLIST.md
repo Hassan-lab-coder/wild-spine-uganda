@@ -10,12 +10,16 @@ Do not deploy this migration from a dirty laptop workspace. Production must be b
 - Store backup artifacts outside Git with SHA-256 checksums.
 - Confirm the backup includes financial tables and authentication references needed to restore invoice/payment history.
 
+Status on 2026-08-02: completed for backup ID `20260802-130120-bank-transfer-pre-migration`; SHA-256 verification passed.
+
 ## 2. Restoration test
 
 - Restore the backup into a disposable Supabase project or local database.
 - Verify row counts match the production export.
 - Confirm admin login, invoice list, receipt list, and public lead tables are readable in the restored environment.
 - Document the restore command, timestamp, operator, and result.
+
+Status on 2026-08-02: completed in a disposable local Docker database using the Supabase Postgres image. The first restore test exposed a migration-order bug in invoice status conversion; the migration was corrected and the second restore/migration test passed.
 
 ## 3. Staging application
 
@@ -27,6 +31,8 @@ Do not deploy this migration from a dirty laptop workspace. Production must be b
   - `paid` -> `fully_paid`
   - `cancelled` -> `disputed`
 - Confirm unknown invoice statuses would fail the migration before constraints are applied.
+
+Status on 2026-08-02: not applied to a managed Supabase staging project. Complete this gate before production if a staging Supabase project is available.
 
 ## 4. Database audit
 

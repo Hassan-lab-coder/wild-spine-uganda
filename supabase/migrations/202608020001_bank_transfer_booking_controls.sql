@@ -128,6 +128,9 @@ begin
   end if;
 end $$;
 
+alter table public.invoices
+  drop constraint if exists invoices_status_check;
+
 update public.invoices
 set status = case status
   when 'draft' then 'invoice_issued'
@@ -171,7 +174,6 @@ create index if not exists invoices_verification_revoked_idx
   on public.invoices (verification_revoked_at);
 
 alter table public.invoices
-  drop constraint if exists invoices_status_check,
   add constraint invoices_status_check
   check (status in (
     'inquiry_received',

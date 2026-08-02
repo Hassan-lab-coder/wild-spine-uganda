@@ -31,6 +31,7 @@ Migration reviewed: `202608020001_bank_transfer_booking_controls.sql`.
 Findings and corrections:
 
 - Initial blocker found: `bank_transfer_reconciliations` and `invoice_audit_events` used `ON DELETE CASCADE`, which could erase financial/audit history if an invoice were deleted. Corrected to `ON DELETE RESTRICT` for reconciliations and `ON DELETE SET NULL` for audit events.
+- Restore-test blocker found: the legacy invoice status constraint rejected converted bank-transfer statuses during the migration `UPDATE`. Corrected by validating legacy statuses first, dropping the old `invoices_status_check`, converting status values, and then adding the final bank-transfer status constraint.
 - No table drops, column drops, truncates, or data deletes remain in the migration.
 - Existing invoice statuses are converted only for known legacy values:
   - `draft` -> `invoice_issued`
@@ -117,6 +118,13 @@ Completed on 2026-08-02:
   - `receipts`: 1
   - `volunteer_applications`: 0
 - Supabase dry-run result: `npx supabase db push --linked --dry-run` reported exactly one pending migration, `202608020001_bank_transfer_booking_controls.sql`; no migration was pushed.
+- Disposable local restore test: passed after the migration-order fix.
+  - Restored the verified schema/data backup into a disposable Docker database using the Supabase Postgres image.
+  - Applied `202608020001_bank_transfer_booking_controls.sql` locally only.
+  - Verified invoice and receipt row counts.
+  - Verified invoice status conversion resulted in `invoice_issued` and `fully_paid` only for the current restored data.
+  - Verified 64-character verification tokens, uniqueness, immutable triggers, duplicate bank-reference blocking, audit-event immutability, and financial-document immutability.
+  - Removed the disposable Docker container after the test.
 
 Operational note: `npx supabase db dump --linked --dry-run` prints connection credentials into terminal output. Treat local terminal/session logs as sensitive and rotate the database password after the migration window.
 
@@ -129,8 +137,7 @@ Those folders contain zero-byte dump files and must not be used as backups.
 
 ## Unresolved blockers before production
 
-- Restore test has not been performed in this run.
-- Staging migration has not been applied in this run.
+- Managed Supabase staging migration has not been applied in this run. A disposable local restore/migration test passed, but a real Supabase staging project remains recommended before production.
 - Production migration has not been applied.
 - Production deployment has not been performed.
 - Server-only banking env vars are placeholders until verified legal/bank details are entered.
