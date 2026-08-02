@@ -48,6 +48,8 @@ export default function PublicSiteFooter() {
             <a href="/insights/is-uganda-safe-for-tourists" className="hover:text-[#f5b416]">Uganda Safety Guide</a>
             <a href="/#book" className="hover:text-[#f5b416]">Start Private Planning</a>
             <a href="/terms" className="hover:text-[#f5b416]">Booking Terms</a>
+            <a href="/payment-information" className="hover:text-[#f5b416]">Payment Information</a>
+            <a href="/why-wild-spine" className="hover:text-[#f5b416]">Why Trust Wild Spine</a>
           </div>
         </div>
 
@@ -59,6 +61,7 @@ export default function PublicSiteFooter() {
               <p>Planning office: Victoria Mall, Entebbe</p>
               <p>Kampala meetings: Kingdom Kampala, Kampala</p>
               <p>P.O. Box 25543 Kampala, Uganda</p>
+              <p>Legal entity and licence details: shown after verification.</p>
             </div>
             <a href="mailto:reservations@wildspineuganda.com" className="hover:text-[#f5b416]">reservations@wildspineuganda.com</a>
             <a href="https://wa.me/256751828241" target="_blank" rel="noopener noreferrer" className="hover:text-[#f5b416]">WhatsApp: +256 751 828 241</a>
@@ -72,7 +75,7 @@ export default function PublicSiteFooter() {
       </div>
 
       <div className="mx-auto mt-12 max-w-6xl border-t border-white/10 pt-8 text-center text-sm text-white/55">
-        (c) 2012-2026 Wild Spine Uganda. Trek the Backbone of Africa.
+        (c) 2026 Wild Spine Uganda. Trek the Backbone of Africa. Official company-bank transfer only after invoice issuance.
       </div>
     </footer>
   );

@@ -11,7 +11,7 @@ export default function CtaNextStepNote({ tone = "dark" }: CtaNextStepNoteProps)
   return (
     <p className={`mt-4 max-w-xl text-sm leading-6 ${classes}`}>
       After your request, our local team will contact you within 24 hours to plan your journey step-by-step around permits,
-      route timing, lodges, safety, and your comfort level.
+      route timing, lodges, safety, your comfort level, and the verified bank-transfer steps used only after invoice issuance.
     </p>
   );
 }

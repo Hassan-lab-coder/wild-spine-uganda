@@ -2,6 +2,7 @@ import Image from "next/image";
 import JsonLd from "./JsonLd";
 import CtaNextStepNote from "./CtaNextStepNote";
 import TrustSafetyBlock from "./TrustSafetyBlock";
+import BookingConfidencePanel from "./BookingConfidencePanel";
 
 type SeoLandingPageProps = {
   title: string;
@@ -29,7 +30,7 @@ export default function SeoLandingPage({
   timeline = [
     ["Step 1", "Share your travel month, group size, comfort level, and must-see experiences."],
     ["Step 2", "We check route logic, permit timing, lodge fit, and transfer reality before quoting."],
-    ["Step 3", "You receive clear next steps with inclusions, exclusions, payment guidance, and support options."],
+    ["Step 3", "You receive clear next steps with inclusions, exclusions, payment guidance, and official invoice controls."],
   ],
 }: SeoLandingPageProps) {
   const href = `/?source=${encodeURIComponent(kicker.toLowerCase().replaceAll(" ", "_"))}${route ? `&route=${encodeURIComponent(route)}` : ""}#book`;
@@ -64,6 +65,9 @@ export default function SeoLandingPage({
           <p className="section-kicker">{kicker}</p>
           <h1 className="mb-8 text-5xl font-black leading-tight md:text-7xl">{title}</h1>
           <p className="max-w-3xl text-lg leading-8 text-gray-300">{description}</p>
+          <div className="mt-8 max-w-2xl">
+            <BookingConfidencePanel tone="dark" compact />
+          </div>
           <a href={href} className="mt-10 inline-block rounded-full bg-yellow-500 px-8 py-4 font-black text-black hover:bg-yellow-400">
             {cta}
           </a>
@@ -84,6 +88,7 @@ export default function SeoLandingPage({
               </div>
             ))}
           </div>
+          <BookingConfidencePanel tone="dark" />
         </div>
       </section>
 

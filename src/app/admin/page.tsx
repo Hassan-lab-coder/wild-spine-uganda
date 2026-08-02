@@ -5,6 +5,16 @@ import { useRouter } from "next/navigation";
 import { supabase, type Database } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
 import PaymentLinkPanel from "./PaymentLinkPanel";
+import {
+  bookingLifecycleStatuses,
+  bookingStatusLabel,
+  canApproveCorrections,
+  canReconcileBankTransfer,
+  canTransitionInvoiceStatusForRole,
+  isBookingLifecycleStatus,
+  type AdminRole,
+  type BookingLifecycleStatus,
+} from "@/lib/bank-transfer";
 
 type Session = Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"];
 type ItineraryRequest = Database["public"]["Tables"]["itinerary_requests"]["Row"];
@@ -13,19 +23,29 @@ type VolunteerApplication = Database["public"]["Tables"]["volunteer_applications
 type AnalyticsEvent = Database["public"]["Tables"]["analytics_events"]["Row"];
 type Invoice = Database["public"]["Tables"]["invoices"]["Row"];
 type Receipt = Database["public"]["Tables"]["receipts"]["Row"];
-type PaymentRequest = Database["public"]["Tables"]["payment_requests"]["Row"];
-type PaymentWebhookEvent = Database["public"]["Tables"]["payment_webhook_events"]["Row"];
+type BankTransferReconciliation = Database["public"]["Tables"]["bank_transfer_reconciliations"]["Row"];
+type InvoiceAuditEvent = Database["public"]["Tables"]["invoice_audit_events"]["Row"];
 type InboundEmail = Database["public"]["Tables"]["inbound_emails"]["Row"];
 type LineItem = Invoice["line_items"][number];
 type TabKey = "requests" | "volunteers" | "guides" | "inbox" | "invoices" | "payments" | "receipts" | "analytics";
 type Status = "pending" | "new" | "contacted" | "qualified" | "confirmed" | "paid" | "closed";
 type DateFilter = "all" | "7" | "30" | "followups";
 type SortBy = "newest" | "oldest" | "follow_up" | "status";
-type InvoiceStatus = "draft" | "sent" | "paid" | "cancelled";
+type InvoiceStatus = BookingLifecycleStatus;
 type LeadTypeFilter = "all" | "safari" | "corporate_retreat" | "conservation_membership" | "permit_help" | "other";
 
 const statuses: Status[] = ["pending", "new", "contacted", "qualified", "confirmed", "paid", "closed"];
-const invoiceStatuses: InvoiceStatus[] = ["draft", "sent", "paid", "cancelled"];
+const invoiceStatuses: InvoiceStatus[] = [...bookingLifecycleStatuses];
+const financiallyReconciledStatuses: InvoiceStatus[] = [
+  "transfer_under_verification",
+  "deposit_received",
+  "reservations_in_progress",
+  "booking_confirmed",
+  "balance_due",
+  "fully_paid",
+  "refunded",
+  "disputed",
+];
 const leadTypeOptions: Array<[LeadTypeFilter, string]> = [
   ["all", "All lead types"],
   ["safari", "Safari / expedition"],
@@ -34,6 +54,11 @@ const leadTypeOptions: Array<[LeadTypeFilter, string]> = [
   ["permit_help", "Permit help"],
   ["other", "Other"],
 ];
+
+function isFinanciallyReconciledStatus(status: string | null | undefined) {
+  if (!status) return false;
+  return isBookingLifecycleStatus(status) && financiallyReconciledStatuses.includes(status);
+}
 
 export default function AdminDashboard() {
   const [session, setSession] = useState<Session>(null);
@@ -45,8 +70,8 @@ export default function AdminDashboard() {
   const [analyticsEvents, setAnalyticsEvents] = useState<AnalyticsEvent[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [receipts, setReceipts] = useState<Receipt[]>([]);
-  const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([]);
-  const [paymentEvents, setPaymentEvents] = useState<PaymentWebhookEvent[]>([]);
+  const [bankReconciliations, setBankReconciliations] = useState<BankTransferReconciliation[]>([]);
+  const [invoiceAuditEvents, setInvoiceAuditEvents] = useState<InvoiceAuditEvent[]>([]);
   const [inboundEmails, setInboundEmails] = useState<InboundEmail[]>([]);
   const [dataError, setDataError] = useState("");
   const [notice, setNotice] = useState("");
@@ -60,13 +85,24 @@ export default function AdminDashboard() {
   const [sortBy, setSortBy] = useState<SortBy>("newest");
   const [dashboardTime, setDashboardTime] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [adminRole, setAdminRole] = useState<AdminRole>("admin");
   const router = useRouter();
 
   const loadDashboardData = useCallback(async () => {
     setRefreshing(true);
     setDataError("");
 
-    const [requestResult, guideResult, volunteerResult, analyticsResult, invoiceResult, receiptResult, inboundEmailResult, paymentResult, paymentEventResult] = await Promise.all([
+    const [
+      requestResult,
+      guideResult,
+      volunteerResult,
+      analyticsResult,
+      invoiceResult,
+      receiptResult,
+      inboundEmailResult,
+      bankReconciliationResult,
+      invoiceAuditResult,
+    ] = await Promise.all([
       supabase.from("itinerary_requests").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("guide_leads").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("volunteer_applications").select("*").order("created_at", { ascending: false }).limit(200),
@@ -74,11 +110,11 @@ export default function AdminDashboard() {
       supabase.from("invoices").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("receipts").select("*").order("created_at", { ascending: false }).limit(200),
       supabase.from("inbound_emails").select("*").order("received_at", { ascending: false }).limit(200),
-      supabase.from("payment_requests").select("*").order("created_at", { ascending: false }).limit(200),
-      supabase.from("payment_webhook_events").select("*").order("created_at", { ascending: false }).limit(300),
+      supabase.from("bank_transfer_reconciliations").select("*").order("reconciled_at", { ascending: false }).limit(300),
+      supabase.from("invoice_audit_events").select("*").order("created_at", { ascending: false }).limit(300),
     ]);
 
-    const firstError = requestResult.error || guideResult.error || volunteerResult.error || invoiceResult.error || receiptResult.error || inboundEmailResult.error || paymentResult.error || paymentEventResult.error;
+    const firstError = requestResult.error || guideResult.error || volunteerResult.error || invoiceResult.error || receiptResult.error || inboundEmailResult.error || bankReconciliationResult.error || invoiceAuditResult.error;
 
     if (firstError) {
       setDataError(firstError.message);
@@ -93,8 +129,8 @@ export default function AdminDashboard() {
     setInvoices(invoiceResult.data || []);
     setReceipts(receiptResult.data || []);
     setInboundEmails(inboundEmailResult.data || []);
-    setPaymentRequests(paymentResult.data || []);
-    setPaymentEvents(paymentEventResult.data || []);
+    setBankReconciliations(bankReconciliationResult.data || []);
+    setInvoiceAuditEvents(invoiceAuditResult.data || []);
     setDashboardTime(Date.now());
     setRefreshing(false);
   }, []);
@@ -111,7 +147,7 @@ export default function AdminDashboard() {
 
       const { data: adminProfile } = await supabase
         .from("admin_users")
-        .select("user_id")
+        .select("user_id, role")
         .eq("user_id", data.session.user.id)
         .maybeSingle();
 
@@ -121,6 +157,7 @@ export default function AdminDashboard() {
         return;
       }
 
+      setAdminRole((adminProfile.role as AdminRole) || "admin");
       setIsAdmin(true);
       setSession(data.session);
       await loadDashboardData();
@@ -159,7 +196,7 @@ export default function AdminDashboard() {
       invoices: invoices.length,
       receipts: receipts.length,
       unreadEmails: inboundEmails.filter((email) => !email.read_at).length,
-      unpaid: invoices.filter((invoice) => !["paid", "cancelled"].includes(invoice.status)).length,
+      unpaid: invoices.filter((invoice) => !["fully_paid", "refunded"].includes(invoice.status)).length,
       retreats: requests.filter((request) => getLeadType(request) === "corporate_retreat").length,
       memberships: requests.filter((request) => getLeadType(request) === "conservation_membership").length,
     };
@@ -230,6 +267,10 @@ export default function AdminDashboard() {
       total,
       status: values.status,
       notes: values.notes || null,
+      deposit_amount: roundMoney(values.depositAmount),
+      non_refundable_amount: roundMoney(values.nonRefundableAmount),
+      balance_due_date: values.balanceDueDate || null,
+      assigned_journey_planner: values.assignedJourneyPlanner || null,
       line_items: lineItems,
     }).select("*").single();
 
@@ -240,7 +281,8 @@ export default function AdminDashboard() {
 
     setInvoices((current) => [result.data, ...current]);
     setNotice("Invoice created.");
-    if (values.status === "sent") {
+    void trackEvent("invoice_issued", { currency: values.currency, total, trip: values.tripName || "unspecified" });
+    if (values.status === "awaiting_bank_transfer") {
       void trackEvent("quote_sent", { currency: values.currency, total, trip: values.tripName || "unspecified" });
       void trackEvent("deposit_requested", { currency: values.currency, total, trip: values.tripName || "unspecified" });
     }
@@ -265,6 +307,22 @@ export default function AdminDashboard() {
   async function updateInvoiceStatus(id: string, status: InvoiceStatus) {
     setNotice("");
     setDataError("");
+    const invoice = invoices.find((item) => item.id === id);
+
+    if (invoice && !canTransitionInvoiceStatusForRole(adminRole, invoice.status, status)) {
+      setDataError("This invoice status transition is not allowed for your role or current invoice state.");
+      return;
+    }
+
+    if (["deposit_received", "reservations_in_progress", "booking_confirmed", "balance_due", "fully_paid"].includes(status) && !canReconcileBankTransfer(adminRole)) {
+      setDataError("Finance or admin role is required before changing payment-sensitive invoice states.");
+      return;
+    }
+    if (["refunded", "disputed"].includes(status) && !canApproveCorrections(adminRole)) {
+      setDataError("Admin role is required for refund or disputed status changes.");
+      return;
+    }
+
     const result = await supabase.from("invoices").update({ status }).eq("id", id);
 
     if (result.error) {
@@ -274,11 +332,12 @@ export default function AdminDashboard() {
 
     setInvoices((current) => current.map((invoice) => invoice.id === id ? { ...invoice, status } : invoice));
     setNotice("Invoice status saved.");
-    if (status === "sent") {
-      const invoice = invoices.find((item) => item.id === id);
+    if (status === "awaiting_bank_transfer") {
       void trackEvent("quote_sent", { currency: invoice?.currency, total: invoice?.total, trip: invoice?.trip_name });
       void trackEvent("deposit_requested", { currency: invoice?.currency, total: invoice?.total, trip: invoice?.trip_name });
     }
+    if (status === "deposit_received") void trackEvent("deposit_received", { invoice_id: id });
+    if (status === "booking_confirmed") void trackEvent("booking_confirmed", { invoice_id: id });
   }
 
   async function updateInvoiceMoney(id: string, values: InvoiceMoneyValues) {
@@ -305,6 +364,10 @@ export default function AdminDashboard() {
         tax,
         total,
         notes: values.notes.trim() || null,
+        deposit_amount: roundMoney(values.depositAmount),
+        non_refundable_amount: roundMoney(values.nonRefundableAmount),
+        balance_due_date: values.balanceDueDate || null,
+        assigned_journey_planner: values.assignedJourneyPlanner || null,
         line_items: lineItems,
       })
       .eq("id", id)
@@ -334,7 +397,7 @@ export default function AdminDashboard() {
       payment_date: values.paymentDate,
       currency: values.currency,
       amount: roundMoney(values.amount),
-      payment_method: values.paymentMethod,
+      payment_method: "bank_transfer",
       reference: values.reference || null,
       notes: values.notes || null,
     }).select("*").single();
@@ -345,14 +408,14 @@ export default function AdminDashboard() {
     }
 
     setReceipts((current) => [result.data, ...current]);
-    void trackEvent("offline_payment_pending", {
+    void trackEvent("receipt_issued", {
       currency: result.data.currency,
       amount: result.data.amount,
-      method: result.data.payment_method,
+      method: "bank_transfer",
       trip: invoice?.trip_name,
     });
     if (invoice && result.data.amount >= invoice.total) {
-      await updateInvoiceStatus(invoice.id, "paid");
+      await updateInvoiceStatus(invoice.id, "fully_paid");
     }
     setNotice("Receipt created.");
   }
@@ -414,7 +477,7 @@ export default function AdminDashboard() {
         <div>
           <p className="section-kicker">Wild Spine Operations</p>
           <h1 className="mb-3 text-4xl font-black md:text-5xl">Admin Dashboard</h1>
-          <p className="text-gray-400">Signed in as {session?.user.email}</p>
+          <p className="text-gray-400">Signed in as {session?.user.email} · Role: {bookingStatusLabel(adminRole)}</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <button onClick={loadDashboardData} className="admin-outline-button">{refreshing ? "Refreshing..." : "Refresh Data"}</button>
@@ -491,7 +554,7 @@ export default function AdminDashboard() {
           <TabButton active={activeTab === "guides"} onClick={() => setActiveTab("guides")}>Guides</TabButton>
           <TabButton active={activeTab === "inbox"} onClick={() => setActiveTab("inbox")}>Inbox</TabButton>
           <TabButton active={activeTab === "invoices"} onClick={() => setActiveTab("invoices")}>Invoices</TabButton>
-          <TabButton active={activeTab === "payments"} onClick={() => setActiveTab("payments")}>Payments</TabButton>
+          <TabButton active={activeTab === "payments"} onClick={() => setActiveTab("payments")}>Bank</TabButton>
           <TabButton active={activeTab === "receipts"} onClick={() => setActiveTab("receipts")}>Receipts</TabButton>
           <TabButton active={activeTab === "analytics"} onClick={() => setActiveTab("analytics")}>Analytics</TabButton>
         </div>
@@ -560,10 +623,10 @@ export default function AdminDashboard() {
               <InvoiceCard
                 key={invoice.id}
                 invoice={invoice}
-                paymentLocked={paymentRequests.some((payment) => payment.invoice_id === invoice.id && ["creating", "pending", "paid"].includes(payment.status))}
+                reconciliationLocked={isFinanciallyReconciledStatus(invoice.status)}
                 onMoneySave={(values) => updateInvoiceMoney(invoice.id, values)}
                 onStatusChange={(status) => updateInvoiceStatus(invoice.id, status)}
-                onPrint={() => printInvoice(invoice)}
+                onPrint={() => void printInvoice(invoice)}
               />
             )}
           </RecordGrid>
@@ -574,13 +637,19 @@ export default function AdminDashboard() {
         <FinancialPanel title="Receipts" count={visibleReceipts.length}>
           <ReceiptForm invoices={invoices} receipts={receipts} onCreate={createReceipt} />
           <RecordGrid title="Receipt Records" empty="No receipts match this view." rows={visibleReceipts}>
-            {(receipt) => <ReceiptCard key={receipt.id} receipt={receipt} onPrint={() => printReceipt(receipt)} />}
+            {(receipt) => <ReceiptCard key={receipt.id} receipt={receipt} onPrint={() => void printReceipt(receipt)} />}
           </RecordGrid>
         </FinancialPanel>
       )}
 
       {activeTab === "payments" && (
-        <PaymentReconciliationPanel payments={paymentRequests} events={paymentEvents} invoices={invoices} />
+        <PaymentReconciliationPanel
+          invoices={invoices}
+          reconciliations={bankReconciliations}
+          auditEvents={invoiceAuditEvents}
+          adminRole={adminRole}
+          onReconciled={loadDashboardData}
+        />
       )}
 
       {activeTab === "analytics" && <AnalyticsPanel events={analyticsEvents} />}
@@ -596,8 +665,12 @@ type InvoiceFormValues = {
   tripName: string;
   issueDate: string;
   dueDate: string;
+  balanceDueDate: string;
   currency: string;
   tax: number;
+  depositAmount: number;
+  nonRefundableAmount: number;
+  assignedJourneyPlanner: string;
   status: InvoiceStatus;
   notes: string;
   lineItems: LineItem[];
@@ -606,6 +679,10 @@ type InvoiceFormValues = {
 type InvoiceMoneyValues = {
   currency: string;
   tax: number;
+  depositAmount: number;
+  nonRefundableAmount: number;
+  balanceDueDate: string;
+  assignedJourneyPlanner: string;
   notes: string;
   lineItems: LineItem[];
 };
@@ -644,55 +721,222 @@ function FinancialPanel({ title, count, children }: { title: string; count: numb
   );
 }
 
-function PaymentReconciliationPanel({ payments, events, invoices }: {
-  payments: PaymentRequest[];
-  events: PaymentWebhookEvent[];
+function PaymentReconciliationPanel({ invoices, reconciliations, auditEvents, adminRole, onReconciled }: {
   invoices: Invoice[];
+  reconciliations: BankTransferReconciliation[];
+  auditEvents: InvoiceAuditEvent[];
+  adminRole: AdminRole;
+  onReconciled: () => Promise<void>;
 }) {
   const invoiceById = new Map(invoices.map((invoice) => [invoice.id, invoice]));
+  const [invoiceId, setInvoiceId] = useState(invoices[0]?.id || "");
+  const selectedInvoice = invoices.find((invoice) => invoice.id === invoiceId) || invoices[0] || null;
+  const [bankReference, setBankReference] = useState("");
+  const [senderName, setSenderName] = useState("");
+  const [amount, setAmount] = useState("");
+  const [currency, setCurrency] = useState(selectedInvoice?.currency || "USD");
+  const [valueDate, setValueDate] = useState(todayInputValue());
+  const [invoiceReference, setInvoiceReference] = useState(selectedInvoice?.invoice_number || "");
+  const [status, setStatus] = useState<"matched" | "unmatched" | "rejected">("matched");
+  const [nextInvoiceStatus, setNextInvoiceStatus] = useState<InvoiceStatus>("deposit_received");
+  const [transferAdviceReceived, setTransferAdviceReceived] = useState(false);
+  const [confirmReconciliation, setConfirmReconciliation] = useState(false);
+  const [issueReceipt, setIssueReceipt] = useState(true);
+  const [notes, setNotes] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [result, setResult] = useState("");
+  const [error, setError] = useState("");
+  const canReconcile = canReconcileBankTransfer(adminRole);
+
+  async function reconcileTransfer(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving(true);
+    setResult("");
+    setError("");
+
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    if (!token) {
+      setSaving(false);
+      setError("Admin session expired. Sign in again before reconciling a transfer.");
+      return;
+    }
+
+    const response = await fetch("/api/admin/bank-transfer-reconciliations", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        invoice_id: invoiceId,
+        bank_transaction_reference: bankReference,
+        sender_name: senderName,
+        amount: Number(amount || selectedInvoice?.deposit_amount || selectedInvoice?.total || 0),
+        currency: currency || selectedInvoice?.currency || "USD",
+        value_date: valueDate,
+        invoice_reference: invoiceReference || selectedInvoice?.invoice_number || "",
+        status,
+        next_invoice_status: status === "matched" ? nextInvoiceStatus : "transfer_under_verification",
+        transfer_advice_received: transferAdviceReceived,
+        confirm_reconciliation: confirmReconciliation,
+        issue_receipt: issueReceipt,
+        notes,
+      }),
+    });
+    const json = await response.json().catch(() => null) as { ok?: boolean; reason?: string } | null;
+    setSaving(false);
+
+    if (!response.ok || !json?.ok) {
+      setError(json?.reason || "Bank transfer reconciliation could not be saved.");
+      return;
+    }
+
+    setResult("Bank transfer reconciliation saved and audit event recorded.");
+    setBankReference("");
+    setSenderName("");
+    setNotes("");
+    setTransferAdviceReceived(false);
+    setConfirmReconciliation(false);
+    await onReconciled();
+  }
   return (
-    <FinancialPanel title="Payment Reconciliation" count={payments.length}>
-      <div className="mb-2 grid gap-4 md:grid-cols-4">
-        {["pending", "paid", "failed", "expired"].map((status) => (
-          <div key={status} className="border border-white/10 bg-white/5 p-5">
-            <p className="text-xs font-black uppercase text-gray-500">{status}</p>
-            <p className="mt-2 text-3xl font-black">{payments.filter((payment) => payment.status === status).length}</p>
+    <FinancialPanel title="Bank Transfer Reconciliation" count={reconciliations.length}>
+      <div className="grid gap-4 md:grid-cols-4">
+        {(["matched", "unmatched", "rejected"] as const).map((item) => (
+          <div key={item} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <p className="text-xs font-black uppercase text-gray-500">{item}</p>
+            <p className="mt-2 text-3xl font-black">{reconciliations.filter((row) => row.status === item).length}</p>
           </div>
         ))}
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <p className="text-xs font-black uppercase text-gray-500">Audit events</p>
+          <p className="mt-2 text-3xl font-black">{auditEvents.length}</p>
+        </div>
       </div>
-      <div className="grid gap-5">
-        {payments.map((payment) => {
-          const invoice = payment.invoice_id ? invoiceById.get(payment.invoice_id) : null;
-          const relatedEvents = events.filter((event) => event.payment_request_id === payment.id);
-          const needsAttention = relatedEvents.some((event) => ["failed", "rejected", "unmatched"].includes(event.processing_status));
-          return (
-            <article key={payment.id} className="border border-white/10 bg-white/5 p-6">
-              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                <div>
-                  <p className="text-xs font-black uppercase text-yellow-500">{invoice?.invoice_number || "Unlinked payment"}</p>
-                  <h3 className="mt-2 text-xl font-black">{payment.client_name}</h3>
-                  <p className="mt-1 text-sm text-gray-400">{payment.client_email}</p>
-                </div>
-                <div className="text-left md:text-right">
-                  <p className="text-2xl font-black">{formatMoney(payment.amount, payment.currency)}</p>
-                  <p className="mt-1 text-sm font-bold capitalize text-gray-400">{payment.provider} · {payment.status}</p>
-                </div>
-              </div>
-              <div className="mt-5 grid gap-3 text-sm text-gray-400 md:grid-cols-3">
-                <p>Created: {formatDate(payment.created_at)}</p>
-                <p>Paid: {payment.paid_at ? formatDate(payment.paid_at) : "Not confirmed"}</p>
-                <p>Webhook events: {relatedEvents.length}</p>
-              </div>
-              {payment.provider_reference && <p className="mt-4 break-all text-xs text-gray-500">Provider reference: {payment.provider_reference}</p>}
-              {payment.checkout_url && payment.status !== "paid" && (
-                <a href={payment.checkout_url} target="_blank" rel="noopener noreferrer" className="admin-outline-button mt-5 inline-flex text-sm">Open Checkout</a>
-              )}
-              {needsAttention && <p className="mt-4 border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">Reconciliation needs attention. Review the latest webhook event.</p>}
-            </article>
-          );
-        })}
-        {payments.length === 0 && <p className="text-gray-400">No payment requests have been created.</p>}
+
+      <form onSubmit={reconcileTransfer} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div className="mb-5">
+          <p className="text-xs font-black uppercase tracking-widest text-yellow-500">Authorised bank reconciliation</p>
+          <h3 className="mt-2 text-2xl font-black">Match a bank transaction to an invoice</h3>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-gray-400">
+            Transfer advice is not proof of payment. Only a finance/admin user may update the invoice after matching the company bank statement.
+          </p>
+        </div>
+
+        {!canReconcile && (
+          <p className="mb-5 rounded-2xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">
+            Your role is {bookingStatusLabel(adminRole)}. Finance or admin role is required to reconcile bank transfers.
+          </p>
+        )}
+
+        <div className="grid gap-4 md:grid-cols-4">
+          <select
+            className="form-input md:col-span-2"
+            value={invoiceId}
+            onChange={(event) => {
+              const nextInvoice = invoices.find((invoice) => invoice.id === event.target.value) || null;
+              setInvoiceId(event.target.value);
+              setCurrency(nextInvoice?.currency || "USD");
+              setInvoiceReference(nextInvoice?.invoice_number || "");
+              setAmount(String(nextInvoice?.deposit_amount || nextInvoice?.total || ""));
+            }}
+          >
+            {invoices.map((invoice) => (
+              <option key={invoice.id} value={invoice.id}>
+                {invoice.invoice_number} - {invoice.client_name} - {formatMoney(invoice.total, invoice.currency)}
+              </option>
+            ))}
+          </select>
+          <input required className="form-input" value={bankReference} onChange={(event) => setBankReference(event.target.value)} placeholder="Bank transaction reference" />
+          <input required className="form-input" value={senderName} onChange={(event) => setSenderName(event.target.value)} placeholder="Sender name" />
+          <input required className="form-input" type="number" min="0" step="0.01" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="Amount received" />
+          <select className="form-input" value={currency} onChange={(event) => setCurrency(event.target.value)}>
+            <option>USD</option>
+            <option>UGX</option>
+            <option>EUR</option>
+            <option>GBP</option>
+          </select>
+          <input required className="form-input" type="date" value={valueDate} onChange={(event) => setValueDate(event.target.value)} />
+          <input required className="form-input" value={invoiceReference} onChange={(event) => setInvoiceReference(event.target.value)} placeholder="Invoice reference on transfer" />
+          <select className="form-input" value={status} onChange={(event) => setStatus(event.target.value as "matched" | "unmatched" | "rejected")}>
+            <option value="matched">Matched</option>
+            <option value="unmatched">Unmatched</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <select className="form-input md:col-span-2" value={nextInvoiceStatus} onChange={(event) => setNextInvoiceStatus(event.target.value as InvoiceStatus)} disabled={status !== "matched"}>
+            {(["deposit_received", "reservations_in_progress", "booking_confirmed", "balance_due", "fully_paid"] as InvoiceStatus[]).map((item) => (
+              <option key={item} value={item}>{bookingStatusLabel(item)}</option>
+            ))}
+          </select>
+          <textarea className="form-input min-h-24 md:col-span-4" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Reconciliation notes, statement line context, or exception details" />
+        </div>
+
+        <div className="mt-5 grid gap-3 text-sm text-gray-300 md:grid-cols-3">
+          <label className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
+            <input type="checkbox" checked={transferAdviceReceived} onChange={(event) => setTransferAdviceReceived(event.target.checked)} />
+            <span>Transfer advice received, but not treated as proof</span>
+          </label>
+          <label className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
+            <input type="checkbox" checked={confirmReconciliation} onChange={(event) => setConfirmReconciliation(event.target.checked)} />
+            <span>I confirm this was matched against the official company bank statement</span>
+          </label>
+          <label className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
+            <input type="checkbox" checked={issueReceipt} onChange={(event) => setIssueReceipt(event.target.checked)} />
+            <span>Issue a numbered receipt after matched reconciliation</span>
+          </label>
+        </div>
+
+        {result && <p className="mt-5 rounded-xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm text-green-200">{result}</p>}
+        {error && <p className="mt-5 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}
+
+        <button type="submit" disabled={!canReconcile || saving || !invoiceId || !bankReference.trim()} className="admin-primary-button mt-5 disabled:cursor-not-allowed disabled:opacity-60">
+          {saving ? "Reconciling..." : "Record Bank Reconciliation"}
+        </button>
+      </form>
+
+      <div className="grid gap-5 xl:grid-cols-2">
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <h3 className="text-xl font-black">Recent bank reconciliations</h3>
+          <div className="mt-5 grid gap-4">
+            {reconciliations.slice(0, 10).map((row) => {
+              const invoice = row.invoice_id ? invoiceById.get(row.invoice_id) : null;
+              return (
+                <article key={row.id} className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                  <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                    <div>
+                      <p className="text-xs font-black uppercase text-yellow-500">{invoice?.invoice_number || row.invoice_reference}</p>
+                      <p className="mt-1 font-black">{row.sender_name}</p>
+                    </div>
+                    <p className="font-black">{formatMoney(row.amount, row.currency)}</p>
+                  </div>
+                  <div className="mt-3 grid gap-2 text-xs text-gray-400 md:grid-cols-2">
+                    <p>Status: {bookingStatusLabel(row.status)}</p>
+                    <p>Value date: {formatPlainDate(row.value_date)}</p>
+                    <p className="break-all">Bank ref: {row.bank_transaction_reference}</p>
+                    <p>Reconciled: {formatDate(row.reconciled_at)}</p>
+                  </div>
+                </article>
+              );
+            })}
+            {reconciliations.length === 0 && <p className="text-gray-400">No bank transfers have been reconciled.</p>}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <h3 className="text-xl font-black">Invoice audit events</h3>
+          <div className="mt-5 grid gap-4">
+            {auditEvents.slice(0, 10).map((event) => (
+              <article key={event.id} className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                <p className="text-xs font-black uppercase text-yellow-500">{event.event_type.replaceAll("_", " ")}</p>
+                <p className="mt-2 text-sm text-gray-300">
+                  {event.old_status ? bookingStatusLabel(event.old_status) : "No previous status"} -&gt; {event.new_status ? bookingStatusLabel(event.new_status) : "No status change"}
+                </p>
+                <p className="mt-2 text-xs text-gray-500">Actor role: {event.actor_role ? bookingStatusLabel(event.actor_role) : "unknown"} · {formatDate(event.created_at)}</p>
+              </article>
+            ))}
+            {auditEvents.length === 0 && <p className="text-gray-400">No invoice audit events yet.</p>}
+          </div>
+        </section>
       </div>
+
     </FinancialPanel>
   );
 }
@@ -704,9 +948,13 @@ function InvoiceForm({ draft, invoices, onCreate }: { draft: InvoiceDraft | null
   const [tripName, setTripName] = useState(draft?.tripName || "");
   const [issueDate, setIssueDate] = useState(todayInputValue());
   const [dueDate, setDueDate] = useState("");
+  const [balanceDueDate, setBalanceDueDate] = useState("");
   const [currency, setCurrency] = useState("USD");
   const [tax, setTax] = useState("0");
-  const [status, setStatus] = useState<InvoiceStatus>("draft");
+  const [depositAmount, setDepositAmount] = useState("0");
+  const [nonRefundableAmount, setNonRefundableAmount] = useState("0");
+  const [assignedJourneyPlanner, setAssignedJourneyPlanner] = useState("");
+  const [status, setStatus] = useState<InvoiceStatus>("invoice_issued");
   const [notes, setNotes] = useState(draft?.notes || "");
   const [lineItems, setLineItems] = useState<LineItem[]>(draft?.lineItems || [{ description: "Private Uganda travel services", quantity: 1, unit_price: 0, total: 0 }]);
   const invoiceNumber = useMemo(() => nextDocumentNumber("INV", invoices.map((invoice) => invoice.invoice_number)), [invoices]);
@@ -733,8 +981,12 @@ function InvoiceForm({ draft, invoices, onCreate }: { draft: InvoiceDraft | null
           tripName: tripName.trim(),
           issueDate,
           dueDate,
+          balanceDueDate,
           currency,
           tax: Number(tax || 0),
+          depositAmount: Number(depositAmount || 0),
+          nonRefundableAmount: Number(nonRefundableAmount || 0),
+          assignedJourneyPlanner: assignedJourneyPlanner.trim(),
           status,
           notes: notes.trim(),
           lineItems: lineItems.filter((item) => item.description.trim()),
@@ -744,8 +996,12 @@ function InvoiceForm({ draft, invoices, onCreate }: { draft: InvoiceDraft | null
         setClientPhone("");
         setTripName("");
         setDueDate("");
+        setBalanceDueDate("");
         setTax("0");
-        setStatus("draft");
+        setDepositAmount("0");
+        setNonRefundableAmount("0");
+        setAssignedJourneyPlanner("");
+        setStatus("invoice_issued");
         setNotes("");
         setLineItems([{ description: "Private Uganda travel services", quantity: 1, unit_price: 0, total: 0 }]);
       }}
@@ -766,6 +1022,7 @@ function InvoiceForm({ draft, invoices, onCreate }: { draft: InvoiceDraft | null
         <input className="form-input" value={tripName} onChange={(event) => setTripName(event.target.value)} placeholder="Trip / package" />
         <input required className="form-input" type="date" value={issueDate} onChange={(event) => setIssueDate(event.target.value)} />
         <input className="form-input" type="date" value={dueDate} onChange={(event) => setDueDate(event.target.value)} />
+        <input className="form-input" type="date" value={balanceDueDate} onChange={(event) => setBalanceDueDate(event.target.value)} title="Balance due date" />
         <select className="form-input" value={currency} onChange={(event) => setCurrency(event.target.value)}>
           <option>USD</option>
           <option>UGX</option>
@@ -773,8 +1030,9 @@ function InvoiceForm({ draft, invoices, onCreate }: { draft: InvoiceDraft | null
           <option>GBP</option>
         </select>
         <select className="form-input" value={status} onChange={(event) => setStatus(event.target.value as InvoiceStatus)}>
-          {invoiceStatuses.map((item) => <option key={item} value={item}>{labelStatus(item)}</option>)}
+          {invoiceStatuses.map((item) => <option key={item} value={item}>{bookingStatusLabel(item)}</option>)}
         </select>
+        <input className="form-input" value={assignedJourneyPlanner} onChange={(event) => setAssignedJourneyPlanner(event.target.value)} placeholder="Assigned journey planner" />
       </div>
 
       <div className="mt-5 grid gap-3">
@@ -803,11 +1061,19 @@ function InvoiceForm({ draft, invoices, onCreate }: { draft: InvoiceDraft | null
         ))}
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-[1fr_180px_180px]">
+      <div className="mt-5 grid gap-4 md:grid-cols-[1fr_180px_180px_180px_180px]">
         <textarea className="form-input min-h-24" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Invoice notes, payment terms, bank details..." />
         <label className="grid gap-2">
           <span className="text-xs font-black uppercase tracking-widest text-gray-500">Tax / extra fees</span>
           <input className="form-input" type="number" min="0" step="0.01" value={tax} onChange={(event) => setTax(event.target.value)} placeholder="Tax / fees" />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-xs font-black uppercase tracking-widest text-gray-500">Deposit required</span>
+          <input className="form-input" type="number" min="0" step="0.01" value={depositAmount} onChange={(event) => setDepositAmount(event.target.value)} placeholder="Deposit" />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-xs font-black uppercase tracking-widest text-gray-500">Non-refundable items</span>
+          <input className="form-input" type="number" min="0" step="0.01" value={nonRefundableAmount} onChange={(event) => setNonRefundableAmount(event.target.value)} placeholder="Permits / flights" />
         </label>
         <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
           <p className="text-xs uppercase tracking-widest text-gray-500">Subtotal</p>
@@ -832,7 +1098,7 @@ function ReceiptForm({ invoices, receipts, onCreate }: { invoices: Invoice[]; re
   const [paymentDate, setPaymentDate] = useState(todayInputValue());
   const [currency, setCurrency] = useState("USD");
   const [amount, setAmount] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("bank_transfer");
+  const paymentMethod = "bank_transfer";
   const [reference, setReference] = useState("");
   const [notes, setNotes] = useState("");
   const receiptNumber = useMemo(() => nextDocumentNumber("RCT", receipts.map((receipt) => receipt.receipt_number)), [receipts]);
@@ -867,7 +1133,6 @@ function ReceiptForm({ invoices, receipts, onCreate }: { invoices: Invoice[]; re
         setClientName("");
         setClientEmail("");
         setAmount("");
-        setPaymentMethod("bank_transfer");
         setReference("");
         setNotes("");
       }}
@@ -895,15 +1160,7 @@ function ReceiptForm({ invoices, receipts, onCreate }: { invoices: Invoice[]; re
           <option>GBP</option>
         </select>
         <input required className="form-input" type="number" min="0" step="0.01" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="Amount paid" />
-        <select className="form-input" value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)}>
-          <option value="bank_transfer">Bank transfer</option>
-          <option value="cash">Cash</option>
-          <option value="card">Card</option>
-          <option value="mobile_money">Mobile money</option>
-          <option value="paypal">PayPal</option>
-          <option value="tazapay">Tazapay</option>
-          <option value="flutterwave">Flutterwave</option>
-        </select>
+        <input className="form-input" value="Bank transfer only" readOnly aria-label="Payment method" />
         <input className="form-input" value={reference} onChange={(event) => setReference(event.target.value)} placeholder="Payment reference" />
       </div>
       <textarea className="form-input mt-4 min-h-24" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Receipt notes..." />
@@ -912,9 +1169,9 @@ function ReceiptForm({ invoices, receipts, onCreate }: { invoices: Invoice[]; re
   );
 }
 
-function InvoiceCard({ invoice, paymentLocked, onMoneySave, onStatusChange, onPrint }: {
+function InvoiceCard({ invoice, reconciliationLocked, onMoneySave, onStatusChange, onPrint }: {
   invoice: Invoice;
-  paymentLocked: boolean;
+  reconciliationLocked: boolean;
   onMoneySave: (values: InvoiceMoneyValues) => void;
   onStatusChange: (status: InvoiceStatus) => void;
   onPrint: () => void;
@@ -922,6 +1179,10 @@ function InvoiceCard({ invoice, paymentLocked, onMoneySave, onStatusChange, onPr
   const [editingMoney, setEditingMoney] = useState(false);
   const [currency, setCurrency] = useState(invoice.currency);
   const [tax, setTax] = useState(String(invoice.tax));
+  const [depositAmount, setDepositAmount] = useState(String(invoice.deposit_amount || 0));
+  const [nonRefundableAmount, setNonRefundableAmount] = useState(String(invoice.non_refundable_amount || 0));
+  const [balanceDueDate, setBalanceDueDate] = useState(invoice.balance_due_date || "");
+  const [assignedJourneyPlanner, setAssignedJourneyPlanner] = useState(invoice.assigned_journey_planner || "");
   const [notes, setNotes] = useState(invoice.notes || "");
   const [lineItems, setLineItems] = useState<LineItem[]>(
     invoice.line_items.length > 0
@@ -947,14 +1208,17 @@ function InvoiceCard({ invoice, paymentLocked, onMoneySave, onStatusChange, onPr
           <p className="text-gray-400">{invoice.client_name}</p>
           <p className="mt-1 text-sm text-gray-500">Issued {formatPlainDate(invoice.issue_date)}{invoice.due_date ? `, due ${formatPlainDate(invoice.due_date)}` : ""}</p>
         </div>
-        <select value={invoice.status} onChange={(event) => onStatusChange(event.target.value as InvoiceStatus)} className="form-input md:w-44">
-          {invoiceStatuses.map((item) => <option key={item} value={item}>{labelStatus(item)}</option>)}
+        <select value={invoice.status} onChange={(event) => onStatusChange(event.target.value as InvoiceStatus)} className="form-input md:w-64">
+          {invoiceStatuses.map((item) => <option key={item} value={item}>{bookingStatusLabel(item)}</option>)}
         </select>
       </div>
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         <Field label="Trip" value={invoice.trip_name || "Not provided"} />
         <Field label="Email" value={invoice.client_email || "Not provided"} />
         <Field label="Total" value={formatMoney(invoice.total, invoice.currency)} />
+        <Field label="Deposit" value={formatMoney(invoice.deposit_amount || 0, invoice.currency)} />
+        <Field label="Non-refundable" value={formatMoney(invoice.non_refundable_amount || 0, invoice.currency)} />
+        <Field label="Planner" value={invoice.assigned_journey_planner || "Not assigned"} />
       </div>
       <LineItemList items={invoice.line_items} currency={invoice.currency} />
       {invoice.notes && <MessageBlock label="Notes" value={invoice.notes} />}
@@ -968,7 +1232,7 @@ function InvoiceCard({ invoice, paymentLocked, onMoneySave, onStatusChange, onPr
             <p className="text-2xl font-black text-yellow-500">{formatMoney(total, currency)}</p>
           </div>
 
-          <div className="mb-3 grid gap-3 md:grid-cols-[1fr_160px]">
+          <div className="mb-3 grid gap-3 md:grid-cols-[1fr_160px_160px_160px]">
             <label className="grid gap-2">
               <span className="text-xs font-black uppercase tracking-widest text-gray-500">Currency</span>
               <select className="form-input" value={currency} onChange={(event) => setCurrency(event.target.value)}>
@@ -981,6 +1245,25 @@ function InvoiceCard({ invoice, paymentLocked, onMoneySave, onStatusChange, onPr
             <label className="grid gap-2">
               <span className="text-xs font-black uppercase tracking-widest text-gray-500">Tax / extra fees</span>
               <input className="form-input" type="number" min="0" step="0.01" value={tax} onChange={(event) => setTax(event.target.value)} />
+            </label>
+            <label className="grid gap-2">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500">Deposit</span>
+              <input className="form-input" type="number" min="0" step="0.01" value={depositAmount} onChange={(event) => setDepositAmount(event.target.value)} />
+            </label>
+            <label className="grid gap-2">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500">Non-refundable</span>
+              <input className="form-input" type="number" min="0" step="0.01" value={nonRefundableAmount} onChange={(event) => setNonRefundableAmount(event.target.value)} />
+            </label>
+          </div>
+
+          <div className="mb-3 grid gap-3 md:grid-cols-2">
+            <label className="grid gap-2">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500">Balance due date</span>
+              <input className="form-input" type="date" value={balanceDueDate} onChange={(event) => setBalanceDueDate(event.target.value)} />
+            </label>
+            <label className="grid gap-2">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500">Assigned journey planner</span>
+              <input className="form-input" value={assignedJourneyPlanner} onChange={(event) => setAssignedJourneyPlanner(event.target.value)} />
             </label>
           </div>
 
@@ -1010,18 +1293,27 @@ function InvoiceCard({ invoice, paymentLocked, onMoneySave, onStatusChange, onPr
 
           <div className="mt-4 flex flex-wrap gap-3">
             <button type="button" className="admin-outline-button text-sm" onClick={() => setLineItems((current) => [...current, { description: "", quantity: 1, unit_price: 0, total: 0 }])}>Add Line</button>
-            <button type="button" className="admin-primary-button text-sm" disabled={lineItems.length === 0} onClick={() => onMoneySave({ currency, tax: Number(tax || 0), notes, lineItems })}>Save Money</button>
+            <button type="button" className="admin-primary-button text-sm" disabled={lineItems.length === 0} onClick={() => onMoneySave({
+              currency,
+              tax: Number(tax || 0),
+              depositAmount: Number(depositAmount || 0),
+              nonRefundableAmount: Number(nonRefundableAmount || 0),
+              balanceDueDate,
+              assignedJourneyPlanner,
+              notes,
+              lineItems,
+            })}>Save Money</button>
           </div>
         </div>
       )}
       <div className="mt-5 flex flex-wrap gap-3">
-        <button type="button" disabled={paymentLocked} onClick={() => setEditingMoney((open) => !open)} className="admin-outline-button text-sm disabled:cursor-not-allowed disabled:opacity-50">
+        <button type="button" disabled={reconciliationLocked} onClick={() => setEditingMoney((open) => !open)} className="admin-outline-button text-sm disabled:cursor-not-allowed disabled:opacity-50">
           {editingMoney ? "Close Money Editor" : "Edit Money"}
         </button>
-        <button type="button" onClick={onPrint} className="admin-primary-button text-sm">Print Invoice</button>
+        <button type="button" onClick={onPrint} className="admin-primary-button text-sm">Print / Save PDF Invoice</button>
         {invoice.client_email && <a href={`mailto:${invoice.client_email}?subject=${encodeURIComponent(`Invoice ${invoice.invoice_number} from Wild Spine Uganda`)}`} className="admin-outline-button text-sm">Email Client</a>}
       </div>
-      {paymentLocked && <p className="mt-4 text-sm text-yellow-200">Invoice money is locked while an active or paid payment request exists.</p>}
+      {reconciliationLocked && <p className="mt-4 text-sm text-yellow-200">Invoice money is locked after transfer verification begins. Admin corrections must be handled through authorised finance notes and audit events.</p>}
       <PaymentLinkPanel invoice={invoice} />
     </article>
   );
@@ -1044,7 +1336,7 @@ function ReceiptCard({ receipt, onPrint }: { receipt: Receipt; onPrint: () => vo
         <Field label="Reference" value={receipt.reference || "Not provided"} />
       </div>
       {receipt.notes && <MessageBlock label="Notes" value={receipt.notes} />}
-      <button type="button" onClick={onPrint} className="admin-primary-button mt-5 text-sm">Print Receipt</button>
+      <button type="button" onClick={onPrint} className="admin-primary-button mt-5 text-sm">Print / Save PDF Receipt</button>
     </article>
   );
 }
@@ -1569,7 +1861,7 @@ function nextDocumentNumber(prefix: string, existingNumbers: string[]) {
 }
 
 function labelStatus(status: string) {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  return bookingStatusLabel(status);
 }
 
 function getLeadType(request: ItineraryRequest): LeadTypeFilter {
@@ -1686,7 +1978,8 @@ Original message from ${email.from_email} on ${formatDate(email.received_at)}:
 ${body}`;
 }
 
-function printInvoice(invoice: Invoice) {
+async function printInvoice(invoice: Invoice) {
+  const verificationUrl = `${window.location.origin}/verify-invoice/${invoice.verification_token}`;
   const rows = invoice.line_items.map((item) => `
     <tr>
       <td>${escapeHtml(item.description)}</td>
@@ -1696,28 +1989,124 @@ function printInvoice(invoice: Invoice) {
     </tr>
   `).join("");
 
-  printDocument("Invoice", `
+  const body = `
     <section class="hero"><div><p class="kicker">Wild Spine Uganda</p><h1>Invoice</h1></div><div class="doc-number">${escapeHtml(invoice.invoice_number)}</div></section>
+    <section class="legal">
+      <p><strong>Legal entity:</strong> ${escapeHtml(invoice.beneficiary_legal_name || "Verified legal entity pending configuration")}</p>
+      <p><strong>Registration:</strong> Verified registration number pending entry by administration.</p>
+      <p><strong>Tourism licence:</strong> Licence details pending verification and entry by administration.</p>
+      <p><strong>Official contacts:</strong> reservations@wildspineuganda.com | WhatsApp +256 751 828 241 | P.O. Box 25543 Kampala, Uganda</p>
+      <p><strong>Verify invoice:</strong> ${escapeHtml(verificationUrl)}</p>
+    </section>
     <section class="grid">
       <div><p class="label">Bill To</p><p>${escapeHtml(invoice.client_name)}</p><p>${escapeHtml(invoice.client_email || "")}</p><p>${escapeHtml(invoice.client_phone || "")}</p></div>
-      <div><p><strong>Issue date:</strong> ${formatPlainDate(invoice.issue_date)}</p>${invoice.due_date ? `<p><strong>Due date:</strong> ${formatPlainDate(invoice.due_date)}</p>` : ""}<p><strong>Status:</strong> ${labelStatus(invoice.status)}</p>${invoice.trip_name ? `<p><strong>Trip:</strong> ${escapeHtml(invoice.trip_name)}</p>` : ""}</div>
+      <div><p><strong>Issue date:</strong> ${formatPlainDate(invoice.issue_date)}</p>${invoice.due_date ? `<p><strong>Due date:</strong> ${formatPlainDate(invoice.due_date)}</p>` : ""}${invoice.balance_due_date ? `<p><strong>Balance due:</strong> ${formatPlainDate(invoice.balance_due_date)}</p>` : ""}<p><strong>Status:</strong> ${bookingStatusLabel(invoice.status)}</p>${invoice.trip_name ? `<p><strong>Trip:</strong> ${escapeHtml(invoice.trip_name)}</p>` : ""}${invoice.assigned_journey_planner ? `<p><strong>Journey planner:</strong> ${escapeHtml(invoice.assigned_journey_planner)}</p>` : ""}</div>
     </section>
     <table><thead><tr><th>Description</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${rows}</tbody></table>
-    <section class="totals"><p><span>Subtotal</span><strong>${formatMoney(invoice.subtotal, invoice.currency)}</strong></p><p><span>Tax / fees</span><strong>${formatMoney(invoice.tax, invoice.currency)}</strong></p><p class="grand"><span>Total</span><strong>${formatMoney(invoice.total, invoice.currency)}</strong></p></section>
+    <section class="totals"><p><span>Subtotal</span><strong>${formatMoney(invoice.subtotal, invoice.currency)}</strong></p><p><span>Tax / fees</span><strong>${formatMoney(invoice.tax, invoice.currency)}</strong></p><p><span>Deposit required</span><strong>${formatMoney(invoice.deposit_amount || 0, invoice.currency)}</strong></p><p><span>Non-refundable items</span><strong>${formatMoney(invoice.non_refundable_amount || 0, invoice.currency)}</strong></p><p class="grand"><span>Total</span><strong>${formatMoney(invoice.total, invoice.currency)}</strong></p></section>
+    <section class="notes"><p class="label">Official company-bank transfer instructions</p><p>Transfer only to the official company bank account stated on this authorised invoice or its attached finance instruction page. The beneficiary name must match the legal entity above. Full account number, SWIFT/BIC, branch and intermediary instructions must be entered by finance only after verification.</p><p><strong>Payment reference:</strong> ${escapeHtml(invoice.invoice_number)}</p><p><strong>Bank charges:</strong> The full invoiced amount must reach the Wild Spine Uganda company account. Originating, intermediary, correspondent and receiving-bank charges are the traveller's responsibility unless agreed otherwise in writing.</p><p><strong>Anti-fraud warning:</strong> Wild Spine Uganda does not request safari payments to personal accounts, social-media accounts, or changed bank details sent informally. A transfer advice or screenshot is not proof of payment; receipts are issued only after authorised bank reconciliation.</p></section>
     ${invoice.notes ? `<section class="notes"><p class="label">Notes</p><p>${escapeHtml(invoice.notes)}</p></section>` : ""}
-  `);
+    <section class="signature"><p><strong>Authorised signatory:</strong> ______________________________</p><p>Date: __________________</p></section>
+  `;
+  const control = await recordFinancialDocument({
+    documentType: "invoice",
+    invoiceId: invoice.id,
+    documentNumber: invoice.invoice_number,
+    verificationUrl,
+    canonicalContent: body,
+  });
+  if (!control) return;
+  printDocument("Invoice", `${body}${documentControlHtml(control)}`);
 }
 
-function printReceipt(receipt: Receipt) {
-  printDocument("Receipt", `
+async function printReceipt(receipt: Receipt) {
+  const body = `
     <section class="hero"><div><p class="kicker">Wild Spine Uganda</p><h1>Receipt</h1></div><div class="doc-number">${escapeHtml(receipt.receipt_number)}</div></section>
+    <section class="legal">
+      <p><strong>Legal entity:</strong> Verified legal entity pending configuration</p>
+      <p><strong>Official contacts:</strong> reservations@wildspineuganda.com | WhatsApp +256 751 828 241 | P.O. Box 25543 Kampala, Uganda</p>
+    </section>
     <section class="grid">
       <div><p class="label">Received From</p><p>${escapeHtml(receipt.client_name)}</p><p>${escapeHtml(receipt.client_email || "")}</p></div>
-      <div><p><strong>Payment date:</strong> ${formatPlainDate(receipt.payment_date)}</p>${receipt.invoice_number ? `<p><strong>Invoice:</strong> ${escapeHtml(receipt.invoice_number)}</p>` : ""}<p><strong>Method:</strong> ${labelStatus(receipt.payment_method.replaceAll("_", " "))}</p>${receipt.reference ? `<p><strong>Reference:</strong> ${escapeHtml(receipt.reference)}</p>` : ""}</div>
+      <div><p><strong>Payment date:</strong> ${formatPlainDate(receipt.payment_date)}</p>${receipt.invoice_number ? `<p><strong>Invoice:</strong> ${escapeHtml(receipt.invoice_number)}</p>` : ""}<p><strong>Method:</strong> Bank transfer</p>${receipt.reference ? `<p><strong>Bank reference:</strong> ${escapeHtml(receipt.reference)}</p>` : ""}</div>
     </section>
     <section class="paid"><p>Amount Received</p><strong>${formatMoney(receipt.amount, receipt.currency)}</strong></section>
+    <section class="notes"><p class="label">Receipt basis</p><p>This receipt is issued only after authorised bank reconciliation. Transfer advice or screenshots alone are not proof of payment.</p></section>
     ${receipt.notes ? `<section class="notes"><p class="label">Notes</p><p>${escapeHtml(receipt.notes)}</p></section>` : ""}
-  `);
+    <section class="signature"><p><strong>Authorised signatory:</strong> ______________________________</p><p>Date: __________________</p></section>
+  `;
+  const control = await recordFinancialDocument({
+    documentType: "receipt",
+    receiptId: receipt.id,
+    documentNumber: receipt.receipt_number,
+    verificationUrl: receipt.invoice_number ? `${window.location.origin}/admin` : "",
+    canonicalContent: body,
+  });
+  if (!control) return;
+  printDocument("Receipt", `${body}${documentControlHtml(control)}`);
+}
+
+type DocumentControl = {
+  document: {
+    version: number;
+    generated_at: string;
+    generated_by_role: string | null;
+    verification_url: string | null;
+    content_hash: string;
+  };
+  qr_svg: string;
+};
+
+async function recordFinancialDocument(input: {
+  documentType: "invoice" | "receipt";
+  invoiceId?: string;
+  receiptId?: string;
+  documentNumber: string;
+  verificationUrl: string;
+  canonicalContent: string;
+}): Promise<DocumentControl | null> {
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) {
+    window.alert("Admin session expired. Sign in again before generating a controlled document.");
+    return null;
+  }
+
+  const response = await fetch("/api/admin/financial-documents", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      document_type: input.documentType,
+      invoice_id: input.invoiceId,
+      receipt_id: input.receiptId,
+      document_number: input.documentNumber,
+      verification_url: input.verificationUrl,
+      canonical_content: input.canonicalContent,
+    }),
+  });
+  const json = await response.json().catch(() => null) as (DocumentControl & { ok?: boolean; reason?: string }) | null;
+  if (!response.ok || !json?.ok) {
+    window.alert(json?.reason || "Document version could not be recorded. Printing was stopped to avoid an untracked invoice or receipt.");
+    return null;
+  }
+  return json;
+}
+
+function documentControlHtml(control: DocumentControl) {
+  const document = control.document;
+  return `
+    <section class="document-control">
+      <div>
+        <p class="label">Document control</p>
+        <p><strong>Version:</strong> ${document.version}</p>
+        <p><strong>Generated:</strong> ${formatDate(document.generated_at)}</p>
+        <p><strong>Issuer role:</strong> ${escapeHtml(document.generated_by_role || "authorised user")}</p>
+        <p><strong>Verification URL:</strong> ${escapeHtml(document.verification_url || "Internal receipt record")}</p>
+        <p class="hash"><strong>SHA-256:</strong> ${escapeHtml(document.content_hash)}</p>
+      </div>
+      <div class="qr">${control.qr_svg}</div>
+    </section>
+  `;
 }
 
 function printDocument(title: string, body: string) {
@@ -1745,7 +2134,12 @@ function printDocument(title: string, body: string) {
           .grand { border-top: 2px solid #111; font-size: 24px; margin-top: 12px; padding-top: 12px; }
           .paid { background: #111; color: white; margin-top: 34px; padding: 28px; }
           .paid strong { color: #eab308; display: block; font-size: 44px; margin-top: 8px; }
+          .legal { background: #f8f4e8; border: 1px solid #ddd; margin-top: 24px; padding: 18px; }
           .notes { border-top: 1px solid #ddd; margin-top: 34px; padding-top: 24px; }
+          .signature { border-top: 1px solid #ddd; margin-top: 42px; padding-top: 24px; }
+          .document-control { align-items: center; border: 2px solid #111; display: flex; gap: 24px; justify-content: space-between; margin-top: 42px; padding: 18px; page-break-inside: avoid; }
+          .document-control .hash { font-size: 11px; overflow-wrap: anywhere; }
+          .qr svg { display: block; height: 132px; width: 132px; }
         </style>
       </head>
       <body>${body}<script>window.print();</script></body>

@@ -1,8 +1,8 @@
 import { noIndexMetadata } from "@/lib/seo";
 
 export const metadata = noIndexMetadata(
-  "Payment Status",
-  "Private Wild Spine Uganda payment status page.",
+  "Bank Transfer Status",
+  "Private Wild Spine Uganda bank-transfer status page.",
 );
 
 export default function PaymentLayout({ children }: { children: React.ReactNode }) {

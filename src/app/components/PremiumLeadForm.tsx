@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 import TurnstileField from "./TurnstileField";
 import { submitItineraryLead } from "@/lib/lead-capture";
+import BookingConfidencePanel from "./BookingConfidencePanel";
 
 type PremiumLeadFormProps = {
   leadSource: string;
@@ -168,8 +169,12 @@ export default function PremiumLeadForm({
       <div className="mt-5 rounded-2xl border border-[#d8cda9] bg-[#fff9ea]/80 p-4">
         <p className="text-sm font-black uppercase tracking-widest text-[#b8860b]">Step 3 - Send your travel request</p>
         <p className="mt-2 text-sm leading-6 text-[#68746a]">
-          We will respond with realistic next steps, timing, and planning questions within 24 hours.
+          We will respond with realistic next steps, timing, planning questions, and the documentation required before any transfer.
         </p>
+      </div>
+
+      <div className="mt-5">
+        <BookingConfidencePanel compact />
       </div>
 
       {error && (

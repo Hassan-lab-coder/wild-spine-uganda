@@ -20,6 +20,7 @@ export const publicRoutes: PublicRoute[] = [
   { path: "/insights/best-time-to-visit-bwindi", changeFrequency: "monthly", priority: 0.82 },
   { path: "/insights/is-uganda-safe-for-tourists", changeFrequency: "monthly", priority: 0.82 },
   { path: "/about", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/why-wild-spine", changeFrequency: "monthly", priority: 0.8 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.75 },
   { path: "/conservation-membership", changeFrequency: "monthly", priority: 0.7 },
   { path: "/corporate-retreats", changeFrequency: "monthly", priority: 0.75 },
@@ -31,6 +32,7 @@ export const publicRoutes: PublicRoute[] = [
   { path: "/reviews", changeFrequency: "monthly", priority: 0.7 },
   { path: "/volunteer", changeFrequency: "monthly", priority: 0.55 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.25 },
+  { path: "/payment-information", changeFrequency: "yearly", priority: 0.35 },
   { path: "/refund-policy", changeFrequency: "yearly", priority: 0.25 },
   { path: "/terms", changeFrequency: "yearly", priority: 0.25 },
 ];

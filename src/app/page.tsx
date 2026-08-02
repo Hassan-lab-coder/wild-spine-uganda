@@ -9,6 +9,8 @@ import { submitItineraryLead } from "@/lib/lead-capture";
 import ConversionTrustStrip from "./components/ConversionTrustStrip";
 import CtaNextStepNote from "./components/CtaNextStepNote";
 import TrustSafetyBlock from "./components/TrustSafetyBlock";
+import BookingConfidencePanel from "./components/BookingConfidencePanel";
+import PlanWithConfidence from "./components/PlanWithConfidence";
 
 const tours = [
   {
@@ -220,7 +222,7 @@ const travelerReviews = [
 
 const trustSignals = [
   ["12+ years", "Uganda route experience across gorilla, safari, and mountain travel realities."],
-  ["Permit-first", "Gorilla trekking plans shaped around availability, sector logic, and secure payment steps."],
+  ["Permit-first", "Gorilla trekking plans shaped around availability, sector logic, and verified invoice-first bank-transfer steps."],
   ["Long-haul ready", "Planning language, pacing, and support designed for travelers flying in from abroad."],
   ["Local team", "Ground knowledge from Uganda, not generic third-party brochure planning."],
 ];
@@ -228,7 +230,7 @@ const trustSignals = [
 const assuranceSteps = [
   ["1", "You share your month, route interests, group size, comfort level, and what would make the trip feel unforgettable."],
   ["2", "We check realistic permit, lodge, guide, transfer, and route availability before quoting."],
-  ["3", "You receive a clear plan with inclusions, exclusions, payment steps, and the safest next decision."],
+  ["3", "You receive a clear plan with inclusions, exclusions, invoice steps, and the safest next decision."],
 ];
 
 const entryPointPlans = [
@@ -258,7 +260,7 @@ const entryPointPlans = [
 const confidencePoints = [
   "Permit availability checked before final route design",
   "Date-change options discussed before confirmation",
-  "Deposit and secure payment steps explained in writing",
+  "Deposit and company-bank transfer steps explained in writing",
   "Private 4x4 and fly-in options compared when useful",
 ];
 
@@ -268,7 +270,7 @@ const bookingFaqs = [
   ["What fitness level do I need?", "Gorilla trekking can range from moderate to demanding depending on the gorilla family location. Rwenzori routes require stronger hiking fitness and preparation."],
   ["What is included in the quote?", "We clarify permits, guiding, transport, accommodation level, park logistics, and optional extensions before you commit."],
   ["Can the itinerary be private?", "Yes. Wild Spine focuses on private and tailored Uganda journeys rather than fixed mass-market departures."],
-  ["How do payments work?", "We confirm availability and scope first, then share clear payment steps, booking terms, and secure provider options such as Tazapay when online payment is appropriate."],
+  ["How do payments work?", "We confirm availability and scope first, then issue a written itinerary, itemised quotation, numbered invoice, and official company-bank transfer instructions. No payment is confirmed from a screenshot or social-media message."],
 ];
 
 const ecosystemLogos = [
@@ -436,6 +438,8 @@ function HomeContent() {
             <a href="/conservation-membership" className="rounded-2xl bg-white/70 px-4 py-3">Impact</a>
             <a href="/guide" className="rounded-2xl bg-white/70 px-4 py-3">Guide</a>
             <a href="/volunteer" className="rounded-2xl bg-white/70 px-4 py-3">Volunteer</a>
+            <a href="/why-wild-spine" className="rounded-2xl bg-white/70 px-4 py-3">Trust</a>
+            <a href="/payment-information" className="rounded-2xl bg-white/70 px-4 py-3">Payments</a>
             <a href="/about" className="rounded-2xl bg-white/70 px-4 py-3">About</a>
             <a href="#book" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-[#f5b416] px-4 py-3 text-black">Plan Trip</a>
           </div>
@@ -489,6 +493,8 @@ function HomeContent() {
           <CtaNextStepNote />
         </div>
       </section>
+
+      <PlanWithConfidence />
 
       <ConversionTrustStrip />
 
@@ -823,7 +829,7 @@ function HomeContent() {
         </h3>
         <p className="text-[#68746a] text-lg leading-8">
           A private Uganda journey asks for real trust. Wild Spine earns it through clear communication,
-          local route knowledge, careful permit planning, and secure payment guidance before you send a deposit.
+          local route knowledge, careful permit planning, and verified company-bank transfer guidance before you send a deposit.
         </p>
       </div>
 
@@ -886,9 +892,9 @@ function HomeContent() {
   <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6 text-center">
 
     <div className="border border-[#d8cda9] p-6 rounded-xl">
-      Secure Payment Guidance
+      Company-bank transfer guidance
       <p className="text-[#68746a] text-sm mt-2">
-        Clear invoices, written terms, and Tazapay-ready online payment links before confirmation
+        Clear invoices, written terms, official company beneficiary checks, and no personal-account payments
       </p>
     </div>
 
@@ -1054,6 +1060,9 @@ function HomeContent() {
             <p className="text-white/80 text-lg leading-8">
               Share your travel month, comfort level, route interests, and what would make this journey feel worth crossing the world for.
             </p>
+            <div className="mt-7">
+              <BookingConfidencePanel tone="dark" />
+            </div>
             <CtaNextStepNote />
           </div>
 
@@ -1138,8 +1147,12 @@ function HomeContent() {
               <div className="mt-6 rounded-2xl border border-[#d8cda9] bg-[#fff9ea]/80 p-5 text-[#123a2a]">
                 <p className="text-sm font-black uppercase tracking-widest text-[#b8860b]">Step 3 - Send your travel request</p>
                 <p className="mt-2 text-sm leading-6 text-[#68746a]">
-                  After you send this, we review permit timing, route fit, transfer reality, and lodge logic before replying.
+                  After you send this, we review permit timing, route fit, transfer reality, lodge logic, and documentation before replying.
                 </p>
+              </div>
+
+              <div className="mt-6">
+                <BookingConfidencePanel compact />
               </div>
 
               {error && (

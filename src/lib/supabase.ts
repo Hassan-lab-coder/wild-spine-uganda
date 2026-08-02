@@ -27,6 +27,15 @@ export type Database = {
           status: string;
           notes: string | null;
           line_items: Array<{ description: string; quantity: number; unit_price: number; total: number }>;
+          verification_token: string;
+          verification_revoked_at: string | null;
+          verification_last_rotated_at: string;
+          assigned_journey_planner: string | null;
+          deposit_amount: number;
+          non_refundable_amount: number;
+          balance_due_date: string | null;
+          beneficiary_legal_name: string;
+          updated_at: string;
           created_at: string;
         };
         Insert: {
@@ -45,6 +54,15 @@ export type Database = {
           status?: string;
           notes?: string | null;
           line_items?: Array<{ description: string; quantity: number; unit_price: number; total: number }>;
+          verification_token?: string;
+          verification_revoked_at?: string | null;
+          verification_last_rotated_at?: string;
+          assigned_journey_planner?: string | null;
+          deposit_amount?: number;
+          non_refundable_amount?: number;
+          balance_due_date?: string | null;
+          beneficiary_legal_name?: string;
+          updated_at?: string;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["invoices"]["Insert"]>;
@@ -232,11 +250,13 @@ export type Database = {
         Row: {
           user_id: string;
           email: string;
+          role: string;
           created_at: string;
         };
         Insert: {
           user_id: string;
           email: string;
+          role?: string;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["admin_users"]["Insert"]>;
@@ -286,83 +306,115 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["email_automation_events"]["Insert"]>;
         Relationships: [];
       };
-      payment_requests: {
+      bank_transfer_reconciliations: {
+        Row: {
+          id: string;
+          invoice_id: string;
+          bank_transaction_reference: string;
+          sender_name: string;
+          amount: number;
+          currency: string;
+          value_date: string;
+          invoice_reference: string;
+          status: string;
+          transfer_advice_received: boolean;
+          reconciled_by: string | null;
+          reconciled_at: string;
+          notes: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          invoice_id: string;
+          bank_transaction_reference: string;
+          sender_name: string;
+          amount: number;
+          currency?: string;
+          value_date: string;
+          invoice_reference: string;
+          status?: string;
+          transfer_advice_received?: boolean;
+          reconciled_by?: string | null;
+          reconciled_at?: string;
+          notes?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["bank_transfer_reconciliations"]["Insert"]>;
+        Relationships: [];
+      };
+      invoice_audit_events: {
         Row: {
           id: string;
           invoice_id: string | null;
-          client_name: string;
-          client_email: string;
-          amount: number;
-          currency: string;
-          provider: string;
-          provider_reference: string | null;
-          checkout_url: string | null;
-          status: string;
-          metadata: Record<string, unknown> | null;
-          created_by: string | null;
-          public_token: string;
-          updated_at: string;
-          paid_at: string | null;
-          expires_at: string | null;
-          last_event_at: string | null;
+          event_type: string;
+          old_status: string | null;
+          new_status: string | null;
+          actor_id: string | null;
+          actor_role: string | null;
+          metadata: Record<string, unknown>;
           created_at: string;
         };
         Insert: {
           id?: string;
           invoice_id?: string | null;
-          client_name: string;
-          client_email: string;
-          amount: number;
-          currency?: string;
-          provider?: string;
-          provider_reference?: string | null;
-          checkout_url?: string | null;
-          status?: string;
-          metadata?: Record<string, unknown> | null;
-          created_by?: string | null;
-          public_token?: string;
-          updated_at?: string;
-          paid_at?: string | null;
-          expires_at?: string | null;
-          last_event_at?: string | null;
+          event_type: string;
+          old_status?: string | null;
+          new_status?: string | null;
+          actor_id?: string | null;
+          actor_role?: string | null;
+          metadata?: Record<string, unknown>;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["payment_requests"]["Insert"]>;
+        Update: Partial<Database["public"]["Tables"]["invoice_audit_events"]["Insert"]>;
         Relationships: [];
       };
-      payment_webhook_events: {
+      financial_documents: {
         Row: {
           id: string;
-          provider: string;
-          event_id: string;
-          event_type: string;
-          provider_reference: string | null;
-          payment_request_id: string | null;
-          payload: Record<string, unknown>;
-          processing_status: string;
-          processing_error: string | null;
-          processed_at: string | null;
+          document_type: string;
+          invoice_id: string | null;
+          receipt_id: string | null;
+          document_number: string;
+          version: number;
+          generated_by: string | null;
+          generated_by_role: string | null;
+          generated_at: string;
+          verification_url: string | null;
+          qr_payload: string | null;
+          content_hash: string;
+          metadata: Record<string, unknown>;
           created_at: string;
         };
         Insert: {
           id?: string;
-          provider: string;
-          event_id: string;
-          event_type: string;
-          provider_reference?: string | null;
-          payment_request_id?: string | null;
-          payload: Record<string, unknown>;
-          processing_status?: string;
-          processing_error?: string | null;
-          processed_at?: string | null;
+          document_type: string;
+          invoice_id?: string | null;
+          receipt_id?: string | null;
+          document_number: string;
+          version: number;
+          generated_by?: string | null;
+          generated_by_role?: string | null;
+          generated_at?: string;
+          verification_url?: string | null;
+          qr_payload?: string | null;
+          content_hash: string;
+          metadata?: Record<string, unknown>;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["payment_webhook_events"]["Insert"]>;
+        Update: Partial<Database["public"]["Tables"]["financial_documents"]["Insert"]>;
         Relationships: [];
       };
     };
     Functions: {
       is_admin: {
+        Args: Record<PropertyKey, never>;
+        Returns: boolean;
+      };
+      current_admin_role: {
+        Args: Record<PropertyKey, never>;
+        Returns: string;
+      };
+      is_finance_or_admin: {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
       };

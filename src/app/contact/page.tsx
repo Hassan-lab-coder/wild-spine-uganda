@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PremiumLeadForm from "../components/PremiumLeadForm";
+import BookingConfidencePanel from "../components/BookingConfidencePanel";
 import { seoMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = seoMetadata({
@@ -25,9 +26,13 @@ export default function ContactPage() {
             Planning office: Victoria Mall, Entebbe<br />
             Kampala meetings: Kingdom Kampala, Kampala<br />
             P.O. Box 25543 Kampala, Uganda<br />
+            Legal entity and licence details: entered only after verification<br />
             <a className="text-[#f5b416] hover:underline" href="mailto:reservations@wildspineuganda.com">reservations@wildspineuganda.com</a><br />
             <a className="text-[#f5b416] hover:underline" href="https://wa.me/256751828241">WhatsApp: +256 751 828 241</a>
           </address>
+          <div className="mt-8">
+            <BookingConfidencePanel tone="dark" />
+          </div>
         </div>
         <PremiumLeadForm
           leadSource="contact_page"
