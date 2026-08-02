@@ -2,9 +2,9 @@
 
 Date: 2026-08-02  
 Branch: `codex/bank-transfer-trust`  
-Deployment status: not deployed  
-Migration status: not applied to production  
-Backup status: production pre-migration backup created and checksum-verified on 2026-08-02
+Deployment status: pending Git merge/deploy  
+Migration status: applied to production on 2026-08-02  
+Backup status: production pre-migration backups created and checksum-verified on 2026-08-02
 
 ## Summary
 
@@ -18,7 +18,7 @@ Primary areas changed:
 - Public trust architecture: `src/app/page.tsx`, `src/app/payment-information/page.tsx`, `src/app/why-wild-spine/page.tsx`, `src/app/components/PlanWithConfidence.tsx`, `src/app/components/BookingConfidencePanel.tsx`.
 - Admin finance operations: `src/app/admin/page.tsx`, `src/app/admin/PaymentLinkPanel.tsx`, `src/app/api/admin/bank-transfer-reconciliations/route.ts`, `src/app/api/admin/financial-documents/route.ts`.
 - Invoice verification and payment-disabled APIs: `src/app/verify-invoice/[token]/page.tsx`, `src/app/api/payment-links/route.ts`, `src/app/api/payments/config/route.ts`, `src/app/api/payments/status/route.ts`.
-- Migration and database audit: `supabase/migrations/202608020001_bank_transfer_booking_controls.sql`, `scripts/validate-migrations.mjs`, `src/lib/supabase.ts`.
+- Migration and database audit: `supabase/migrations/202608020001_bank_transfer_booking_controls.sql`, `supabase/migrations/202608020002_harden_financial_table_grants.sql`, `scripts/validate-migrations.mjs`, `src/lib/supabase.ts`.
 - Monitoring, runbooks, release docs: `MONITORING.md`, `OPERATIONS_RUNBOOK.md`, `PAYMENTS_ON_HOLD.md`, `RELEASE.md`, `MIGRATION_DEPLOYMENT_CHECKLIST.md`, `SECURITY.md`, `README.md`.
 - Tests: `src/lib/bank-transfer.test.mts`, `src/lib/server-banking-config.test.mts`, `src/lib/payment-guard.test.mts`, `tests/e2e/release-safety.spec.ts`.
 - Removed active gateway code/scripts: `src/lib/payments.ts`, `src/lib/payments.test.mts`, the former gateway webhook route, the former gateway activation script, and the former payment-readiness script.
@@ -45,9 +45,10 @@ Findings and corrections:
 - Invoice update RLS is role-aware. Journey planners are limited to planning/proposal states, finance to bank-transfer payment states, and admin to corrections/refunds.
 - Receipt creation is restricted to finance/admin; receipt updates are revoked.
 - Duplicate bank transaction references are blocked by a case-insensitive unique index.
-- Invoice verification tokens are upgraded to 64-character random hex tokens generated with `gen_random_bytes(32)`.
+- Invoice verification tokens are upgraded to 64-character random hex tokens generated through a Supabase-compatible `pgcrypto` helper.
 - Token revocation support is added with `verification_revoked_at`; verification queries ignore revoked tokens.
 - Financial documents are stored in an append-only ledger with version number, generation timestamp, issuer role, verification URL, QR payload, content hash, and metadata.
+- Follow-up grant hardening added in `202608020002_harden_financial_table_grants.sql`: anonymous privileges are revoked from finance/payment tables and helper functions; authenticated privileges are reduced to the minimum required by RLS and server-mediated workflows.
 
 Rollback risk:
 
@@ -126,6 +127,23 @@ Completed on 2026-08-02:
   - Verified 64-character verification tokens, uniqueness, immutable triggers, duplicate bank-reference blocking, audit-event immutability, and financial-document immutability.
   - Removed the disposable Docker container after the test.
 
+Production go-live migration window on 2026-08-02:
+
+- Fresh backup ID: `20260802-140803-production-go-live-pre-migration`
+- Fresh backup location: `C:\Users\Yoga\wildspine-backups\20260802-140803-production-go-live-pre-migration`
+- Fresh backup files:
+  - `schema-public.sql` — 24,924 bytes
+  - `data-public.sql` — 1,719,478 bytes
+  - `roles.sql` — 297 bytes
+  - `manifest.json`
+  - `SHA256SUMS.txt`
+- SHA-256 verification: passed.
+- `202608020001_bank_transfer_booking_controls.sql` was applied to production after fixing Supabase `pgcrypto` function resolution.
+- `202608020002_harden_financial_table_grants.sql` was applied to production to remove anonymous direct table/function privileges from finance surfaces.
+- Post-apply dry-run result: `npx supabase db push --linked --dry-run` reports the remote database is up to date.
+- Remote schema verification confirmed `bank_transfer_reconciliations`, `invoice_audit_events`, `financial_documents`, `generate_invoice_verification_token`, `generate_bank_transfer_uuid`, and `invoices_active_verification_token_idx`.
+- Remote grant verification confirmed no `anon` grants remain on `invoices`, `receipts`, `payment_requests`, `bank_transfer_reconciliations`, `invoice_audit_events`, `financial_documents`, or the token/UUID helper functions.
+
 Operational note: `npx supabase db dump --linked --dry-run` prints connection credentials into terminal output. Treat local terminal/session logs as sensitive and rotate the database password after the migration window.
 
 Invalid backup placeholders were created before Docker was ready:
@@ -135,14 +153,13 @@ Invalid backup placeholders were created before Docker was ready:
 
 Those folders contain zero-byte dump files and must not be used as backups.
 
-## Unresolved blockers before production
+## Unresolved blockers before full production confidence
 
 - Managed Supabase staging migration has not been applied in this run. A disposable local restore/migration test passed, but a real Supabase staging project remains recommended before production.
-- Production migration has not been applied.
-- Production deployment has not been performed.
+- Production deployment has not been performed yet in this report state.
 - Server-only banking env vars are placeholders until verified legal/bank details are entered.
 - Legal identity, licensing, insurance, staff credentials, reviews, memberships, and bank details remain placeholders until verified.
-- Live RLS/trigger behavior still needs staging verification against Supabase after migration apply.
+- Live RLS/trigger behavior was schema-verified after production migration apply; full role-based workflow smoke testing still requires production admin sessions.
 - Existing framework dependency advisories require a separate security-update PR.
 
 ## Deployment steps
@@ -203,7 +220,7 @@ Database rollback:
 - `npm run lint` — passed
 - `npm test` — passed, 13 tests
 - `npm run audit:payments` — passed with placeholder warnings for unconfigured bank values
-- `npm run audit:db` — passed, 6 ordered migrations
+- `npm run audit:db` — passed, 7 ordered migrations
 - `npm run audit:site` — passed
 - `npm run build` — passed
 - `npm run test:e2e` — passed, 8 tests
