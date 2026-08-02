@@ -1,5 +1,29 @@
 -- Bank-transfer-only booking controls and audit trail.
 
+create schema if not exists extensions;
+create extension if not exists pgcrypto with schema extensions;
+
+create or replace function public.generate_invoice_verification_token()
+returns text
+language sql
+volatile
+set search_path = public, extensions
+as $$
+  select encode(gen_random_bytes(32), 'hex');
+$$;
+
+create or replace function public.generate_bank_transfer_uuid()
+returns uuid
+language sql
+volatile
+set search_path = public, extensions
+as $$
+  select gen_random_uuid();
+$$;
+
+grant execute on function public.generate_invoice_verification_token() to authenticated;
+grant execute on function public.generate_bank_transfer_uuid() to authenticated;
+
 alter table public.admin_users
   add column if not exists role text;
 
@@ -157,13 +181,13 @@ alter table public.invoices
 
 update public.invoices
 set
-  verification_token = encode(gen_random_bytes(32), 'hex'),
+  verification_token = public.generate_invoice_verification_token(),
   verification_last_rotated_at = now()
 where verification_token is null
   or verification_token !~ '^[0-9a-f]{64}$';
 
 alter table public.invoices
-  alter column verification_token set default encode(gen_random_bytes(32), 'hex'),
+  alter column verification_token set default public.generate_invoice_verification_token(),
   alter column verification_token set not null;
 
 drop index if exists public.invoices_verification_token_idx;
@@ -197,7 +221,7 @@ alter table public.invoices
   check (deposit_amount >= 0 and non_refundable_amount >= 0);
 
 create table if not exists public.bank_transfer_reconciliations (
-  id uuid primary key default gen_random_uuid(),
+  id uuid primary key default public.generate_bank_transfer_uuid(),
   invoice_id uuid not null references public.invoices(id) on delete restrict,
   bank_transaction_reference text not null,
   sender_name text not null,
@@ -233,7 +257,7 @@ create index if not exists bank_transfer_reconciliations_status_idx
   on public.bank_transfer_reconciliations (status, reconciled_at desc);
 
 create table if not exists public.invoice_audit_events (
-  id uuid primary key default gen_random_uuid(),
+  id uuid primary key default public.generate_bank_transfer_uuid(),
   invoice_id uuid references public.invoices(id) on delete set null,
   event_type text not null,
   old_status text,
@@ -252,7 +276,7 @@ create index if not exists invoice_audit_events_type_idx
   on public.invoice_audit_events (event_type, created_at desc);
 
 create table if not exists public.financial_documents (
-  id uuid primary key default gen_random_uuid(),
+  id uuid primary key default public.generate_bank_transfer_uuid(),
   document_type text not null,
   invoice_id uuid references public.invoices(id) on delete restrict,
   receipt_id uuid references public.receipts(id) on delete restrict,
