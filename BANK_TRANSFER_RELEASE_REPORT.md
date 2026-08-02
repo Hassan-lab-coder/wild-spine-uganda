@@ -3,7 +3,8 @@
 Date: 2026-08-02  
 Branch: `codex/bank-transfer-trust`  
 Deployment status: not deployed  
-Migration status: not applied to production
+Migration status: not applied to production  
+Backup status: production pre-migration backup created and checksum-verified on 2026-08-02
 
 ## Summary
 
@@ -89,9 +90,45 @@ Alertable events now include:
 - beneficiary matches legal entity;
 - no `NEXT_PUBLIC_BANK_TRANSFER_*` env vars.
 
+## Backup and dry-run status
+
+Completed on 2026-08-02:
+
+- Backup ID: `20260802-130120-bank-transfer-pre-migration`
+- Backup location: `C:\Users\Yoga\wildspine-backups\20260802-130120-bank-transfer-pre-migration`
+- Backup files:
+  - `schema-public.sql` — 24,924 bytes
+  - `data-public.sql` — 1,718,895 bytes
+  - `roles.sql` — 297 bytes
+  - `manifest.json`
+  - `SHA256SUMS.txt`
+- SHA-256 verification: passed.
+- Backup was stored outside the repository and should not be committed or uploaded to an unapproved service.
+- Safe row-count summary from the data dump:
+  - `admin_users`: 1
+  - `analytics_events`: 1,979
+  - `email_automation_events`: 16
+  - `guide_leads`: 6
+  - `inbound_emails`: 29
+  - `invoices`: 7
+  - `itinerary_requests`: 31
+  - `payment_requests`: 6
+  - `payment_webhook_events`: 16
+  - `receipts`: 1
+  - `volunteer_applications`: 0
+- Supabase dry-run result: `npx supabase db push --linked --dry-run` reported exactly one pending migration, `202608020001_bank_transfer_booking_controls.sql`; no migration was pushed.
+
+Operational note: `npx supabase db dump --linked --dry-run` prints connection credentials into terminal output. Treat local terminal/session logs as sensitive and rotate the database password after the migration window.
+
+Invalid backup placeholders were created before Docker was ready:
+
+- `C:\Users\Yoga\wildspine-backups\20260802-124450-bank-transfer-pre-migration`
+- `C:\Users\Yoga\wildspine-backups\20260802-124919-bank-transfer-pre-migration`
+
+Those folders contain zero-byte dump files and must not be used as backups.
+
 ## Unresolved blockers before production
 
-- Production backup has not been created in this run.
 - Restore test has not been performed in this run.
 - Staging migration has not been applied in this run.
 - Production migration has not been applied.
