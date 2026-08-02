@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import type { Database } from "@/lib/supabase";
+import { sendOperationalAlert } from "@/lib/logger";
 import { bearerToken } from "@/lib/server-validation";
 
 type AutomationEvent = Database["public"]["Tables"]["email_automation_events"]["Row"];
@@ -50,6 +51,14 @@ export async function POST(request: Request) {
   for (const event of events || []) {
     const result = await sendAutomationEmail(supabase, event);
     results.push({ id: event.id, ...result });
+    if (!result.ok) {
+      await sendOperationalAlert("email_delivery_failure", {
+        eventId: event.id,
+        eventType: event.event_type,
+        leadTable: event.lead_table,
+        reason: result.reason,
+      });
+    }
 
     await supabase
       .from("email_automation_events")
@@ -160,6 +169,7 @@ Wild Spine Uganda`,
   const request = lead as ItineraryRequest;
   const name = request.name || "there";
   const route = request.route || "your Uganda journey";
+  const invoiceNumber = typeof event.metadata?.invoice_number === "string" ? event.metadata.invoice_number : "your Wild Spine invoice";
 
   if (event.event_type === "instant_acknowledgement") {
     return {
@@ -175,6 +185,128 @@ For faster planning, you can reply with:
 - Flexible or fixed dates
 - Preferred comfort level
 - Must-see experiences
+
+Warmly,
+Wild Spine Uganda`,
+    };
+  }
+
+  if (event.event_type === "proposal_sent") {
+    return {
+      subject: `Your Wild Spine Uganda proposal for ${route}`,
+      text: `Hi ${name},
+
+Your Wild Spine Uganda proposal is ready for review.
+
+Please check the written itinerary, itemised quotation, inclusions, exclusions, cancellation notes, and suggested next steps before approving anything financially.
+
+No payment is requested until you approve the itinerary and receive a numbered invoice.
+
+Warmly,
+Wild Spine Uganda`,
+    };
+  }
+
+  if (event.event_type === "invoice_issued") {
+    return {
+      subject: `Invoice issued: ${invoiceNumber}`,
+      text: `Hi ${name},
+
+Wild Spine Uganda has issued ${invoiceNumber} for ${route}.
+
+Please review the itinerary, itemised quotation, due dates, cancellation terms, and beneficiary legal name before transferring funds.
+
+Payments are accepted only by transfer to the official company bank account stated on the authorised invoice. Do not pay a personal account or social-media payment request.
+
+Warmly,
+Wild Spine Uganda`,
+    };
+  }
+
+  if (event.event_type === "transfer_instructions") {
+    return {
+      subject: `Bank-transfer instructions for ${invoiceNumber}`,
+      text: `Hi ${name},
+
+Your bank-transfer instructions are provided only on the authorised Wild Spine Uganda invoice or approved booking thread.
+
+Before transferring:
+- confirm the invoice number;
+- confirm the beneficiary name matches the legal entity on the invoice;
+- quote the invoice reference exactly;
+- contact us through the official website details if anything looks different.
+
+A transfer advice or screenshot is not proof of payment. Finance confirms receipt only after bank reconciliation.
+
+Warmly,
+Wild Spine Uganda`,
+    };
+  }
+
+  if (event.event_type === "transfer_under_verification") {
+    return {
+      subject: `Transfer under verification: ${invoiceNumber}`,
+      text: `Hi ${name},
+
+Thank you. Your transfer information for ${invoiceNumber} is under finance verification.
+
+This does not yet confirm payment. Wild Spine Uganda confirms receipt only after the funds appear in the official company bank account and are reconciled against the invoice reference.
+
+Warmly,
+Wild Spine Uganda`,
+    };
+  }
+
+  if (event.event_type === "deposit_received") {
+    return {
+      subject: `Deposit received for ${route}`,
+      text: `Hi ${name},
+
+Wild Spine Uganda finance has reconciled your deposit for ${route}.
+
+Our operations team will continue with the agreed reservation steps and will send written updates for permits, lodges, transfers, and any remaining balance.
+
+Warmly,
+Wild Spine Uganda`,
+    };
+  }
+
+  if (event.event_type === "booking_confirmed") {
+    return {
+      subject: `Booking confirmed: ${route}`,
+      text: `Hi ${name},
+
+Your Wild Spine Uganda booking for ${route} is confirmed in writing.
+
+Please keep your itinerary, invoice, receipt, emergency contacts, and booking terms together. Our team will continue supporting the journey through pre-trip preparation and arrival.
+
+Warmly,
+Wild Spine Uganda`,
+    };
+  }
+
+  if (event.event_type === "balance_reminder") {
+    return {
+      subject: `Balance reminder for ${route}`,
+      text: `Hi ${name},
+
+This is a reminder to review the balance due date for ${route}.
+
+Please use only the official company-bank instructions on your authorised invoice and quote the invoice reference exactly. If anything about the bank details appears to have changed, verify through the contact details published on wildspineuganda.com before transferring.
+
+Warmly,
+Wild Spine Uganda`,
+    };
+  }
+
+  if (event.event_type === "receipt_issued") {
+    return {
+      subject: `Receipt issued for ${invoiceNumber}`,
+      text: `Hi ${name},
+
+Wild Spine Uganda has issued a receipt linked to ${invoiceNumber}.
+
+Receipts are issued only after authorised bank reconciliation. Please keep the receipt with your itinerary and invoice records.
 
 Warmly,
 Wild Spine Uganda`,

@@ -11,8 +11,11 @@ export const analyticsEventNames = [
   "thank_you_viewed",
   "lead_qualified",
   "quote_sent",
+  "invoice_issued",
   "deposit_requested",
-  "offline_payment_pending",
+  "bank_transfer_under_verification",
+  "deposit_received",
+  "receipt_issued",
   "booking_confirmed",
 ] as const;
 

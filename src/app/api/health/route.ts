@@ -1,11 +1,14 @@
 import { createClient } from "@supabase/supabase-js";
 import { Redis } from "@upstash/redis";
 import { NextResponse } from "next/server";
+import { bankTransferBookingsEnabled } from "@/lib/bank-transfer";
 import { paymentsEnabled } from "@/lib/payment-guard";
+import { safeBankingConfigStatus } from "@/lib/server-banking-config";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const bankingStatus = safeBankingConfigStatus();
   const checks = {
     database: false,
     durable_rate_limit: false,
@@ -18,6 +21,11 @@ export async function GET() {
       process.env.LEAD_NOTIFICATION_EMAIL
     ),
     payments_enabled: paymentsEnabled(),
+    payment_method_bank_transfer: (process.env.PAYMENT_METHOD || "bank_transfer") === "bank_transfer",
+    bank_transfer_bookings_enabled: bankTransferBookingsEnabled(),
+    banking_config_complete: bankingStatus.complete,
+    bank_beneficiary_matches_legal_entity: bankingStatus.beneficiary_matches_legal_entity,
+    no_public_bank_transfer_env: Object.keys(process.env).every((key) => !/^NEXT_PUBLIC_BANK_TRANSFER_/.test(key)),
   };
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -48,7 +56,12 @@ export async function GET() {
     checks.turnstile_required &&
     checks.cron_secret &&
     checks.operational_alerts &&
-    !checks.payments_enabled;
+    !checks.payments_enabled &&
+    checks.payment_method_bank_transfer &&
+    checks.bank_transfer_bookings_enabled &&
+    checks.banking_config_complete &&
+    checks.bank_beneficiary_matches_legal_entity &&
+    checks.no_public_bank_transfer_env;
   return NextResponse.json(
     {
       status: healthy ? "healthy" : "degraded",

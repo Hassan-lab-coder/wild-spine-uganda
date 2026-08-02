@@ -10,6 +10,7 @@ const navItems = [
   ["Retreats", "/corporate-retreats"],
   ["Impact", "/conservation-membership"],
   ["Guide", "/guide"],
+  ["Trust", "/why-wild-spine"],
   ["About", "/about"],
 ] as const;
 

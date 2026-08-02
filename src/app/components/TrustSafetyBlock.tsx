@@ -1,8 +1,9 @@
 const assurances = [
-  "Licensed and experienced local guides",
+  "Licensed guide credentials and business registrations are shown only after verification",
   "Permit handling through official channels",
-  "Structured itineraries with full support",
-  "Designed for international travelers",
+  "Numbered invoices before any company-bank transfer",
+  "No personal-account or social-media payments",
+  "Payment confirmed only after bank reconciliation",
 ];
 
 export default function TrustSafetyBlock() {
@@ -19,7 +20,7 @@ export default function TrustSafetyBlock() {
         <div className="grid gap-4 sm:grid-cols-2">
           {assurances.map((item) => (
             <div key={item} className="rounded-lg border border-white/12 bg-white/8 p-5">
-              <p className="text-xs font-black uppercase tracking-widest text-[#f5b416]">Verified</p>
+              <p className="text-xs font-black uppercase tracking-widest text-[#f5b416]">Safeguard</p>
               <p className="mt-2 font-bold leading-7 text-white/82">{item}</p>
             </div>
           ))}

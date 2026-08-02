@@ -1,3 +1,5 @@
+import BookingConfidencePanel from "../components/BookingConfidencePanel";
+
 type TourConversionSectionsProps = {
   tourName: string;
   proof: string;
@@ -92,6 +94,9 @@ export default function TourConversionSections({
               <p className="mt-4 leading-7 text-gray-400">{answer}</p>
             </details>
           ))}
+        </div>
+        <div className="mt-8">
+          <BookingConfidencePanel tone="dark" />
         </div>
         <a
           href={inquiryHref}

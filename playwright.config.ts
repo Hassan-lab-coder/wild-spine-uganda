@@ -16,6 +16,9 @@ export default defineConfig({
     timeout: 120_000,
     env: {
       ...process.env,
+      PAYMENTS_ENABLED: "false",
+      PAYMENT_METHOD: "bank_transfer",
+      BANK_TRANSFER_BOOKINGS_ENABLED: "true",
       TURNSTILE_REQUIRED: "true",
       NEXT_PUBLIC_TURNSTILE_SITE_KEY: "1x00000000000000000000AA",
       TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
