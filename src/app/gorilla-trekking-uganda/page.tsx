@@ -21,6 +21,40 @@ export default function GorillaTrekkingUgandaPage() {
       route="The Spine Explorer"
       cta="Request Your Gorilla Trek Plan"
       bullets={["Permit timing guidance before you commit", "Bwindi route and lodge support by sector", "Private driver and guide coordination", "Optional safari, lake, or Rwenzori extensions"]}
+      videoFeature={{
+        title: "Forest guidance, before the trek",
+        eyebrow: "Guide clip",
+        description: "A natural guide clip makes the planning feel more human and prepares travelers for the park-day rhythm.",
+        src: "/video/organic/guide-forest-note.mp4",
+        poster: "/images/organic/video-guide-forest-poster.webp",
+        label: "Guide speaking on a Uganda forest trail before a gorilla trekking experience",
+      }}
+      mediaGallery={[
+        {
+          title: "Forest guidance",
+          image: "/images/travel/ranger-briefing.jpg",
+          imageAlt: "Uganda ranger briefing travelers before a forest trek",
+          caption: "Gorilla days are structured through park procedures, briefing discipline, and guide support.",
+        },
+        {
+          title: "Sector-based lodge comfort",
+          image: "/images/organic/suite-bed-net.webp",
+          imageAlt: "Comfortable Uganda lodge bed with mosquito net",
+          caption: "The right lodge base depends on permit sector, route logic, and the guest comfort level.",
+        },
+        {
+          title: "Private route recovery",
+          image: "/images/organic/lodge-dining-sunset.webp",
+          imageAlt: "Outdoor lodge dining terrace at sunset",
+          caption: "A good short gorilla journey leaves time to breathe after the forest.",
+        },
+        {
+          title: "Wild route context",
+          image: "/images/organic/elephant-near-lodge.webp",
+          imageAlt: "Elephant moving near a Uganda lodge area",
+          caption: "Safari extensions can add wildlife variety when they fit the route instead of crowding it.",
+        },
+      ]}
       timeline={[
         ["Step 1", "Tell us your month, group size, fitness comfort, and whether gorilla trekking is the main reason for travel."],
         ["Step 2", "We review Bwindi or Mgahinga permit timing, likely sectors, lodge base logic, and transfer flow before shaping the route."],

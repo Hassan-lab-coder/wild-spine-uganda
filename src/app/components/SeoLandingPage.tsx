@@ -3,6 +3,7 @@ import JsonLd from "./JsonLd";
 import CtaNextStepNote from "./CtaNextStepNote";
 import TrustSafetyBlock from "./TrustSafetyBlock";
 import BookingConfidencePanel from "./BookingConfidencePanel";
+import OrganicVideoCard from "./OrganicVideoCard";
 
 type SeoLandingPageProps = {
   title: string;
@@ -15,6 +16,20 @@ type SeoLandingPageProps = {
   cta: string;
   route?: string;
   timeline?: Array<[string, string]>;
+  mediaGallery?: Array<{
+    title: string;
+    image: string;
+    imageAlt: string;
+    caption: string;
+  }>;
+  videoFeature?: {
+    title: string;
+    eyebrow: string;
+    description: string;
+    src: string;
+    poster: string;
+    label: string;
+  };
 };
 
 export default function SeoLandingPage({
@@ -27,6 +42,8 @@ export default function SeoLandingPage({
   faqs,
   cta,
   route,
+  mediaGallery,
+  videoFeature,
   timeline = [
     ["Step 1", "Share your travel month, group size, comfort level, and must-see experiences."],
     ["Step 2", "We check route logic, permit timing, lodge fit, and transfer reality before quoting."],
@@ -91,6 +108,47 @@ export default function SeoLandingPage({
           <BookingConfidencePanel tone="dark" />
         </div>
       </section>
+
+      {(mediaGallery?.length || videoFeature) && (
+        <section className="border-t border-white/10 px-6 py-24 md:px-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 max-w-3xl">
+              <p className="section-kicker">Field media</p>
+              <h2 className="mt-3 text-4xl font-black md:text-5xl">
+                Real textures from the route, not generic brochure filler.
+              </h2>
+              <p className="mt-5 leading-8 text-gray-400">
+                Photos and clips are used to show terrain, comfort, pacing, and route feeling before a traveler commits.
+              </p>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+              {videoFeature && <OrganicVideoCard {...videoFeature} dark />}
+              {mediaGallery?.length ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {mediaGallery.map((item) => (
+                    <figure key={item.image} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06]">
+                      <div className="relative h-72 overflow-hidden">
+                        <Image
+                          src={item.image}
+                          alt={item.imageAlt}
+                          fill
+                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                          className="object-cover transition duration-700 group-hover:scale-105"
+                        />
+                      </div>
+                      <figcaption className="p-5">
+                        <h3 className="font-black">{item.title}</h3>
+                        <p className="mt-2 text-sm leading-6 text-gray-400">{item.caption}</p>
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="border-t border-white/10 px-6 py-24 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">

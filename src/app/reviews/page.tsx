@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
+import OrganicVideoCard from "../components/OrganicVideoCard";
 
 export const metadata = seoMetadata({
   title: "Traveler Reviews & Private Trip Feedback",
   description:
     "Read Wild Spine Uganda traveler feedback and practical guidance for verifying gorilla trekking, Rwenzori, and private safari planning.",
   path: "/reviews",
-  image: "/images/travel/ranger-briefing.jpg",
+  image: "/images/organic/rwenzori-team-entrance.webp",
   keywords: ["Wild Spine Uganda reviews", "Uganda tour operator reviews", "gorilla trekking reviews"],
 });
 
@@ -75,6 +76,12 @@ const verificationSteps = [
   "Use documented payment steps and keep invoices or receipts for every payment.",
 ];
 
+const proofMoments = [
+  ["Permit days", "/images/travel/ranger-briefing.jpg", "Uganda ranger briefing travelers before a forest trek", "Travelers remember the trek, but trust is built in the planning before it."],
+  ["Trail days", "/images/organic/rwenzori-green-trail-steps.webp", "Green Rwenzori trail steps through dense vegetation", "Mountain routes need clear pacing, guide support, and realistic expectations."],
+  ["Recovery days", "/images/organic/suite-view-bed.webp", "Comfortable Uganda lodge room with bed net and view", "Good itineraries leave room for weather, rest, and the journey back down."],
+];
+
 export default function ReviewsPage() {
   return (
     <main className="min-h-screen bg-black text-white">
@@ -108,11 +115,7 @@ export default function ReviewsPage() {
 
       <section className="px-6 py-20 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-3">
-          {[
-            ["Permit days", "/images/travel/ranger-briefing.jpg", "Uganda ranger briefing travelers before a forest trek", "Travelers remember the trek, but trust is built in the planning before it."],
-            ["Trail days", "/images/travel/boardwalk-trek.jpg", "Hikers crossing a wooden boardwalk in the Rwenzori Mountains", "Mountain routes need clear pacing, guide support, and realistic expectations."],
-            ["Recovery days", "/images/travel/lake-boat.webp", "Travelers crossing a calm Uganda lake by boat", "Good itineraries leave room for weather, rest, and the journey back down."],
-          ].map(([title, image, imageAlt, caption]) => (
+          {proofMoments.map(([title, image, imageAlt, caption]) => (
             <figure key={title} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5">
               <div className="relative h-80 overflow-hidden">
                 <Image src={image} alt={imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
@@ -124,6 +127,50 @@ export default function ReviewsPage() {
               <p className="p-5 text-sm leading-6 text-gray-400">{caption}</p>
             </figure>
           ))}
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-[#050605] px-6 py-24 md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 max-w-3xl">
+            <p className="section-kicker">What the notes point to</p>
+            <h2 className="mt-3 text-4xl font-black md:text-5xl">
+              Organic clips make the feedback feel less abstract.
+            </h2>
+            <p className="mt-5 leading-8 text-gray-400">
+              These are field-context clips, not public-platform review proof. Third-party review links should only be added after verification.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            <OrganicVideoCard
+              dark
+              eyebrow="Safari road"
+              title="Guests meeting the plains"
+              description="A natural safari-road moment that supports the feeling behind traveler notes."
+              src="/video/organic/safari-giraffe-drive.mp4"
+              poster="/images/organic/video-safari-giraffe-poster.webp"
+              label="Short safari road video with giraffe and travelers"
+            />
+            <OrganicVideoCard
+              dark
+              eyebrow="Park movement"
+              title="Private vehicle context"
+              description="Simple park-road footage helps visitors picture the day-to-day movement between sightings."
+              src="/video/organic/park-road-elephant.mp4"
+              poster="/images/organic/video-park-road-poster.webp"
+              label="Short Uganda park road video with safari vehicle and elephant"
+            />
+            <OrganicVideoCard
+              dark
+              eyebrow="Mountain route"
+              title="Rwenzori bridge texture"
+              description="A short trail clip gives mountain feedback more grounding and specificity."
+              src="/video/organic/rwenzori-suspension-bridge.mp4"
+              poster="/images/organic/video-rwenzori-bridge-poster.webp"
+              label="Short Rwenzori suspension bridge crossing video"
+            />
+          </div>
         </div>
       </section>
 

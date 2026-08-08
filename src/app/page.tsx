@@ -11,6 +11,7 @@ import CtaNextStepNote from "./components/CtaNextStepNote";
 import TrustSafetyBlock from "./components/TrustSafetyBlock";
 import BookingConfidencePanel from "./components/BookingConfidencePanel";
 import PlanWithConfidence from "./components/PlanWithConfidence";
+import OrganicVideoCard from "./components/OrganicVideoCard";
 
 const tours = [
   {
@@ -282,6 +283,105 @@ const ecosystemLogos = [
   { name: "Association of Uganda Tour Operators", initials: "AUTO", note: "Tour operator network" },
 ];
 
+const planningPageLinks = [
+  {
+    eyebrow: "Trust",
+    title: "Why Wild Spine",
+    desc: "Legal identity placeholders, team proof, permit handling, supplier standards, support procedures, and complaint steps.",
+    href: "/why-wild-spine",
+    cta: "Open trust page",
+  },
+  {
+    eyebrow: "Payments",
+    title: "Payment information",
+    desc: "Company-bank transfer process, beneficiary checks, references, bank charges, reconciliation timing, and anti-fraud rules.",
+    href: "/payment-information",
+    cta: "Read safeguards",
+  },
+  {
+    eyebrow: "Terms",
+    title: "Booking terms",
+    desc: "How written itineraries, itemised quotations, numbered invoices, cancellations, and booking responsibilities work.",
+    href: "/terms",
+    cta: "View terms",
+  },
+  {
+    eyebrow: "Refunds",
+    title: "Refund policy",
+    desc: "Refund handling, non-refundable supplier items, admin approval, and why payments are reconciled before receipts.",
+    href: "/refund-policy",
+    cta: "Review policy",
+  },
+  {
+    eyebrow: "Proof",
+    title: "Reviews",
+    desc: "Traveler confidence signals and feedback while third-party proof and credentials are added only after verification.",
+    href: "/reviews",
+    cta: "Read reviews",
+  },
+  {
+    eyebrow: "Contact",
+    title: "Official contact",
+    desc: "Use the official website, email, WhatsApp, and Kampala P.O. Box details before trusting any payment instruction.",
+    href: "/contact",
+    cta: "Contact Wild Spine",
+  },
+];
+
+const fieldProofImages = [
+  {
+    title: "Rwenzori team at the trail gate",
+    image: "/images/organic/rwenzori-team-entrance.webp",
+    imageAlt: "Rwenzori hiking team standing at a trail entrance in Uganda",
+    caption: "Real groups, real trailheads, and the start of the mountain rhythm.",
+  },
+  {
+    title: "Lodge comfort after long routes",
+    image: "/images/organic/suite-view-bed.webp",
+    imageAlt: "Comfortable Uganda lodge suite with mosquito net and balcony view",
+    caption: "Accommodation should support the journey, not just fill a night on the itinerary.",
+  },
+  {
+    title: "Suspension bridges and mountain forests",
+    image: "/images/organic/rwenzori-suspension-bridge.webp",
+    imageAlt: "Hiker crossing a suspension bridge in the Rwenzori Mountains",
+    caption: "The mountain is practical, wet, beautiful, and very real underfoot.",
+  },
+  {
+    title: "Giant lobelia country",
+    image: "/images/organic/rwenzori-lobelia-valley.webp",
+    imageAlt: "Giant lobelia plants in a Rwenzori mountain valley",
+    caption: "Specific field textures make the story feel lived-in rather than stock.",
+  },
+];
+
+const fieldProofVideos = [
+  {
+    title: "Safari road moment",
+    eyebrow: "Wildlife clip",
+    description: "A short, organic park-road moment with guests in the vehicle and giraffe on the plains.",
+    src: "/video/organic/safari-giraffe-drive.mp4",
+    poster: "/images/organic/video-safari-giraffe-poster.webp",
+    label: "Short Uganda safari road video with giraffe and travelers",
+  },
+  {
+    title: "Guide voice in the forest",
+    eyebrow: "People proof",
+    description: "A guide-style field clip adds a human voice to the brand without making unsupported claims.",
+    src: "/video/organic/guide-forest-note.mp4",
+    poster: "/images/organic/video-guide-forest-poster.webp",
+    label: "Short forest guide video from a Uganda trail",
+  },
+  {
+    title: "Rwenzori bridge crossing",
+    eyebrow: "Trail proof",
+    description: "A practical glimpse of Rwenzori trail conditions, useful for travelers deciding if the mountain fits.",
+    src: "/video/organic/rwenzori-suspension-bridge.mp4",
+    poster: "/images/organic/video-rwenzori-bridge-poster.webp",
+    label: "Short Rwenzori suspension bridge crossing video",
+  },
+];
+
 export default function Home() {
   return (
     <Suspense fallback={<main className="min-h-screen bg-black text-white" />}>
@@ -409,8 +509,9 @@ function HomeContent() {
 <a href="/tours" className="nav-link">Tours</a>
           <a href="/corporate-retreats" className="nav-link">Retreats</a>
           <a href="/conservation-membership" className="nav-link">Impact</a>
+          <a href="/why-wild-spine" className="nav-link">Trust</a>
+          <a href="/payment-information" className="nav-link">Payments</a>
           <a href="/about" className="nav-link">About</a>
-          <a href="#why" className="nav-link">Why Us</a>
           <a href="#book" className="bg-[#f5b416] text-black px-5 py-3 rounded-full font-black hover:bg-[#ffd766] transition">
             Plan Trip
           </a>
@@ -494,10 +595,6 @@ function HomeContent() {
         </div>
       </section>
 
-      <PlanWithConfidence />
-
-      <ConversionTrustStrip />
-
       <section className="bg-[#f8f4e8] px-6 py-24 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
@@ -557,6 +654,113 @@ function HomeContent() {
           <a href="#book" className="shrink-0 rounded-full bg-[#f5b416] px-8 py-4 text-center font-black text-black transition hover:bg-[#ffd766]">
             Request a Route Review
           </a>
+        </div>
+      </section>
+
+      <section className="border-y border-[#d8cda9] bg-[#fff9ea] px-6 py-20 md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="section-kicker">Essential planning pages</p>
+              <h2 className="mt-3 text-3xl font-black leading-tight text-[#123a2a] md:text-5xl">
+                Everything careful travelers should check before booking.
+              </h2>
+            </div>
+            <p className="max-w-2xl leading-7 text-[#68746a]">
+              These pages keep the important trust, payment, terms, and contact details easy to find
+              without crowding the first hero section.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {planningPageLinks.map((page) => (
+              <a
+                key={page.href}
+                href={page.href}
+                className="group rounded-3xl border border-[#d8cda9] bg-white/75 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#f5b416] hover:bg-white hover:shadow-xl"
+              >
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-[#b8860b]">{page.eyebrow}</p>
+                <h3 className="mt-3 text-2xl font-black text-[#123a2a]">{page.title}</h3>
+                <p className="mt-4 min-h-24 text-sm leading-6 text-[#68746a]">{page.desc}</p>
+                <p className="mt-6 text-sm font-black uppercase tracking-widest text-[#b8860b] transition group-hover:text-[#123a2a]">
+                  {page.cta} -&gt;
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#f8f4e8] px-6 py-24 md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="section-kicker">Field proof</p>
+              <h2 className="mt-3 text-4xl font-black leading-tight text-[#123a2a] md:text-6xl">
+                See the real rhythm behind the journey.
+              </h2>
+            </div>
+            <p className="max-w-3xl text-lg leading-8 text-[#68746a]">
+              Travelers trust what feels specific: forest briefings, trail conditions, guides, local culture,
+              and the small practical details that make Uganda feel understood before they book.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="overflow-hidden rounded-[2rem] border border-[#d8cda9] bg-[#123a2a] shadow-xl">
+              <div className="relative aspect-video bg-black">
+                <video
+                  className="h-full w-full object-cover"
+                  controls
+                  muted
+                  playsInline
+                  preload="metadata"
+                  poster="/images/travel/bwindi-trek-ranger-guests.jpg"
+                  aria-label="Wild Spine Uganda field video showing private Uganda travel atmosphere"
+                >
+                  <source src="/video/wildspine-hero.mp4" type="video/mp4" />
+                  Your browser does not support embedded video. Contact Wild Spine Uganda for current field clips.
+                </video>
+              </div>
+              <div className="p-6 text-white md:p-8">
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f5b416]">Short field clip</p>
+                <h3 className="mt-3 text-3xl font-black">A more human first impression.</h3>
+                <p className="mt-4 leading-7 text-white/72">
+                  Keep adding real phone-shot clips from briefings, trailheads, lodge arrivals, and guide introductions.
+                  That is the material that makes Wild Spine feel alive and trustworthy.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              {fieldProofImages.map((item) => (
+                <figure
+                  key={item.title}
+                  className="group grid gap-4 rounded-3xl border border-[#d8cda9] bg-white/75 p-4 shadow-sm transition duration-300 hover:border-[#f5b416] hover:bg-white md:grid-cols-[0.85fr_1.15fr] lg:grid-cols-[0.85fr_1.15fr]"
+                >
+                  <div className="relative min-h-44 overflow-hidden rounded-2xl">
+                    <Image
+                      src={item.image}
+                      alt={item.imageAlt}
+                      fill
+                      sizes="(min-width: 1024px) 18vw, (min-width: 768px) 40vw, 100vw"
+                      className="object-cover transition duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <figcaption className="self-center">
+                    <p className="text-lg font-black text-[#123a2a]">{item.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-[#68746a]">{item.caption}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-5 md:grid-cols-3">
+            {fieldProofVideos.map((clip) => (
+              <OrganicVideoCard key={clip.src} {...clip} />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -886,6 +1090,10 @@ function HomeContent() {
     </div>
   </div>
 </section>
+
+<PlanWithConfidence />
+
+<ConversionTrustStrip />
 
 <section className="py-20 px-6 md:px-24 bg-[#fff9ea] border-t border-[#d8cda9]">
 
