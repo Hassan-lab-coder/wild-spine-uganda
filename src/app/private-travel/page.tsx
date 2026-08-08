@@ -1,16 +1,40 @@
 import { seoMetadata } from "@/lib/seo";
 import Image from "next/image";
+import OrganicVideoCard from "../components/OrganicVideoCard";
 
 export const metadata = seoMetadata({
   title: "Private Uganda Travel | Tailored Gorilla & Safari Planning",
   description:
     "Plan private Uganda travel with tailored gorilla trekking, Rwenzori hiking, luxury safari routing, local support, and clear communication.",
   path: "/private-travel",
-  image: "/images/travel/lake-boat.webp",
+  image: "/images/organic/lodge-aerial-wilderness.webp",
   keywords: ["private Uganda travel", "private Uganda safari", "gorilla trekking Uganda", "luxury Africa travel"],
 });
 
 export default function PrivateTravelPage() {
+  const lodgePhotos = [
+    {
+      title: "Wilderness lodge setting",
+      image: "/images/organic/lodge-aerial-wilderness.webp",
+      alt: "Aerial view of Uganda wilderness lodge and swimming pool",
+    },
+    {
+      title: "Pool deck recovery",
+      image: "/images/organic/lodge-pool-deck.webp",
+      alt: "Uganda lodge pool deck surrounded by green landscape",
+    },
+    {
+      title: "Suite comfort",
+      image: "/images/organic/suite-view-bed.webp",
+      alt: "Comfortable Uganda lodge room with bed net and balcony view",
+    },
+    {
+      title: "Dining with a view",
+      image: "/images/organic/lodge-dining-sunset.webp",
+      alt: "Outdoor lodge dining terrace at sunset in Uganda",
+    },
+  ];
+
   const pillars = [
     {
       title: "Private Pacing",
@@ -34,8 +58,8 @@ export default function PrivateTravelPage() {
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <Image
-          src="/images/travel/lake-boat.webp"
-          alt="Travelers crossing a calm Uganda lake by boat"
+          src="/images/organic/lodge-aerial-wilderness.webp"
+          alt="Aerial view of a private Uganda lodge in a wilderness setting"
           fill
           priority
           sizes="100vw"
@@ -87,6 +111,54 @@ export default function PrivateTravelPage() {
                 <p className="text-gray-400 leading-7">{item.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-[#050605] px-6 py-24 md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="section-kicker">Lodge proof</p>
+              <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
+                Comfort is part of the route design.
+              </h2>
+            </div>
+            <p className="max-w-3xl text-lg leading-8 text-gray-400">
+              Private travel feels premium when the nights make sense: location, recovery, views,
+              and comfort matched to the pace of the journey.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+            <OrganicVideoCard
+              dark
+              eyebrow="Lodge clip"
+              title="A real look at the stay experience"
+              description="A short lodge walkthrough gives travelers a more honest feel for comfort than a single polished room shot."
+              src="/video/organic/lodge-walkthrough.mp4"
+              poster="/images/organic/video-lodge-walkthrough-poster.webp"
+              label="Short Uganda lodge walkthrough video"
+            />
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {lodgePhotos.map((photo) => (
+                <figure key={photo.image} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06]">
+                  <div className="relative h-64 overflow-hidden">
+                    <Image
+                      src={photo.image}
+                      alt={photo.alt}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <figcaption className="p-5">
+                    <p className="font-black">{photo.title}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
           </div>
         </div>
       </section>

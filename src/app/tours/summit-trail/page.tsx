@@ -1,23 +1,45 @@
 import { seoMetadata } from "@/lib/seo";
 import Image from "next/image";
 import TourConversionSections from "../TourConversionSections";
+import OrganicVideoCard from "../../components/OrganicVideoCard";
 
 export const metadata = seoMetadata({
   title: "The Summit Trail | Gorillas & Rwenzori Hiking Uganda",
   description:
     "A private Uganda journey combining Bwindi gorilla trekking, Rwenzori mountains hiking, alpine valleys, route planning, and premium logistics.",
   path: "/tours/summit-trail",
-  image: "/images/travel/forest-trek.jpg",
+  image: "/images/organic/rwenzori-green-trail-steps.webp",
   keywords: ["Rwenzori mountains hiking", "gorilla trekking Uganda", "Uganda hiking tour", "private Uganda safari"],
 });
 
 export default function SummitTrailPage() {
+  const routeMedia = [
+    {
+      title: "Green trail approaches",
+      image: "/images/organic/rwenzori-green-trail-steps.webp",
+      alt: "Green Rwenzori trail steps through dense vegetation",
+      caption: "The early route is green, wet, and slow enough to reward good pacing.",
+    },
+    {
+      title: "Rwenzori team rhythm",
+      image: "/images/organic/rwenzori-team-entrance.webp",
+      alt: "Rwenzori hiking team standing at a trail entrance",
+      caption: "A private expedition still depends on route teams, handoffs, and support clarity.",
+    },
+    {
+      title: "Lake valley days",
+      image: "/images/organic/rwenzori-lake-valley-hiker.webp",
+      alt: "Hiker standing near a Rwenzori alpine lake valley",
+      caption: "The reward is not just the summit; it is the shift from forest to high valley.",
+    },
+  ];
+
   return (
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <Image
-          src="/images/travel/forest-trek.jpg"
-          alt="Hikers following a forest trail toward the Rwenzori Mountains"
+          src="/images/organic/rwenzori-green-trail-steps.webp"
+          alt="Green Rwenzori trail steps through dense mountain vegetation"
           fill
           priority
           sizes="100vw"
@@ -103,6 +125,48 @@ export default function SummitTrailPage() {
   Chat on WhatsApp
 </a>
 </aside>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-[#050605] px-6 py-24 md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="section-kicker">Route media</p>
+              <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
+                The Summit Trail should feel real before it feels easy.
+              </h2>
+            </div>
+            <p className="max-w-3xl text-lg leading-8 text-gray-400">
+              These are the details that help a traveler understand the route: bridges, wet vegetation,
+              mountain teams, and high valleys.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+            <OrganicVideoCard
+              dark
+              eyebrow="Trail clip"
+              title="Bridge crossing in the Rwenzori"
+              description="A short clip from the mountain route shows why the journey needs practical preparation, not vague adventure language."
+              src="/video/organic/rwenzori-suspension-bridge.mp4"
+              poster="/images/organic/video-rwenzori-bridge-poster.webp"
+              label="Rwenzori bridge crossing video for The Summit Trail"
+            />
+            <div className="grid gap-4 md:grid-cols-3">
+              {routeMedia.map((item) => (
+                <figure key={item.image} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06]">
+                  <div className="relative h-72 overflow-hidden">
+                    <Image src={item.image} alt={item.alt} fill sizes="(min-width: 1024px) 22vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+                  </div>
+                  <figcaption className="p-5">
+                    <h3 className="font-black">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-gray-400">{item.caption}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

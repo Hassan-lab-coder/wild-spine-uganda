@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
+import OrganicVideoCard from "../components/OrganicVideoCard";
 
 export const metadata = seoMetadata({
   title: "Why Trust Wild Spine Uganda?",
@@ -34,6 +35,27 @@ const bookingControls = [
   "Finance must match bank transaction reference, sender, amount, currency, value date, and invoice reference.",
   "Corrections, refunds, and disputed statuses require admin-level review.",
   "Payment status changes create audit events for later review.",
+];
+
+const evidenceMedia = [
+  {
+    title: "Trail team visibility",
+    image: "/images/organic/rwenzori-group-trail.webp",
+    alt: "Rwenzori hiking group with local field team on a forest trail",
+    text: "Use real team and traveler field media where permission is confirmed.",
+  },
+  {
+    title: "Park-route preparation",
+    image: "/images/organic/rwenzori-suspension-bridge.webp",
+    alt: "Hiker crossing a suspension bridge in the Rwenzori Mountains",
+    text: "Trust grows when the site shows the terrain that creates planning decisions.",
+  },
+  {
+    title: "Accommodation context",
+    image: "/images/organic/lodge-aerial-wilderness.webp",
+    alt: "Aerial view of Uganda lodge in wilderness setting",
+    text: "Lodge photos should support comfort proof while final supplier names remain quote-specific.",
+  },
 ];
 
 export default function WhyWildSpinePage() {
@@ -71,6 +93,49 @@ export default function WhyWildSpinePage() {
               <p className="mt-4 leading-7 text-[#4c5f51]">{text}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="border-y border-[#d8cda9] bg-[#123a2a] px-6 py-20 text-white md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="section-kicker">Visible evidence</p>
+              <h2 className="mt-3 text-4xl font-black md:text-5xl">
+                Real media supports trust, but does not replace verification.
+              </h2>
+            </div>
+            <p className="max-w-3xl leading-8 text-white/72">
+              These field visuals make Wild Spine feel more human and local while the legal, licence,
+              staff, and supplier details remain placeholder-only until officially verified.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+            <OrganicVideoCard
+              dark
+              eyebrow="Guide proof"
+              title="Forest guidance, shown naturally"
+              description="A real field clip helps travelers feel the human side of planning without claiming unverified qualifications."
+              src="/video/organic/guide-forest-note.mp4"
+              poster="/images/organic/video-guide-forest-poster.webp"
+              label="Guide speaking on a Uganda forest trail for Wild Spine trust page"
+            />
+
+            <div className="grid gap-4 md:grid-cols-3">
+              {evidenceMedia.map((item) => (
+                <article key={item.image} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06]">
+                  <div className="relative h-64 overflow-hidden">
+                    <Image src={item.image} alt={item.alt} fill sizes="(min-width: 1024px) 22vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-black">{item.title}</h3>
+                    <p className="mt-3 text-sm leading-6 text-white/65">{item.text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

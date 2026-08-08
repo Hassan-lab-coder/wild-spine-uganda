@@ -1,23 +1,45 @@
 import { seoMetadata } from "@/lib/seo";
 import Image from "next/image";
 import TourConversionSections from "../TourConversionSections";
+import OrganicVideoCard from "../../components/OrganicVideoCard";
 
 export const metadata = seoMetadata({
   title: "Margherita Expedition | Private Rwenzori Summit Planning",
   description:
     "Plan a private Margherita Peak expedition in Uganda's Rwenzori Mountains with premium logistics, mountain preparation, and expert route support.",
   path: "/tours/margherita-expedition",
-  image: "/images/travel/margherita-peak.png",
+  image: "/images/organic/margherita-peak-summit.webp",
   keywords: ["Margherita Peak expedition", "Rwenzori mountains hiking", "Rwenzori expedition", "Uganda trekking"],
 });
 
 export default function MargheritaExpeditionPage() {
+  const summitMedia = [
+    {
+      title: "Margherita summit proof",
+      image: "/images/organic/margherita-peak-summit.webp",
+      alt: "Climber beside the Margherita Peak summit sign in the Rwenzori Mountains",
+      caption: "The summit is serious enough to require early preparation, gear clarity, and contingency thinking.",
+    },
+    {
+      title: "Rock and glacier terrain",
+      image: "/images/organic/rwenzori-rock-climb.webp",
+      alt: "Climber moving across rock terrain in the Rwenzori Mountains",
+      caption: "The route can shift from forest to technical-feeling terrain faster than many travelers expect.",
+    },
+    {
+      title: "Misty mountain windows",
+      image: "/images/organic/rwenzori-sunrise-ridge.webp",
+      alt: "Sunrise above misty Rwenzori mountain ridges",
+      caption: "Weather windows shape the emotional rhythm of a high Rwenzori expedition.",
+    },
+  ];
+
   return (
     <main className="bg-black text-white min-h-screen">
       <section className="relative min-h-screen flex items-center px-6 md:px-24 py-28 overflow-hidden">
         <Image
-          src="/images/travel/margherita-peak.png"
-          alt="Snow-covered Margherita Peak above the Rwenzori mountain valleys"
+          src="/images/organic/margherita-peak-summit.webp"
+          alt="Climber beside the Margherita Peak summit sign in the Rwenzori Mountains"
           fill
           priority
           sizes="100vw"
@@ -50,6 +72,48 @@ export default function MargheritaExpeditionPage() {
           >
             Request This Journey
           </a>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-[#050605] px-6 py-24 md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+            <div>
+              <p className="section-kicker">Summit evidence</p>
+              <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
+                Premium summit planning needs visible mountain reality.
+              </h2>
+            </div>
+            <p className="max-w-3xl text-lg leading-8 text-gray-400">
+              Margherita Peak is not sold as a vague luxury safari add-on. The route needs preparation,
+              altitude humility, gear review, and a realistic weather conversation.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+            <OrganicVideoCard
+              dark
+              eyebrow="Mountain atmosphere"
+              title="Mist moving through the Rwenzori"
+              description="A short atmospheric clip adds the right kind of romance: beautiful, but honest about mountain weather."
+              src="/video/organic/rwenzori-mist-mountains.mp4"
+              poster="/images/organic/video-rwenzori-mist-poster.webp"
+              label="Misty Rwenzori mountain field video for Margherita expedition planning"
+            />
+            <div className="grid gap-4 md:grid-cols-3">
+              {summitMedia.map((item) => (
+                <figure key={item.image} className="group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06]">
+                  <div className="relative h-72 overflow-hidden">
+                    <Image src={item.image} alt={item.alt} fill sizes="(min-width: 1024px) 22vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+                  </div>
+                  <figcaption className="p-5">
+                    <h3 className="font-black">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-gray-400">{item.caption}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

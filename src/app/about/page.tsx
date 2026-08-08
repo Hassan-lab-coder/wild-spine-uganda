@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
+import OrganicVideoCard from "../components/OrganicVideoCard";
 
 const proofPoints = [
   {
@@ -57,6 +58,27 @@ const specialties = [
     image: "/images/travel/safari-elephants.jpg",
     alt: "Uganda safari elephants on a private extension",
     text: "Queen Elizabeth, Murchison Falls, lake days, and cultural stops added with intention, never as filler between the main experiences.",
+  },
+];
+
+const fieldTeamMedia = [
+  {
+    title: "Trail team at the gate",
+    image: "/images/organic/rwenzori-team-entrance.webp",
+    alt: "Rwenzori hiking team standing at a trail entrance",
+    text: "Visible people and trailheads make the brand feel accountable, not anonymous.",
+  },
+  {
+    title: "Group trail support",
+    image: "/images/organic/rwenzori-group-trail.webp",
+    alt: "Rwenzori hiking group and field team on a forest trail",
+    text: "Complex trips depend on the quality of the support team behind the itinerary.",
+  },
+  {
+    title: "Mountain route texture",
+    image: "/images/organic/rwenzori-moss-forest.webp",
+    alt: "Mossy Rwenzori forest with hanging vegetation",
+    text: "Wild Spine should feel rooted in Uganda's real terrain, not a generic luxury promise.",
   },
 ];
 
@@ -147,6 +169,48 @@ export default function AboutPage() {
             <p className="mt-3 max-w-4xl leading-8 text-white/72">
               Gorilla trekking plans are built around official Uganda Wildlife Authority procedures, permit timing, park briefings, and sector logistics, not generic safari assumptions.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-[#050605] px-6 py-24 md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="section-kicker">Seen in the field</p>
+              <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
+                Trust grows when travelers can see the people and places.
+              </h2>
+            </div>
+            <p className="max-w-3xl text-lg leading-8 text-white/68">
+              The next level is founder portraits and named guide profiles. Until those are verified,
+              real trail media helps make the company feel grounded without inventing credentials.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+            <OrganicVideoCard
+              dark
+              eyebrow="Guide clip"
+              title="A human voice from the forest"
+              description="Short, natural guide footage makes the experience feel less abstract and more personal."
+              src="/video/organic/guide-forest-note.mp4"
+              poster="/images/organic/video-guide-forest-poster.webp"
+              label="Guide speaking on a Uganda forest trail"
+            />
+            <div className="grid gap-4 md:grid-cols-3">
+              {fieldTeamMedia.map((item) => (
+                <article key={item.image} className="group overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.05]">
+                  <div className="relative h-72 overflow-hidden">
+                    <Image src={item.image} alt={item.alt} fill sizes="(min-width: 1024px) 22vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-black">{item.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-white/62">{item.text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
