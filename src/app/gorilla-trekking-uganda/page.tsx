@@ -6,7 +6,7 @@ export const metadata = seoMetadata({
   description:
     "Plan private gorilla trekking in Uganda with Bwindi permit guidance, sector advice, lodge planning, safe transfers, and local Wild Spine Uganda expertise.",
   path: "/gorilla-trekking-uganda",
-  image: "/images/travel/forest-silverback-gorilla.gif",
+  image: "/images/field/gorilla-forest-encounter-poster.webp",
   keywords: ["gorilla trekking Uganda", "Bwindi forest experience", "Uganda gorilla permit", "private Uganda safari"],
 });
 
@@ -16,31 +16,30 @@ export default function GorillaTrekkingUgandaPage() {
       kicker="Gorilla trekking Uganda"
       title="Stand face to face with mountain gorillas in Bwindi."
       description="Plan a private gorilla trekking Uganda journey with permit guidance, realistic transfers, carefully matched lodges, and local expertise that makes the forest feel safe, rare, and deeply moving."
-      image="/images/travel/forest-silverback-gorilla.gif"
-      imageAlt="Silverback mountain gorilla resting in Bwindi forest vegetation"
+      image="/images/field/gorilla-forest-encounter-poster.webp"
+      imageAlt="Mountain gorilla in Uganda forest vegetation during a guided trek"
       route="The Spine Explorer"
       cta="Request Your Gorilla Trek Plan"
       bullets={["Permit timing guidance before you commit", "Bwindi route and lodge support by sector", "Private driver and guide coordination", "Optional safari, lake, or Rwenzori extensions"]}
       videoFeature={{
-        title: "Forest guidance, before the trek",
-        eyebrow: "Guide clip",
-        description: "A natural guide clip makes the planning feel more human and prepares travelers for the park-day rhythm.",
-        src: "/video/organic/guide-forest-note.mp4",
-        poster: "/images/organic/video-guide-forest-poster.webp",
-        label: "Guide speaking on a Uganda forest trail before a gorilla trekking experience",
+        title: "Gorilla forest encounter",
+        description: "A quiet preview of the forest experience travelers are preparing for: close, regulated, and deeply memorable.",
+        src: "/video/field/gorilla-forest-encounter.mp4",
+        poster: "/images/field/gorilla-forest-encounter-poster.webp",
+        label: "Silent preview video of a gorilla encounter in Uganda forest",
       }}
       mediaGallery={[
         {
-          title: "Forest guidance",
-          image: "/images/travel/ranger-briefing.jpg",
-          imageAlt: "Uganda ranger briefing travelers before a forest trek",
-          caption: "Gorilla days are structured through park procedures, briefing discipline, and guide support.",
+          title: "Mgahinga park context",
+          image: "/images/field/guide-mgahinga-sign.webp",
+          imageAlt: "Guide standing beside the Mgahinga Gorilla National Park sign",
+          caption: "Recognizable park context helps guests understand where the experience begins.",
         },
         {
-          title: "Sector-based lodge comfort",
-          image: "/images/organic/suite-bed-net.webp",
-          imageAlt: "Comfortable Uganda lodge bed with mosquito net",
-          caption: "The right lodge base depends on permit sector, route logic, and the guest comfort level.",
+          title: "Ranger-station readiness",
+          image: "/images/field/guide-ranger-station.webp",
+          imageAlt: "Guide standing outside a stone ranger station with trekking staff nearby",
+          caption: "The right trek day depends on briefing discipline, route timing, and local coordination.",
         },
         {
           title: "Private route recovery",

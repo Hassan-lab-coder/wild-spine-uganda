@@ -6,7 +6,7 @@ export const metadata = seoMetadata({
   description:
     "Design a private luxury Uganda safari with gorilla trekking, premium lodges, Rwenzori landscapes, private transfers, and careful local planning.",
   path: "/uganda-luxury-safari",
-  image: "/images/organic/lodge-aerial-wilderness.webp",
+  image: "/images/field/murchison-sunset-vehicle.webp",
   keywords: ["Uganda luxury safari", "private Uganda safari", "gorilla trekking Uganda", "luxury Africa travel"],
 });
 
@@ -16,25 +16,24 @@ export default function UgandaLuxurySafariPage() {
       kicker="Uganda luxury safari"
       title="A private Uganda safari for travelers who want depth, not crowds."
       description="Build a premium Uganda safari experience around gorillas, Rwenzori landscapes, private transfers, carefully selected lodges, and clear planning before you commit."
-      image="/images/organic/lodge-aerial-wilderness.webp"
-      imageAlt="Aerial view of a private Uganda wilderness lodge"
+      image="/images/field/murchison-sunset-vehicle.webp"
+      imageAlt="Safari vehicle beside water at sunset in Uganda"
       route="The Summit Trail"
       cta="Start Your Luxury Uganda Plan"
       bullets={["Private itinerary design around your pace", "Premium lodge planning with route logic", "Gorilla and mountain combinations", "Clear communication before booking"]}
       videoFeature={{
-        title: "Safari road feeling",
-        eyebrow: "Park-road clip",
-        description: "A short, organic clip helps travelers picture the private safari rhythm between lodges, plains, and wildlife.",
-        src: "/video/organic/safari-giraffe-drive.mp4",
-        poster: "/images/organic/video-safari-giraffe-poster.webp",
-        label: "Uganda safari road video with giraffe and travelers",
+        title: "Wildlife and water between big days",
+        description: "A short preview of the park rhythm that can sit between gorilla forests, lodge recovery, and mountain routes.",
+        src: "/video/field/murchison-wildlife-water.mp4",
+        poster: "/images/field/murchison-wildlife-water-poster.webp",
+        label: "Silent preview video of wildlife and water scenes in a Uganda national park",
       }}
       mediaGallery={[
         {
-          title: "Wilderness lodge setting",
-          image: "/images/organic/lodge-aerial-wilderness.webp",
-          imageAlt: "Aerial view of Uganda wilderness lodge and swimming pool",
-          caption: "Premium safari planning connects the wild route with the comfort needed between big days.",
+          title: "Safari vehicle access",
+          image: "/images/field/enttiko-safari-vehicle.webp",
+          imageAlt: "Safari vehicle on open Uganda plains",
+          caption: "Premium planning starts with how the route moves, not only where the nights are booked.",
         },
         {
           title: "Suite comfort",
@@ -49,10 +48,10 @@ export default function UgandaLuxurySafariPage() {
           caption: "The premium feeling comes from quiet details, not only headline wildlife moments.",
         },
         {
-          title: "Park-road wildlife",
-          image: "/images/organic/elephant-near-lodge.webp",
-          imageAlt: "Elephant moving near a Uganda lodge area",
-          caption: "Safari extensions work best when lodge location and wildlife movement are planned together.",
+          title: "Murchison Falls context",
+          image: "/images/field/murchison-falls-river.webp",
+          imageAlt: "Water rushing through Murchison Falls National Park in Uganda",
+          caption: "Safari extensions work best when water, wildlife, lodge location, and road timing are planned together.",
         },
       ]}
       faqs={[

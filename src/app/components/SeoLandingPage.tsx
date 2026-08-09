@@ -24,7 +24,7 @@ type SeoLandingPageProps = {
   }>;
   videoFeature?: {
     title: string;
-    eyebrow: string;
+    eyebrow?: string;
     description: string;
     src: string;
     poster: string;
@@ -113,12 +113,12 @@ export default function SeoLandingPage({
         <section className="border-t border-white/10 px-6 py-24 md:px-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 max-w-3xl">
-              <p className="section-kicker">Field media</p>
+              <p className="section-kicker">From the route</p>
               <h2 className="mt-3 text-4xl font-black md:text-5xl">
-                Real textures from the route, not generic brochure filler.
+                Real places behind the proposed journey.
               </h2>
               <p className="mt-5 leading-8 text-gray-400">
-                Photos and clips are used to show terrain, comfort, pacing, and route feeling before a traveler commits.
+                Photos and clips show terrain, comfort, pacing, and route feeling before a traveler commits.
               </p>
             </div>
 
