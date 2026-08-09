@@ -43,8 +43,8 @@ const planningSteps = [
 const specialties = [
   {
     title: "Gorilla Trekking",
-    image: "/images/travel/traveler-trust-gorilla.jpg",
-    alt: "Traveler observing Uganda gorilla trekking conditions",
+    image: "/images/field/guide-mgahinga-sign.webp",
+    alt: "Guide standing beside the Mgahinga Gorilla National Park sign",
     text: "Private Bwindi forest experiences shaped around permits, lodge access, ranger guidance, and the emotional weight of meeting mountain gorillas properly.",
   },
   {
@@ -63,21 +63,21 @@ const specialties = [
 
 const fieldTeamMedia = [
   {
-    title: "Trail team at the gate",
-    image: "/images/organic/rwenzori-team-entrance.webp",
-    alt: "Rwenzori hiking team standing at a trail entrance",
-    text: "Visible people and trailheads make the brand feel accountable, not anonymous.",
+    title: "Park handoff context",
+    image: "/images/field/guide-ranger-station.webp",
+    alt: "Guide standing outside a stone ranger station with trekking staff nearby",
+    text: "Visible people and real park settings make the brand feel accountable, not anonymous.",
   },
   {
-    title: "Group trail support",
-    image: "/images/organic/rwenzori-group-trail.webp",
-    alt: "Rwenzori hiking group and field team on a forest trail",
-    text: "Complex trips depend on the quality of the support team behind the itinerary.",
+    title: "Forest trail support",
+    image: "/images/field/forest-guide-moment.webp",
+    alt: "Guide filming a forest trail moment in Uganda",
+    text: "Complex trips depend on the quality of the people behind the itinerary.",
   },
   {
     title: "Mountain route texture",
-    image: "/images/organic/rwenzori-moss-forest.webp",
-    alt: "Mossy Rwenzori forest with hanging vegetation",
+    image: "/images/field/rwenzori-forest-ladder.webp",
+    alt: "A ladder bridge section through dense Rwenzori forest",
     text: "Wild Spine should feel rooted in Uganda's real terrain, not a generic luxury promise.",
   },
 ];
@@ -87,7 +87,7 @@ export const metadata = seoMetadata({
   description:
     "Meet Wild Spine Uganda, a local premium travel team planning private gorilla trekking, Bwindi permits, Rwenzori expeditions, and high-trust Uganda safari journeys.",
   path: "/about",
-  image: "/images/travel/terraced-mountains.jpg",
+  image: "/images/field/guide-ranger-station.webp",
   keywords: ["Wild Spine Uganda", "Uganda tour operator", "gorilla trekking Uganda", "Rwenzori expeditions"],
 });
 
@@ -96,8 +96,8 @@ export default function AboutPage() {
     <main className="min-h-screen bg-[#07110c] text-white">
       <section className="relative flex min-h-[92vh] items-end overflow-hidden px-6 pb-20 pt-32 md:px-24 md:pb-28">
         <Image
-          src="/images/travel/terraced-mountains.jpg"
-          alt="Rwenzori Mountains rising through mist in Uganda"
+          src="/images/field/guide-ranger-station.webp"
+          alt="Guide standing outside a stone ranger station with trekking staff nearby"
           fill
           priority
           sizes="100vw"
@@ -183,20 +183,18 @@ export default function AboutPage() {
               </h2>
             </div>
             <p className="max-w-3xl text-lg leading-8 text-white/68">
-              The next level is founder portraits and named guide profiles. Until those are verified,
-              real trail media helps make the company feel grounded without inventing credentials.
+              We only publish named roles and credentials when they can be verified. Real field media keeps the company grounded without overstating credentials.
             </p>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
             <OrganicVideoCard
               dark
-              eyebrow="Guide clip"
-              title="A human voice from the forest"
-              description="Short, natural guide footage makes the experience feel less abstract and more personal."
-              src="/video/organic/guide-forest-note.mp4"
-              poster="/images/organic/video-guide-forest-poster.webp"
-              label="Guide speaking on a Uganda forest trail"
+              title="A guide moment in the forest"
+              description="Short, natural field footage makes the experience feel less abstract and more personal."
+              src="/video/field/guide-forest-briefing.mp4"
+              poster="/images/field/guide-forest-briefing-poster.webp"
+              label="Silent preview video of a forest guide briefing moment"
             />
             <div className="grid gap-4 md:grid-cols-3">
               {fieldTeamMedia.map((item) => (

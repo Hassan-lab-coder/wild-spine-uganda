@@ -6,7 +6,7 @@ export const metadata = seoMetadata({
   description:
     "Plan Rwenzori mountains hiking in Uganda with route guidance, logistics, private transfers, fitness preparation, and optional gorilla trekking add-ons.",
   path: "/rwenzori-hiking-tours",
-  image: "/images/organic/rwenzori-lake-valley-hiker.webp",
+  image: "/images/field/rwenzori-boardwalk-valley.webp",
   keywords: ["Rwenzori mountains hiking", "Rwenzori hiking tours", "Uganda trekking", "Rwenzori expedition"],
 });
 
@@ -16,25 +16,24 @@ export default function RwenzoriHikingToursPage() {
       kicker="Rwenzori hiking tours"
       title="Hike the Rwenzori Mountains with honest expedition planning."
       description="Explore Uganda's Rwenzori Mountains with route guidance, pacing advice, private transfers, and practical preparation for weather, fitness, altitude, and recovery."
-      image="/images/organic/rwenzori-lake-valley-hiker.webp"
-      imageAlt="Hiker standing by an alpine lake in the Rwenzori Mountains"
+      image="/images/field/rwenzori-boardwalk-valley.webp"
+      imageAlt="Hiker crossing a Rwenzori boardwalk through high mountain valley vegetation"
       route="The Summit Trail"
       cta="Plan My Rwenzori Expedition"
       bullets={["Route and duration guidance", "Mountain logistics coordination", "Fitness and gear preparation", "Gorilla trekking add-on options"]}
       videoFeature={{
-        title: "Bridge crossings and wet mountain trail",
-        eyebrow: "Rwenzori field clip",
-        description: "A short route texture clip that shows why realistic pacing and gear planning matter in the Rwenzori.",
-        src: "/video/organic/rwenzori-suspension-bridge.mp4",
-        poster: "/images/organic/video-rwenzori-bridge-poster.webp",
-        label: "Rwenzori suspension bridge crossing field video",
+        title: "Waterfall trail and mountain footing",
+        description: "A short route preview that shows why realistic pacing, footwear, and weather planning matter in the Rwenzori.",
+        src: "/video/field/rwenzori-waterfall-trail.mp4",
+        poster: "/images/field/rwenzori-waterfall-trail-poster.webp",
+        label: "Silent preview video of a Rwenzori waterfall and mountain trail",
       }}
       mediaGallery={[
         {
-          title: "Alpine lake valleys",
-          image: "/images/organic/rwenzori-lake-valley-hiker.webp",
-          imageAlt: "Hiker standing by an alpine lake in the Rwenzori Mountains",
-          caption: "The Rwenzori route is shaped by valley terrain, weather, and recovery pacing.",
+          title: "Boardwalk valleys",
+          image: "/images/field/rwenzori-boardwalk-valley.webp",
+          imageAlt: "Hiker crossing a Rwenzori boardwalk through high mountain valley vegetation",
+          caption: "The Rwenzori route is shaped by wet footing, valley terrain, weather, and recovery pacing.",
         },
         {
           title: "Giant lobelia zones",
@@ -43,10 +42,10 @@ export default function RwenzoriHikingToursPage() {
           caption: "Specific plant zones help travelers understand that this is a distinct mountain ecosystem.",
         },
         {
-          title: "Mist and forest texture",
-          image: "/images/organic/rwenzori-misty-peak.webp",
-          imageAlt: "Misty Rwenzori mountain peak behind trees",
-          caption: "Weather is part of the experience, so route planning has to stay honest.",
+          title: "Forest ladder sections",
+          image: "/images/field/rwenzori-forest-ladder.webp",
+          imageAlt: "A ladder bridge section through dense Rwenzori forest",
+          caption: "The route changes constantly, so guests need practical expectations before committing.",
         },
         {
           title: "Team trail reality",

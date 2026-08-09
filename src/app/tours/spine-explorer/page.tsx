@@ -15,22 +15,22 @@ export const metadata = seoMetadata({
 export default function SpineExplorerPage() {
   const comfortMedia = [
     {
+      title: "Mgahinga park context",
+      image: "/images/field/guide-mgahinga-sign.webp",
+      alt: "Guide standing beside the Mgahinga Gorilla National Park sign",
+      caption: "Short gorilla trips still need clear park context, permit logic, and timing.",
+    },
+    {
+      title: "Ranger-station readiness",
+      image: "/images/field/guide-ranger-station.webp",
+      alt: "Guide standing outside a stone ranger station with trekking staff nearby",
+      caption: "A good trek day begins before the trail, with handoffs and expectations clear.",
+    },
+    {
       title: "Lodge recovery",
       image: "/images/organic/suite-bed-net.webp",
       alt: "Comfortable Uganda lodge bed with mosquito net",
       caption: "Short trips still need thoughtful nights because the gorilla day starts early.",
-    },
-    {
-      title: "Dining pause",
-      image: "/images/organic/lodge-dining-sunset.webp",
-      alt: "Outdoor lodge dining terrace at sunset in Uganda",
-      caption: "Premium planning leaves room for calm meals and recovery, not only transfers.",
-    },
-    {
-      title: "Route wildlife context",
-      image: "/images/organic/elephant-near-lodge.webp",
-      alt: "Elephant moving near a Uganda lodge area",
-      caption: "Safari texture can be added when it fits the route and permit timing.",
     },
   ];
 
@@ -90,12 +90,11 @@ export default function SpineExplorerPage() {
           <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
             <OrganicVideoCard
               dark
-              eyebrow="Safari road clip"
-              title="A live moment between plans"
-              description="An organic road clip gives the page a human, in-country feel without turning it into a stock safari promise."
-              src="/video/organic/safari-giraffe-drive.mp4"
-              poster="/images/organic/video-safari-giraffe-poster.webp"
-              label="Short Uganda safari road clip with giraffe and travelers"
+              title="A quiet look into the forest"
+              description="A short forest preview grounds the route in the experience travelers are really coming for."
+              src="/video/field/gorilla-forest-encounter.mp4"
+              poster="/images/field/gorilla-forest-encounter-poster.webp"
+              label="Silent preview video of a gorilla encounter in Uganda forest"
             />
             <div className="grid gap-4 md:grid-cols-3">
               {comfortMedia.map((item) => (
@@ -142,11 +141,11 @@ export default function SpineExplorerPage() {
             <div className="mb-8">
               <h4 className="mb-4 font-bold text-yellow-500">What&apos;s Included</h4>
               <ul className="space-y-2 text-sm text-gray-300">
-                <li>Included: Gorilla permit assistance</li>
-                <li>Included: Private guide and driver coordination</li>
-                <li>Included: Lodge and accommodation planning</li>
-                <li>Included: Transport coordination</li>
-                <li>Included: Park entry logistics</li>
+                <li>Gorilla permit assistance</li>
+                <li>Private guide and driver coordination</li>
+                <li>Lodge and accommodation planning</li>
+                <li>Transport coordination</li>
+                <li>Park entry logistics</li>
               </ul>
             </div>
 

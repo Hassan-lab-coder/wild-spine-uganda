@@ -285,42 +285,36 @@ const ecosystemLogos = [
 
 const planningPageLinks = [
   {
-    eyebrow: "Trust",
     title: "Why Wild Spine",
-    desc: "Legal identity placeholders, team proof, permit handling, supplier standards, support procedures, and complaint steps.",
+    desc: "How we plan, handle permits, select suppliers, support travelers, and keep booking responsibilities clear.",
     href: "/why-wild-spine",
-    cta: "Open trust page",
+    cta: "See why travelers trust us",
   },
   {
-    eyebrow: "Payments",
     title: "Payment information",
-    desc: "Company-bank transfer process, beneficiary checks, references, bank charges, reconciliation timing, and anti-fraud rules.",
+    desc: "Company-bank transfer steps, beneficiary checks, payment references, bank charges, reconciliation timing, and anti-fraud guidance.",
     href: "/payment-information",
-    cta: "Read safeguards",
+    cta: "Read payment safeguards",
   },
   {
-    eyebrow: "Terms",
     title: "Booking terms",
-    desc: "How written itineraries, itemised quotations, numbered invoices, cancellations, and booking responsibilities work.",
+    desc: "Written itineraries, itemised quotations, numbered invoices, cancellations, and responsibilities before confirmation.",
     href: "/terms",
-    cta: "View terms",
+    cta: "Review booking terms",
   },
   {
-    eyebrow: "Refunds",
     title: "Refund policy",
-    desc: "Refund handling, non-refundable supplier items, admin approval, and why payments are reconciled before receipts.",
+    desc: "How refunds, non-refundable supplier costs, corrections, and reconciled receipts are handled.",
     href: "/refund-policy",
-    cta: "Review policy",
+    cta: "Read refund policy",
   },
   {
-    eyebrow: "Proof",
     title: "Reviews",
-    desc: "Traveler confidence signals and feedback while third-party proof and credentials are added only after verification.",
+    desc: "Guest feedback, field context, and review links as public references are verified.",
     href: "/reviews",
-    cta: "Read reviews",
+    cta: "Read guest notes",
   },
   {
-    eyebrow: "Contact",
     title: "Official contact",
     desc: "Use the official website, email, WhatsApp, and Kampala P.O. Box details before trusting any payment instruction.",
     href: "/contact",
@@ -330,55 +324,73 @@ const planningPageLinks = [
 
 const fieldProofImages = [
   {
-    title: "Rwenzori team at the trail gate",
-    image: "/images/organic/rwenzori-team-entrance.webp",
-    imageAlt: "Rwenzori hiking team standing at a trail entrance in Uganda",
-    caption: "Real groups, real trailheads, and the start of the mountain rhythm.",
+    title: "Guide at Mgahinga",
+    image: "/images/field/guide-mgahinga-sign.webp",
+    imageAlt: "Wild Spine Uganda guide standing beside the Mgahinga Gorilla National Park sign",
+    caption: "Recognizable park context helps guests see the journey before they arrive.",
   },
   {
-    title: "Lodge comfort after long routes",
-    image: "/images/organic/suite-view-bed.webp",
-    imageAlt: "Comfortable Uganda lodge suite with mosquito net and balcony view",
-    caption: "Accommodation should support the journey, not just fill a night on the itinerary.",
+    title: "Ranger-station readiness",
+    image: "/images/field/guide-ranger-station.webp",
+    imageAlt: "Guide standing outside a stone ranger station with trekking staff nearby",
+    caption: "The best trips feel calm because the practical handoffs are handled early.",
   },
   {
-    title: "Suspension bridges and mountain forests",
-    image: "/images/organic/rwenzori-suspension-bridge.webp",
-    imageAlt: "Hiker crossing a suspension bridge in the Rwenzori Mountains",
-    caption: "The mountain is practical, wet, beautiful, and very real underfoot.",
+    title: "Rwenzori terrain",
+    image: "/images/field/rwenzori-boardwalk-valley.webp",
+    imageAlt: "A hiker crossing a Rwenzori boardwalk through high mountain valley vegetation",
+    caption: "Mountain routes are planned around real terrain, weather, and recovery time.",
   },
   {
-    title: "Giant lobelia country",
-    image: "/images/organic/rwenzori-lobelia-valley.webp",
-    imageAlt: "Giant lobelia plants in a Rwenzori mountain valley",
-    caption: "Specific field textures make the story feel lived-in rather than stock.",
+    title: "Murchison water and wildlife",
+    image: "/images/field/murchison-falls-river.webp",
+    imageAlt: "Water rushing through Murchison Falls National Park in Uganda",
+    caption: "Safari extensions add rhythm between gorilla forests and mountain trails.",
   },
 ];
 
 const fieldProofVideos = [
   {
-    title: "Safari road moment",
-    eyebrow: "Wildlife clip",
-    description: "A short, organic park-road moment with guests in the vehicle and giraffe on the plains.",
-    src: "/video/organic/safari-giraffe-drive.mp4",
-    poster: "/images/organic/video-safari-giraffe-poster.webp",
-    label: "Short Uganda safari road video with giraffe and travelers",
+    title: "Lodge arrival and recovery",
+    description: "Comfort matters after long routes. This preview shows the kind of quiet base that helps the itinerary breathe.",
+    src: "/video/field/enttiko-lodge-preview.mp4",
+    poster: "/images/field/enttiko-lodge-preview-poster.webp",
+    label: "Silent preview video of a Uganda lodge arrival and room setting",
   },
   {
-    title: "Guide voice in the forest",
-    eyebrow: "People proof",
-    description: "A guide-style field clip adds a human voice to the brand without making unsupported claims.",
-    src: "/video/organic/guide-forest-note.mp4",
-    poster: "/images/organic/video-guide-forest-poster.webp",
-    label: "Short forest guide video from a Uganda trail",
+    title: "Wildlife between the forests",
+    description: "Uganda journeys are strongest when the route gives space for both primates and classic park moments.",
+    src: "/video/field/murchison-wildlife-water.mp4",
+    poster: "/images/field/murchison-wildlife-water-poster.webp",
+    label: "Silent preview video of wildlife and water scenes in a Uganda national park",
   },
   {
-    title: "Rwenzori bridge crossing",
-    eyebrow: "Trail proof",
-    description: "A practical glimpse of Rwenzori trail conditions, useful for travelers deciding if the mountain fits.",
-    src: "/video/organic/rwenzori-suspension-bridge.mp4",
-    poster: "/images/organic/video-rwenzori-bridge-poster.webp",
-    label: "Short Rwenzori suspension bridge crossing video",
+    title: "Rwenzori waterfall trail",
+    description: "A short look at the wet, green, physical side of the Rwenzori before the high mountain opens up.",
+    src: "/video/field/rwenzori-waterfall-trail.mp4",
+    poster: "/images/field/rwenzori-waterfall-trail-poster.webp",
+    label: "Silent preview video of a Rwenzori waterfall and mountain trail",
+  },
+  {
+    title: "Gorilla forest encounter",
+    description: "The forest experience is quiet, close, and carefully managed around park guidance and respect for the gorillas.",
+    src: "/video/field/gorilla-forest-encounter.mp4",
+    poster: "/images/field/gorilla-forest-encounter-poster.webp",
+    label: "Silent preview video of a gorilla encounter in Uganda forest",
+  },
+  {
+    title: "Trail support on foot",
+    description: "Good planning shows up in the quiet details: pace, footing, local help, and the practical rhythm of the day.",
+    src: "/video/field/forest-trail-support.mp4",
+    poster: "/images/field/forest-trail-support-poster.webp",
+    label: "Silent preview video of local trail support in a Uganda forest",
+  },
+  {
+    title: "Team bridge crossing",
+    description: "Real crossings, wet boards, and practical pacing help travelers understand the mountain honestly.",
+    src: "/video/field/rwenzori-bridge-team.mp4",
+    poster: "/images/field/rwenzori-bridge-team-poster.webp",
+    label: "Silent preview video of a team crossing a Rwenzori bridge",
   },
 ];
 
@@ -657,113 +669,6 @@ function HomeContent() {
         </div>
       </section>
 
-      <section className="border-y border-[#d8cda9] bg-[#fff9ea] px-6 py-20 md:px-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="section-kicker">Essential planning pages</p>
-              <h2 className="mt-3 text-3xl font-black leading-tight text-[#123a2a] md:text-5xl">
-                Everything careful travelers should check before booking.
-              </h2>
-            </div>
-            <p className="max-w-2xl leading-7 text-[#68746a]">
-              These pages keep the important trust, payment, terms, and contact details easy to find
-              without crowding the first hero section.
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {planningPageLinks.map((page) => (
-              <a
-                key={page.href}
-                href={page.href}
-                className="group rounded-3xl border border-[#d8cda9] bg-white/75 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#f5b416] hover:bg-white hover:shadow-xl"
-              >
-                <p className="text-xs font-black uppercase tracking-[0.22em] text-[#b8860b]">{page.eyebrow}</p>
-                <h3 className="mt-3 text-2xl font-black text-[#123a2a]">{page.title}</h3>
-                <p className="mt-4 min-h-24 text-sm leading-6 text-[#68746a]">{page.desc}</p>
-                <p className="mt-6 text-sm font-black uppercase tracking-widest text-[#b8860b] transition group-hover:text-[#123a2a]">
-                  {page.cta} -&gt;
-                </p>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[#f8f4e8] px-6 py-24 md:px-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-            <div>
-              <p className="section-kicker">Field proof</p>
-              <h2 className="mt-3 text-4xl font-black leading-tight text-[#123a2a] md:text-6xl">
-                See the real rhythm behind the journey.
-              </h2>
-            </div>
-            <p className="max-w-3xl text-lg leading-8 text-[#68746a]">
-              Travelers trust what feels specific: forest briefings, trail conditions, guides, local culture,
-              and the small practical details that make Uganda feel understood before they book.
-            </p>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="overflow-hidden rounded-[2rem] border border-[#d8cda9] bg-[#123a2a] shadow-xl">
-              <div className="relative aspect-video bg-black">
-                <video
-                  className="h-full w-full object-cover"
-                  controls
-                  muted
-                  playsInline
-                  preload="metadata"
-                  poster="/images/travel/bwindi-trek-ranger-guests.jpg"
-                  aria-label="Wild Spine Uganda field video showing private Uganda travel atmosphere"
-                >
-                  <source src="/video/wildspine-hero.mp4" type="video/mp4" />
-                  Your browser does not support embedded video. Contact Wild Spine Uganda for current field clips.
-                </video>
-              </div>
-              <div className="p-6 text-white md:p-8">
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-[#f5b416]">Short field clip</p>
-                <h3 className="mt-3 text-3xl font-black">A more human first impression.</h3>
-                <p className="mt-4 leading-7 text-white/72">
-                  Keep adding real phone-shot clips from briefings, trailheads, lodge arrivals, and guide introductions.
-                  That is the material that makes Wild Spine feel alive and trustworthy.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              {fieldProofImages.map((item) => (
-                <figure
-                  key={item.title}
-                  className="group grid gap-4 rounded-3xl border border-[#d8cda9] bg-white/75 p-4 shadow-sm transition duration-300 hover:border-[#f5b416] hover:bg-white md:grid-cols-[0.85fr_1.15fr] lg:grid-cols-[0.85fr_1.15fr]"
-                >
-                  <div className="relative min-h-44 overflow-hidden rounded-2xl">
-                    <Image
-                      src={item.image}
-                      alt={item.imageAlt}
-                      fill
-                      sizes="(min-width: 1024px) 18vw, (min-width: 768px) 40vw, 100vw"
-                      className="object-cover transition duration-700 group-hover:scale-105"
-                    />
-                  </div>
-                  <figcaption className="self-center">
-                    <p className="text-lg font-black text-[#123a2a]">{item.title}</p>
-                    <p className="mt-2 text-sm leading-6 text-[#68746a]">{item.caption}</p>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-6 grid gap-5 md:grid-cols-3">
-            {fieldProofVideos.map((clip) => (
-              <OrganicVideoCard key={clip.src} {...clip} />
-            ))}
-          </div>
-        </div>
-      </section>
-
      <section className="relative h-[80vh] flex items-center justify-center text-center text-white overflow-hidden">
 
   <Image
@@ -961,7 +866,7 @@ function HomeContent() {
 
               <ul className="space-y-2 text-[#3d4a41] text-sm mb-8">
                 {tour.inclusions.map((item) => (
-                  <li key={item}>Included: {item}</li>
+                  <li key={item}>{item}</li>
                 ))}
               </ul>
 
@@ -1051,7 +956,7 @@ function HomeContent() {
       {travelerReviews.map((review) => (
         <div key={review.name} className="rounded-2xl border border-[#d8cda9] bg-white/85 shadow-lg backdrop-blur-sm p-6">
           <p className="mb-5 text-sm font-black tracking-widest text-[#b8860b]">
-            5 / 5 PRIVATE TRAVELER REVIEW
+            Private traveler note
           </p>
           <p className="text-[#3d4a41] leading-7 mb-6">&quot;{review.text}&quot;</p>
           <h4 className="font-black">{review.name}</h4>
@@ -1097,26 +1002,26 @@ function HomeContent() {
 
 <section className="py-20 px-6 md:px-24 bg-[#fff9ea] border-t border-[#d8cda9]">
 
-  <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6 text-center">
+  <div className="max-w-5xl mx-auto grid gap-6 text-center md:grid-cols-3">
 
-    <div className="border border-[#d8cda9] p-6 rounded-xl">
-      Company-bank transfer guidance
+    <div className="rounded-3xl border border-[#d8cda9] bg-white/75 p-6 shadow-sm">
+      <h3 className="font-black text-[#123a2a]">Company-bank transfer only</h3>
       <p className="text-[#68746a] text-sm mt-2">
-        Clear invoices, written terms, official company beneficiary checks, and no personal-account payments
+        Written invoices, official beneficiary checks, and no personal-account payments.
       </p>
     </div>
 
-    <div className="border border-[#d8cda9] p-6 rounded-xl">
-      Park Procedure Guidance
+    <div className="rounded-3xl border border-[#d8cda9] bg-white/75 p-6 shadow-sm">
+      <h3 className="font-black text-[#123a2a]">Park procedure guidance</h3>
       <p className="text-[#68746a] text-sm mt-2">
-        Planning aligned with Uganda Wildlife Authority tracking procedures
+        Trekking plans shaped around official park procedures and realistic route timing.
       </p>
     </div>
 
-    <div className="border border-[#d8cda9] p-6 rounded-xl">
-      Local Expertise
+    <div className="rounded-3xl border border-[#d8cda9] bg-white/75 p-6 shadow-sm">
+      <h3 className="font-black text-[#123a2a]">Local route knowledge</h3>
       <p className="text-[#68746a] text-sm mt-2">
-        Deep knowledge of Bwindi forest and Rwenzori mountain routes
+        Ground context for Bwindi forests, Rwenzori trails, lodges, transfers, and recovery days.
       </p>
     </div>
 
@@ -1247,6 +1152,119 @@ function HomeContent() {
 </section>
 
       <TrustSafetyBlock />
+
+      <section className="bg-[#f8f4e8] px-6 py-28 md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 grid gap-6 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
+            <div>
+              <p className="section-kicker">Seen in the field</p>
+              <h2 className="mt-3 text-4xl font-black leading-tight text-[#123a2a] md:text-6xl">
+                Real places. Real handoffs. Better trust.
+              </h2>
+            </div>
+            <p className="max-w-3xl text-lg leading-8 text-[#68746a]">
+              Premium does not mean polished stock images. It means travelers can see the parks,
+              lodges, trails, vehicles, guides, and route texture behind the promise before they inquire.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {fieldProofImages.map((item, index) => (
+                <figure
+                  key={item.title}
+                  className={`group overflow-hidden rounded-[2rem] border border-[#d8cda9] bg-white/80 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#f5b416] hover:bg-white hover:shadow-xl ${
+                    index === 1 ? "sm:translate-y-6" : ""
+                  }`}
+                >
+                  <div className="relative h-72 overflow-hidden md:h-80">
+                    <Image
+                      src={item.image}
+                      alt={item.imageAlt}
+                      fill
+                      sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#123a2a]/80 via-transparent to-transparent" />
+                    <figcaption className="absolute bottom-0 p-5 text-white">
+                      <h3 className="text-xl font-black">{item.title}</h3>
+                    </figcaption>
+                  </div>
+                  <p className="p-5 text-sm leading-6 text-[#68746a]">{item.caption}</p>
+                </figure>
+              ))}
+            </div>
+
+            <div className="rounded-[2.5rem] border border-[#d8cda9] bg-[#123a2a] p-5 text-white shadow-xl md:p-7">
+              <div className="relative overflow-hidden rounded-[2rem] bg-black">
+                <video
+                  className="aspect-[4/5] h-full w-full object-cover"
+                  controls
+                  playsInline
+                  preload="metadata"
+                  poster="/images/field/guide-forest-briefing-poster.webp"
+                  aria-label="Silent preview of a Wild Spine Uganda forest briefing"
+                >
+                  <source src="/video/field/guide-forest-briefing.mp4" type="video/mp4" />
+                  Your browser does not support embedded video. Contact Wild Spine Uganda for current field clips.
+                </video>
+              </div>
+              <div className="pt-7">
+                <h3 className="text-3xl font-black leading-tight">The trip should feel clear before it feels expensive.</h3>
+                <p className="mt-4 leading-7 text-white/72">
+                  We use field context to explain routes honestly: what the trail feels like, where comfort matters,
+                  when permit timing controls the plan, and why official payment instructions only appear after a written invoice.
+                </p>
+                <div className="mt-6 grid gap-3 text-sm font-bold text-white/78 sm:grid-cols-2">
+                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">Permit logic before quotes</p>
+                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">Lodge comfort matched to route</p>
+                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">No public bank details</p>
+                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">No payment by social message</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {fieldProofVideos.map((clip) => (
+              <OrganicVideoCard key={clip.src} {...clip} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-[#d8cda9] bg-[#fff9ea] px-6 py-24 md:px-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="section-kicker">Before you inquire</p>
+              <h2 className="mt-3 text-3xl font-black leading-tight text-[#123a2a] md:text-5xl">
+                The pages serious travelers check first.
+              </h2>
+            </div>
+            <p className="max-w-2xl leading-7 text-[#68746a]">
+              Trust, payment safeguards, booking terms, refunds, reviews, and official contact details are kept visible
+              so no one has to rely on a social-media message for critical information.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {planningPageLinks.map((page) => (
+              <a
+                key={page.href}
+                href={page.href}
+                className="group flex min-h-60 flex-col rounded-3xl border border-[#d8cda9] bg-white/80 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#f5b416] hover:bg-white hover:shadow-xl"
+              >
+                <h3 className="text-2xl font-black text-[#123a2a]">{page.title}</h3>
+                <p className="mt-4 flex-1 text-sm leading-6 text-[#68746a]">{page.desc}</p>
+                <p className="mt-6 text-sm font-black uppercase tracking-widest text-[#b8860b] transition group-hover:text-[#123a2a]">
+                  {page.cta} -&gt;
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section id="book" className="relative overflow-hidden py-32 px-6 text-white md:px-24">
         <Image

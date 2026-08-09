@@ -14,9 +14,9 @@ export const metadata = seoMetadata({
 export default function PrivateTravelPage() {
   const lodgePhotos = [
     {
-      title: "Wilderness lodge setting",
-      image: "/images/organic/lodge-aerial-wilderness.webp",
-      alt: "Aerial view of Uganda wilderness lodge and swimming pool",
+      title: "Lodge arrival",
+      image: "/images/field/enttiko-safari-vehicle.webp",
+      alt: "Safari vehicle outside a Uganda lodge setting",
     },
     {
       title: "Pool deck recovery",
@@ -38,7 +38,7 @@ export default function PrivateTravelPage() {
   const pillars = [
     {
       title: "Private Pacing",
-      desc: "No fixed group schedules. Your journey moves at your rhythm — whether slower comfort or faster expedition style.",
+      desc: "No fixed group schedules. Your journey moves at your rhythm, whether slower comfort or faster expedition style.",
     },
     {
       title: "Controlled Group Size",
@@ -46,7 +46,7 @@ export default function PrivateTravelPage() {
     },
     {
       title: "Curated Stays",
-      desc: "Accommodation is selected based on comfort level, location, and overall experience — not just availability.",
+      desc: "Accommodation is selected based on comfort level, location, and overall experience, not just availability.",
     },
     {
       title: "Direct Coordination",
@@ -133,12 +133,11 @@ export default function PrivateTravelPage() {
           <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
             <OrganicVideoCard
               dark
-              eyebrow="Lodge clip"
               title="A real look at the stay experience"
-              description="A short lodge walkthrough gives travelers a more honest feel for comfort than a single polished room shot."
-              src="/video/organic/lodge-walkthrough.mp4"
-              poster="/images/organic/video-lodge-walkthrough-poster.webp"
-              label="Short Uganda lodge walkthrough video"
+              description="A short lodge preview gives travelers a more honest feel for comfort than a single polished room shot."
+              src="/video/field/enttiko-lodge-preview.mp4"
+              poster="/images/field/enttiko-lodge-preview-poster.webp"
+              label="Silent preview video of a Uganda lodge arrival and room setting"
             />
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -205,7 +204,7 @@ export default function PrivateTravelPage() {
 
         <p className="text-gray-400 max-w-2xl mx-auto mb-8">
           If you want a Uganda journey that feels intentional, controlled, and
-          personal — not rushed or crowded — this is where it begins.
+          personal, not rushed or crowded, this is where it begins.
         </p>
 
         <a

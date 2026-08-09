@@ -39,22 +39,22 @@ const bookingControls = [
 
 const evidenceMedia = [
   {
-    title: "Trail team visibility",
-    image: "/images/organic/rwenzori-group-trail.webp",
-    alt: "Rwenzori hiking group with local field team on a forest trail",
-    text: "Use real team and traveler field media where permission is confirmed.",
+    title: "Park handoff visibility",
+    image: "/images/field/guide-ranger-station.webp",
+    alt: "Guide standing outside a stone ranger station with trekking staff nearby",
+    text: "Real people and recognizable park settings make the process easier to trust.",
   },
   {
-    title: "Park-route preparation",
-    image: "/images/organic/rwenzori-suspension-bridge.webp",
-    alt: "Hiker crossing a suspension bridge in the Rwenzori Mountains",
+    title: "Route preparation",
+    image: "/images/field/forest-guide-moment.webp",
+    alt: "Guide filming a forest trail moment in Uganda",
     text: "Trust grows when the site shows the terrain that creates planning decisions.",
   },
   {
-    title: "Accommodation context",
-    image: "/images/organic/lodge-aerial-wilderness.webp",
-    alt: "Aerial view of Uganda lodge in wilderness setting",
-    text: "Lodge photos should support comfort proof while final supplier names remain quote-specific.",
+    title: "Mountain terrain context",
+    image: "/images/field/rwenzori-forest-ladder.webp",
+    alt: "A ladder bridge section through dense Rwenzori forest",
+    text: "Route photos should make preparation concrete while final supplier details remain quote-specific.",
   },
 ];
 
@@ -63,8 +63,8 @@ export default function WhyWildSpinePage() {
     <main className="min-h-screen bg-[#fff9ea] text-[#123a2a]">
       <section className="relative isolate overflow-hidden bg-[#123a2a] px-6 py-32 text-white md:px-24">
         <Image
-          src="/images/travel/bwindi-trek-ranger-guests.jpg"
-          alt="Rangers and travelers preparing for a Bwindi forest trek"
+          src="/images/field/guide-ranger-station.webp"
+          alt="Guide standing outside a stone ranger station with trekking staff nearby"
           fill
           priority
           sizes="100vw"
@@ -106,20 +106,19 @@ export default function WhyWildSpinePage() {
               </h2>
             </div>
             <p className="max-w-3xl leading-8 text-white/72">
-              These field visuals make Wild Spine feel more human and local while the legal, licence,
-              staff, and supplier details remain placeholder-only until officially verified.
+              These field visuals make Wild Spine feel more human and local while legal, licence,
+              staff, and supplier details are published only after official verification.
             </p>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
             <OrganicVideoCard
               dark
-              eyebrow="Guide proof"
               title="Forest guidance, shown naturally"
-              description="A real field clip helps travelers feel the human side of planning without claiming unverified qualifications."
-              src="/video/organic/guide-forest-note.mp4"
-              poster="/images/organic/video-guide-forest-poster.webp"
-              label="Guide speaking on a Uganda forest trail for Wild Spine trust page"
+              description="A real field clip helps travelers feel the human side of planning without overstating credentials."
+              src="/video/field/guide-forest-briefing.mp4"
+              poster="/images/field/guide-forest-briefing-poster.webp"
+              label="Silent preview video of a forest guide briefing moment"
             />
 
             <div className="grid gap-4 md:grid-cols-3">
@@ -145,8 +144,7 @@ export default function WhyWildSpinePage() {
             <p className="section-kicker">Team and guide profiles</p>
             <h2 className="mt-3 text-4xl font-black">People trust identifiable people.</h2>
             <p className="mt-5 leading-8 text-[#68746a]">
-              This section is intentionally placeholder-only until real portraits, names, experience,
-              languages, regions, and qualifications are verified by Wild Spine management.
+              Names, portraits, experience, languages, regions, and qualifications should appear here only after they are verified by Wild Spine management.
             </p>
           </div>
           <div className="grid gap-5 md:grid-cols-3">
