@@ -77,7 +77,7 @@ export default function SpineExplorerPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="section-kicker">Field and comfort proof</p>
+              <p className="section-kicker">Forest and comfort</p>
               <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
                 A short gorilla journey still needs real planning texture.
               </h2>

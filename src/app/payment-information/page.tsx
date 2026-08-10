@@ -34,7 +34,7 @@ export default function PaymentInformationPage() {
         <div className="relative mx-auto max-w-5xl">
           <p className="section-kicker">Secure bank-transfer booking</p>
           <h1 className="mt-5 text-5xl font-black leading-tight md:text-7xl">
-            Formal invoices. Verified company-bank transfers. No public bank details.
+            Formal invoices. Company-bank transfers. Details shared safely.
           </h1>
           <p className="mt-7 max-w-3xl text-lg leading-8 text-white/78">
             Wild Spine Uganda accepts safari payments by bank transfer to the official company account
@@ -137,7 +137,7 @@ export default function PaymentInformationPage() {
               Request a verified safari proposal
             </a>
             <a href="/why-wild-spine" className="rounded-full border border-[#d8cda9] px-8 py-4 text-center font-black text-[#123a2a] hover:bg-white">
-              Why trust Wild Spine?
+              Why travel with Wild Spine?
             </a>
           </div>
         </div>

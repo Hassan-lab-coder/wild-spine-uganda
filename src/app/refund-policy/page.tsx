@@ -36,8 +36,8 @@ export default function RefundPolicy() {
 
         <h2 className="mb-4 mt-10 text-2xl font-bold">Refund method</h2>
         <p className="mb-6 leading-8 text-gray-400">
-          Approved refunds are returned through a controlled finance process to a verified account.
-          Refunds require authorised review and audit notes; they are not handled through informal
+          Approved refunds are returned through a documented finance process to a verified account.
+          Refunds require authorised review and written notes; they are not handled through informal
           personal accounts or social-media instructions.
         </p>
 

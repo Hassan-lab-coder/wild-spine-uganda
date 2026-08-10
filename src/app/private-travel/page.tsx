@@ -82,7 +82,7 @@ export default function PrivateTravelPage() {
           <p className="max-w-3xl text-gray-300 text-lg md:text-xl leading-8">
             Wild Spine journeys are built around the traveler — not the group.
             From pacing to accommodation to route design, everything is tailored
-            to create a controlled, comfortable, and premium Uganda experience.
+            to create a private, comfortable, and carefully paced Uganda experience.
           </p>
 
           <a
@@ -119,7 +119,7 @@ export default function PrivateTravelPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="section-kicker">Lodge proof</p>
+              <p className="section-kicker">Stay experience</p>
               <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
                 Comfort is part of the route design.
               </h2>
@@ -167,7 +167,7 @@ export default function PrivateTravelPage() {
           <div>
             <p className="section-kicker">Who this is for</p>
             <h2 className="text-4xl md:text-6xl font-black mb-8">
-              Travelers who value control and comfort.
+              Travelers who value privacy and comfort.
             </h2>
 
             <ul className="space-y-4 text-gray-300 text-lg">
@@ -203,7 +203,7 @@ export default function PrivateTravelPage() {
         </h2>
 
         <p className="text-gray-400 max-w-2xl mx-auto mb-8">
-          If you want a Uganda journey that feels intentional, controlled, and
+          If you want a Uganda journey that feels intentional, personal, and
           personal, not rushed or crowded, this is where it begins.
         </p>
 

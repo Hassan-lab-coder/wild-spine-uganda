@@ -12,10 +12,10 @@ export const metadata = seoMetadata({
 });
 
 const proofStats = [
-  ["12+ years", "Uganda route experience across gorilla, safari, and mountain travel realities."],
   ["Permit-first", "Gorilla trekking plans shaped around timing, sectors, and route guidance."],
+  ["Private routes", "Itineraries shaped around the traveler, not a fixed departure template."],
   ["Long-haul ready", "Support designed for travelers flying in from North America, Europe, Asia, Africa, and beyond."],
-  ["Local team", "Ground knowledge from Uganda, not a remote brochure desk."],
+  ["Uganda based", "Ground knowledge from Uganda, not a remote brochure desk."],
 ];
 
 const reviews = [
@@ -88,15 +88,15 @@ export default function ReviewsPage() {
       <section className="px-6 pb-20 pt-32 md:px-24">
         <div className="mx-auto max-w-6xl">
           <a href="/" className="text-yellow-500 hover:text-yellow-400">Back Home</a>
-          <p className="section-kicker mt-16">Traveler Proof</p>
+          <p className="section-kicker mt-16">Guest notes</p>
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
               <h1 className="mt-5 text-5xl font-black leading-tight md:text-7xl">
-                Trust is built before the journey starts.
+                Confidence is built before the journey starts.
               </h1>
             </div>
             <p className="text-lg leading-8 text-gray-300">
-              Gorilla trekking and Rwenzori travel are high-trust bookings. This page brings together client feedback, operating signals, and practical verification steps so travelers can understand how Wild Spine plans before they commit.
+              Gorilla trekking and Rwenzori travel are serious bookings. This page brings together guest notes, field scenes, and practical questions travelers can ask before they commit.
             </p>
           </div>
         </div>
@@ -133,12 +133,12 @@ export default function ReviewsPage() {
       <section className="border-y border-white/10 bg-[#050605] px-6 py-24 md:px-24">
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 max-w-3xl">
-            <p className="section-kicker">What the notes point to</p>
+            <p className="section-kicker">Behind the notes</p>
             <h2 className="mt-3 text-4xl font-black md:text-5xl">
-              Field clips make the feedback feel less abstract.
+              Field scenes make the feedback feel less abstract.
             </h2>
             <p className="mt-5 leading-8 text-gray-400">
-              These are field-context clips, not public-platform review proof. Third-party review links should only be added after verification.
+              These clips show the kind of terrain, pacing, and calm practical support that travelers often remember after the trip.
             </p>
           </div>
 
@@ -186,7 +186,7 @@ export default function ReviewsPage() {
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {reviews.map((review) => (
               <article key={`${review.name}-${review.route}`} className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <p className="mb-5 text-sm font-black tracking-widest text-yellow-500">PRIVATE TRAVELER NOTE</p>
+                <p className="mb-5 text-sm font-black tracking-widest text-yellow-500">GUEST NOTE</p>
                 <p className="leading-7 text-gray-300">&quot;{review.quote}&quot;</p>
                 <div className="mt-6 border-t border-white/10 pt-5">
                   <h3 className="font-black">{review.name}</h3>
