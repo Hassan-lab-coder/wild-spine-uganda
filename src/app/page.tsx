@@ -47,10 +47,10 @@ const tours = [
 ];
 
 const whyCards = [
-  ["Local Expertise", "Uganda-based guidance from people who understand permits, roads, weather, and trail realities.", "/expertise"],
-  ["Premium Planning", "Clear steps, written details, and no vague promises before money changes hands.", "/planning"],
-  ["Rare Experience", "Gorilla trekking, Rwenzori hiking, lakes, and savannah woven into one coherent journey.", "/rare-experience"],
-  ["Private Travel", "No mass departures. Your pace, comfort level, and travel style shape the route.", "/private-travel"],
+  ["Local safari specialists", "Uganda-based planning shaped by permits, roads, weather, trail conditions, and park timing.", "/expertise"],
+  ["Thoughtful private planning", "Clear route choices, written inclusions, and practical next steps before any deposit is requested.", "/planning"],
+  ["Rare Uganda combinations", "Gorilla trekking, Rwenzori hiking, lakes, and savannah arranged as one well-paced journey.", "/rare-experience"],
+  ["Tailor-made travel", "Your dates, pace, comfort level, fitness, and interests shape the itinerary from the start.", "/private-travel"],
 ];
 
 const safariCards = [
@@ -222,16 +222,16 @@ const travelerReviews = [
 ];
 
 const trustSignals = [
-  ["12+ years", "Uganda route experience across gorilla, safari, and mountain travel realities."],
-  ["Permit-first", "Gorilla trekking plans shaped around availability, sector logic, and verified invoice-first bank-transfer steps."],
+  ["Permit-first", "Gorilla trekking plans shaped around availability, sector logic, and the best lodge base."],
+  ["Private by design", "Each route is shaped around your dates, pace, comfort level, and reason for coming to Uganda."],
   ["Long-haul ready", "Planning language, pacing, and support designed for travelers flying in from abroad."],
-  ["Local team", "Ground knowledge from Uganda, not generic third-party brochure planning."],
+  ["Uganda based", "Ground knowledge from Uganda, not generic third-party brochure planning."],
 ];
 
 const assuranceSteps = [
   ["1", "You share your month, route interests, group size, comfort level, and what would make the trip feel unforgettable."],
   ["2", "We check realistic permit, lodge, guide, transfer, and route availability before quoting."],
-  ["3", "You receive a clear plan with inclusions, exclusions, invoice steps, and the safest next decision."],
+  ["3", "You receive a written itinerary, itemised quote, numbered invoice, and a calm next step."],
 ];
 
 const entryPointPlans = [
@@ -261,7 +261,7 @@ const entryPointPlans = [
 const confidencePoints = [
   "Permit availability checked before final route design",
   "Date-change options discussed before confirmation",
-  "Deposit and company-bank transfer steps explained in writing",
+  "Official invoice before any deposit is requested",
   "Private 4x4 and fly-in options compared when useful",
 ];
 
@@ -280,43 +280,43 @@ const ecosystemLogos = [
   { name: "Bwindi Impenetrable National Park", initials: "BINP", note: "Gorilla trekking ecosystem" },
   { name: "Rwenzori Mountains National Park", initials: "RMNP", note: "Mountain route ecosystem" },
   { name: "Uganda Civil Aviation Authority", initials: "CAA", note: "Arrival & airport travel context" },
-  { name: "Association of Uganda Tour Operators", initials: "AUTO", note: "Tour operator network" },
+  { name: "Insurance & evacuation planning", initials: "IE", note: "Traveller preparation context" },
 ];
 
 const planningPageLinks = [
   {
     title: "Why Wild Spine",
-    desc: "How we plan, handle permits, select suppliers, support travelers, and keep booking responsibilities clear.",
+    desc: "Meet the standards behind every private journey: people, permits, routes, support, and accountability.",
     href: "/why-wild-spine",
-    cta: "See why travelers trust us",
+    cta: "See why travelers choose us",
   },
   {
     title: "Payment information",
-    desc: "Company-bank transfer steps, beneficiary checks, payment references, bank charges, reconciliation timing, and anti-fraud guidance.",
+    desc: "How deposits are requested after a written proposal, how beneficiary details are checked, and when receipts are issued.",
     href: "/payment-information",
-    cta: "Read payment safeguards",
+    cta: "Read how payment works",
   },
   {
     title: "Booking terms",
-    desc: "Written itineraries, itemised quotations, numbered invoices, cancellations, and responsibilities before confirmation.",
+    desc: "What is included, what can change, how cancellations work, and when reservations become confirmed.",
     href: "/terms",
     cta: "Review booking terms",
   },
   {
     title: "Refund policy",
-    desc: "How refunds, non-refundable supplier costs, corrections, and reconciled receipts are handled.",
+    desc: "How supplier costs, overpayments, written approvals, and refund requests are handled.",
     href: "/refund-policy",
     cta: "Read refund policy",
   },
   {
     title: "Reviews",
-    desc: "Guest feedback, field context, and review links as public references are verified.",
+    desc: "Guest notes, field context, and verified public review links as they become available.",
     href: "/reviews",
     cta: "Read guest notes",
   },
   {
     title: "Official contact",
-    desc: "Use the official website, email, WhatsApp, and Kampala P.O. Box details before trusting any payment instruction.",
+    desc: "Use the website, reservations email, WhatsApp, and Kampala postal address for direct planning questions.",
     href: "/contact",
     cta: "Contact Wild Spine",
   },
@@ -327,13 +327,13 @@ const fieldProofImages = [
     title: "Guide at Mgahinga",
     image: "/images/field/guide-mgahinga-sign.webp",
     imageAlt: "Wild Spine Uganda guide standing beside the Mgahinga Gorilla National Park sign",
-    caption: "Recognizable park context helps guests see the journey before they arrive.",
+    caption: "A recognizable park setting helps guests picture the day before they arrive.",
   },
   {
     title: "Ranger-station readiness",
     image: "/images/field/guide-ranger-station.webp",
     imageAlt: "Guide standing outside a stone ranger station with trekking staff nearby",
-    caption: "The best trips feel calm because the practical handoffs are handled early.",
+    caption: "Permit timing, arrival rhythm, and ranger briefings make the day feel smoother.",
   },
   {
     title: "Rwenzori terrain",
@@ -352,21 +352,21 @@ const fieldProofImages = [
 const fieldProofVideos = [
   {
     title: "Lodge arrival and recovery",
-    description: "Comfort matters after long routes. This preview shows the kind of quiet base that helps the itinerary breathe.",
+    description: "A quiet base between long drives, early starts, and forest days helps the journey breathe.",
     src: "/video/field/enttiko-lodge-preview.mp4",
     poster: "/images/field/enttiko-lodge-preview-poster.webp",
     label: "Silent preview video of a Uganda lodge arrival and room setting",
   },
   {
     title: "Wildlife between the forests",
-    description: "Uganda journeys are strongest when the route gives space for both primates and classic park moments.",
+    description: "Savannah and water moments add space and rhythm between gorilla forests and mountain trails.",
     src: "/video/field/murchison-wildlife-water.mp4",
     poster: "/images/field/murchison-wildlife-water-poster.webp",
     label: "Silent preview video of wildlife and water scenes in a Uganda national park",
   },
   {
     title: "Rwenzori waterfall trail",
-    description: "A short look at the wet, green, physical side of the Rwenzori before the high mountain opens up.",
+    description: "Wet forest, moving water, and real footing help travelers understand the mountain before they arrive.",
     src: "/video/field/rwenzori-waterfall-trail.mp4",
     poster: "/images/field/rwenzori-waterfall-trail-poster.webp",
     label: "Silent preview video of a Rwenzori waterfall and mountain trail",
@@ -380,14 +380,14 @@ const fieldProofVideos = [
   },
   {
     title: "Trail support on foot",
-    description: "Good planning shows up in the quiet details: pace, footing, local help, and the practical rhythm of the day.",
+    description: "The best travel days depend on pace, footing, local support, and calm practical rhythm.",
     src: "/video/field/forest-trail-support.mp4",
     poster: "/images/field/forest-trail-support-poster.webp",
     label: "Silent preview video of local trail support in a Uganda forest",
   },
   {
     title: "Team bridge crossing",
-    description: "Real crossings, wet boards, and practical pacing help travelers understand the mountain honestly.",
+    description: "Bridge crossings and wet boards show why mountain routes need honest pacing and preparation.",
     src: "/video/field/rwenzori-bridge-team.mp4",
     poster: "/images/field/rwenzori-bridge-team-poster.webp",
     label: "Silent preview video of a team crossing a Rwenzori bridge",
@@ -521,11 +521,11 @@ function HomeContent() {
 <a href="/tours" className="nav-link">Tours</a>
           <a href="/corporate-retreats" className="nav-link">Retreats</a>
           <a href="/conservation-membership" className="nav-link">Impact</a>
-          <a href="/why-wild-spine" className="nav-link">Trust</a>
-          <a href="/payment-information" className="nav-link">Payments</a>
+          <a href="/why-wild-spine" className="nav-link">Why us</a>
+          <a href="/payment-information" className="nav-link">How to pay</a>
           <a href="/about" className="nav-link">About</a>
           <a href="#book" className="bg-[#f5b416] text-black px-5 py-3 rounded-full font-black hover:bg-[#ffd766] transition">
-            Plan Trip
+            Start Planning
           </a>
         </div>
 
@@ -551,10 +551,10 @@ function HomeContent() {
             <a href="/conservation-membership" className="rounded-2xl bg-white/70 px-4 py-3">Impact</a>
             <a href="/guide" className="rounded-2xl bg-white/70 px-4 py-3">Guide</a>
             <a href="/volunteer" className="rounded-2xl bg-white/70 px-4 py-3">Volunteer</a>
-            <a href="/why-wild-spine" className="rounded-2xl bg-white/70 px-4 py-3">Trust</a>
-            <a href="/payment-information" className="rounded-2xl bg-white/70 px-4 py-3">Payments</a>
+            <a href="/why-wild-spine" className="rounded-2xl bg-white/70 px-4 py-3">Why us</a>
+            <a href="/payment-information" className="rounded-2xl bg-white/70 px-4 py-3">How to pay</a>
             <a href="/about" className="rounded-2xl bg-white/70 px-4 py-3">About</a>
-            <a href="#book" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-[#f5b416] px-4 py-3 text-black">Plan Trip</a>
+            <a href="#book" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-[#f5b416] px-4 py-3 text-black">Start Planning</a>
           </div>
         </div>
       )}
@@ -644,7 +644,7 @@ function HomeContent() {
                 <h3 className="text-2xl font-black text-[#123a2a]">{plan.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-[#68746a]">{plan.detail}</p>
                 <p className="mt-5 text-sm font-black uppercase tracking-widest text-[#b8860b] transition group-hover:text-[#123a2a]">
-                  {plan.cta} -&gt;
+                  {plan.cta} →
                 </p>
               </a>
             ))}
@@ -739,7 +739,7 @@ function HomeContent() {
           <div className="p-6">
             <h4 className="text-xl font-black text-[#123a2a]">{story.title}</h4>
             <p className="mt-3 min-h-20 text-sm leading-6 text-[#68746a]">{story.desc}</p>
-            <p className="mt-5 text-sm font-black text-[#b8860b]">{story.cta} -&gt;</p>
+            <p className="mt-5 text-sm font-black text-[#b8860b]">{story.cta} →</p>
           </div>
         </a>
       ))}
@@ -870,7 +870,7 @@ function HomeContent() {
                 ))}
               </ul>
 
-              <p className="text-[#b8860b] font-black">Explore Route -&gt;</p>
+              <p className="text-[#b8860b] font-black">Explore Route →</p>
             </a>
           ))}
         </div>
@@ -932,13 +932,13 @@ function HomeContent() {
   <div className="relative z-10 max-w-6xl mx-auto">
     <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-14 items-start mb-16">
       <div>
-        <p className="section-kicker">Traveler trust</p>
+        <p className="section-kicker">Travel with confidence</p>
         <h3 className="text-4xl md:text-5xl font-black mb-6">
-          Trust before the trail.
+          A serious journey should feel clear before you commit.
         </h3>
         <p className="text-[#68746a] text-lg leading-8">
-          A private Uganda journey asks for real trust. Wild Spine earns it through clear communication,
-          local route knowledge, careful permit planning, and verified company-bank transfer guidance before you send a deposit.
+          A private Uganda journey asks for confidence. Wild Spine earns it through clear communication,
+          local route knowledge, careful permit planning, and written payment instructions before you send a deposit.
         </p>
       </div>
 
@@ -956,7 +956,7 @@ function HomeContent() {
       {travelerReviews.map((review) => (
         <div key={review.name} className="rounded-2xl border border-[#d8cda9] bg-white/85 shadow-lg backdrop-blur-sm p-6">
           <p className="mb-5 text-sm font-black tracking-widest text-[#b8860b]">
-            Private traveler note
+            Guest note
           </p>
           <p className="text-[#3d4a41] leading-7 mb-6">&quot;{review.text}&quot;</p>
           <h4 className="font-black">{review.name}</h4>
@@ -1076,7 +1076,7 @@ function HomeContent() {
               <a key={title} href={link} className="premium-card">
                 <h4 className="text-2xl font-black mb-4">{title}</h4>
                 <p className="text-[#68746a] leading-7">{desc}</p>
-                <p className="text-[#b8860b] mt-8 font-black">Explore More -&gt;</p>
+                <p className="text-[#b8860b] mt-8 font-black">Explore More →</p>
               </a>
             ))}
           </div>
@@ -1157,14 +1157,14 @@ function HomeContent() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 grid gap-6 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
             <div>
-              <p className="section-kicker">Seen in the field</p>
+              <p className="section-kicker">Uganda on the ground</p>
               <h2 className="mt-3 text-4xl font-black leading-tight text-[#123a2a] md:text-6xl">
-                Real places. Real handoffs. Better trust.
+                See the places behind the promise.
               </h2>
             </div>
             <p className="max-w-3xl text-lg leading-8 text-[#68746a]">
-              Premium does not mean polished stock images. It means travelers can see the parks,
-              lodges, trails, vehicles, guides, and route texture behind the promise before they inquire.
+              Premium does not mean polished stock images. It means the parks, lodges, trails,
+              vehicles, guides, and route texture feel visible before a traveler enquires.
             </p>
           </div>
 
@@ -1210,16 +1210,16 @@ function HomeContent() {
                 </video>
               </div>
               <div className="pt-7">
-                <h3 className="text-3xl font-black leading-tight">The trip should feel clear before it feels expensive.</h3>
+                <h3 className="text-3xl font-black leading-tight">First the route makes sense. Then the quote follows.</h3>
                 <p className="mt-4 leading-7 text-white/72">
                   We use field context to explain routes honestly: what the trail feels like, where comfort matters,
-                  when permit timing controls the plan, and why official payment instructions only appear after a written invoice.
+                  how permit timing shapes the plan, and why official payment instructions only appear after a written invoice.
                 </p>
                 <div className="mt-6 grid gap-3 text-sm font-bold text-white/78 sm:grid-cols-2">
-                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">Permit logic before quotes</p>
-                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">Lodge comfort matched to route</p>
-                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">No public bank details</p>
-                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">No payment by social message</p>
+                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">Permit timing explained</p>
+                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">Lodges matched to route</p>
+                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">Official invoice before deposit</p>
+                  <p className="rounded-2xl border border-white/10 bg-white/8 p-4">Company-bank transfer only</p>
                 </div>
               </div>
             </div>
@@ -1237,14 +1237,14 @@ function HomeContent() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="section-kicker">Before you inquire</p>
+              <p className="section-kicker">Before you enquire</p>
               <h2 className="mt-3 text-3xl font-black leading-tight text-[#123a2a] md:text-5xl">
-                The pages serious travelers check first.
+                Helpful pages before you start planning.
               </h2>
             </div>
             <p className="max-w-2xl leading-7 text-[#68746a]">
-              Trust, payment safeguards, booking terms, refunds, reviews, and official contact details are kept visible
-              so no one has to rely on a social-media message for critical information.
+              Keep the practical pages close to the booking point: why travel with us, how bank-transfer payments work,
+              terms, refunds, guest notes, and official contact details.
             </p>
           </div>
 
@@ -1258,7 +1258,7 @@ function HomeContent() {
                 <h3 className="text-2xl font-black text-[#123a2a]">{page.title}</h3>
                 <p className="mt-4 flex-1 text-sm leading-6 text-[#68746a]">{page.desc}</p>
                 <p className="mt-6 text-sm font-black uppercase tracking-widest text-[#b8860b] transition group-hover:text-[#123a2a]">
-                  {page.cta} -&gt;
+                  {page.cta} →
                 </p>
               </a>
             ))}

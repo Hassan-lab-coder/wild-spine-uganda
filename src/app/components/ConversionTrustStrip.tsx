@@ -1,15 +1,15 @@
 const trustItems = [
   {
-    label: "Trusted by international travelers",
-    detail: "Built for guests flying in from the UK, US, Europe, and other long-haul travel markets.",
+    label: "For overseas guests",
+    detail: "Built for travelers flying in from the UK, US, Europe, and other long-haul markets.",
   },
   {
     label: "Private journeys from $1,500+",
-    detail: "Fully customized expeditions shaped around permits, comfort, and route logic.",
+    detail: "Tailor-made routes shaped around permits, comfort, pacing, and lodge fit.",
   },
   {
-    label: "Clear next steps within 24 hours",
-    detail: "We respond with practical timing, route questions, and permit guidance before quoting.",
+    label: "Clear reply within 24 hours",
+    detail: "Expect practical timing, route questions, and permit guidance before quoting.",
   },
 ];
 
@@ -26,14 +26,14 @@ export default function ConversionTrustStrip() {
         <div>
           <p className="section-kicker">Traveler confidence</p>
           <h2 className="text-3xl font-black leading-tight md:text-4xl">
-            Built for travelers who need trust before they book.
+            Built for travelers who want clarity before they book.
           </h2>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid auto-rows-fr gap-4 sm:grid-cols-3">
           {trustItems.map((item) => (
-            <div key={item.label} className="rounded-2xl border border-[#d8cda9] bg-white/70 p-5 shadow-sm">
-              <h3 className="text-sm font-black uppercase tracking-widest text-[#123a2a]">{item.label}</h3>
+            <div key={item.label} className="rounded-2xl border border-[#d8cda9] bg-white/72 p-5 shadow-sm">
+              <h3 className="text-lg font-black leading-tight text-[#123a2a]">{item.label}</h3>
               <p className="mt-3 text-sm leading-6 text-[#68746a]">{item.detail}</p>
             </div>
           ))}

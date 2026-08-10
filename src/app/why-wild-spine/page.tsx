@@ -3,14 +3,14 @@ import { seoMetadata } from "@/lib/seo";
 import OrganicVideoCard from "../components/OrganicVideoCard";
 
 export const metadata = seoMetadata({
-  title: "Why Trust Wild Spine Uganda?",
+  title: "Why Travel With Wild Spine Uganda?",
   description:
-    "Wild Spine Uganda trust architecture covering legal identity, licensing, team profiles, permit handling, supplier selection, financial safeguards, emergency support, reviews, sustainability, and complaints.",
+    "How Wild Spine Uganda plans private gorilla trekking, Rwenzori, and safari journeys with clear documents, verified details, company-bank transfers, and traveller support.",
   path: "/why-wild-spine",
 });
 
 const proofSections = [
-  ["Legal business identity", "Verified legal entity, registration number, and registered address will be displayed here once confirmed from official company documents. Until then, Wild Spine avoids publishing unverified claims."],
+  ["Legal business identity", "Legal entity, registration number, and registered address will be published after they are confirmed from official company documents."],
   ["Licensing status", "Tourism licence, guide credentials, memberships, and verification links will be added only after the documents are checked and current."],
   ["Permit handling", "Gorilla and chimpanzee permit planning is handled through official channels. Permit dates, sectors, and non-refundable conditions are explained before payment."],
   ["Supplier selection", "Lodges, transport providers, guides, porters, and specialist suppliers are selected around safety, location logic, reliability, guest fit, and written supplier terms."],
@@ -18,23 +18,23 @@ const proofSections = [
   ["Emergency support", "Travellers receive arrival, transfer, park, guide, and operations contacts in their confirmed booking pack. Emergency support procedures are documented before travel."],
   ["Insurance guidance", "Travellers are advised to arrange appropriate travel, medical, evacuation, cancellation, curtailment, and baggage insurance before departure."],
   ["Sustainability", "Wild Spine plans routes that respect park rules, local communities, guide professionalism, conservation priorities, and realistic pressure on sensitive ecosystems."],
-  ["Reviews and references", "Public third-party review links and references will be added only when verified. Internal private feedback is never presented as a public-platform review."],
+  ["Reviews and references", "Public third-party review links and references will be added only when verified. Private guest notes are kept separate from public review platforms."],
   ["Complaints process", "Complaints must be submitted in writing with booking references. Wild Spine logs the issue, acknowledges receipt, investigates, and responds with next steps."],
 ];
 
 const teamPlaceholders = [
-  ["Founder / Managing Director", "Full name, portrait, tourism experience, languages, specialist regions, and verified qualifications pending confirmation."],
+  ["Founder / Managing Director", "Full name, portrait, tourism experience, languages, specialist regions, and verified qualifications will be added after confirmation."],
   ["Senior Journey Planner", "Assigned planner profiles will show real names, portraits, languages, parks handled, and planning experience once approved."],
-  ["Lead Guide / Field Operations", "Guide credentials, park specialisms, languages, first-aid or mountain qualifications, and licence details pending verification."],
+  ["Lead Guide / Field Operations", "Guide credentials, park specialisms, languages, first-aid or mountain qualifications, and licence details will be added after verification."],
 ];
 
 const bookingControls = [
   "No booking is confirmed solely through WhatsApp or social media.",
-  "No public user can mark an invoice paid.",
+  "Travellers cannot mark an invoice paid themselves.",
   "A transfer screenshot is recorded only as supporting advice, never proof of receipt.",
   "Finance must match bank transaction reference, sender, amount, currency, value date, and invoice reference.",
   "Corrections, refunds, and disputed statuses require admin-level review.",
-  "Payment status changes create audit events for later review.",
+  "Financial changes are logged for later review.",
 ];
 
 const evidenceMedia = [
@@ -42,13 +42,13 @@ const evidenceMedia = [
     title: "Park handoff visibility",
     image: "/images/field/guide-ranger-station.webp",
     alt: "Guide standing outside a stone ranger station with trekking staff nearby",
-    text: "Real people and recognizable park settings make the process easier to trust.",
+    text: "Real people and recognizable park settings make the planning process easier to understand.",
   },
   {
     title: "Route preparation",
     image: "/images/field/forest-guide-moment.webp",
     alt: "Guide filming a forest trail moment in Uganda",
-    text: "Trust grows when the site shows the terrain that creates planning decisions.",
+    text: "The terrain helps explain route choices, gear advice, pacing, and recovery days.",
   },
   {
     title: "Mountain terrain context",
@@ -72,14 +72,13 @@ export default function WhyWildSpinePage() {
         />
         <div className="absolute inset-0 -z-10 bg-[#123a2a]/78" />
         <div className="mx-auto max-w-5xl">
-          <p className="section-kicker">Why trust Wild Spine?</p>
+          <p className="section-kicker">Why travel with Wild Spine?</p>
           <h1 className="mt-5 text-5xl font-black leading-tight md:text-7xl">
-            Real trust is built from real people, precise documents, and verifiable controls.
+            Real confidence comes from real people, clear documents, and careful planning.
           </h1>
           <p className="mt-7 max-w-3xl text-lg leading-8 text-white/78">
-            Wild Spine Uganda is moving beyond beautiful design into evidence-based trust:
-            confirmed company identity, named team members, formal invoices, bank reconciliation,
-            clear terms, and documented traveller support.
+            Wild Spine Uganda combines Uganda-based route knowledge with formal invoices,
+            company-bank transfer discipline, clear terms, and practical traveller support.
           </p>
         </div>
       </section>
@@ -88,7 +87,7 @@ export default function WhyWildSpinePage() {
         <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-2">
           {proofSections.map(([title, text]) => (
             <article key={title} className="rounded-3xl border border-[#d8cda9] bg-white/78 p-7 shadow-sm">
-              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#b8860b]">Trust evidence</p>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#b8860b]">Our standard</p>
               <h2 className="mt-3 text-2xl font-black">{title}</h2>
               <p className="mt-4 leading-7 text-[#4c5f51]">{text}</p>
             </article>
@@ -100,9 +99,9 @@ export default function WhyWildSpinePage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="section-kicker">Visible evidence</p>
+              <p className="section-kicker">Visible planning</p>
               <h2 className="mt-3 text-4xl font-black md:text-5xl">
-                Real media supports trust, but does not replace verification.
+                Field media supports confidence, but does not replace verification.
               </h2>
             </div>
             <p className="max-w-3xl leading-8 text-white/72">
@@ -164,7 +163,7 @@ export default function WhyWildSpinePage() {
       <section className="px-6 py-20 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="rounded-[2rem] bg-[#123a2a] p-8 text-white shadow-2xl">
-            <p className="section-kicker">Client money controls</p>
+            <p className="section-kicker">Client money safeguards</p>
             <h2 className="mt-3 text-4xl font-black">Company-bank transfer only, matched by finance.</h2>
             <p className="mt-5 text-lg leading-8 text-white/78">
               Wild Spine Uganda accepts payments only into the official company bank account stated on an

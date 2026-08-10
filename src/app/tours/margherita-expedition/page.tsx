@@ -15,7 +15,7 @@ export const metadata = seoMetadata({
 export default function MargheritaExpeditionPage() {
   const summitMedia = [
     {
-      title: "Margherita summit proof",
+      title: "Margherita summit context",
       image: "/images/organic/margherita-peak-summit.webp",
       alt: "Climber beside the Margherita Peak summit sign in the Rwenzori Mountains",
       caption: "The summit is serious enough to require early preparation, gear clarity, and contingency thinking.",
@@ -79,7 +79,7 @@ export default function MargheritaExpeditionPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
             <div>
-              <p className="section-kicker">Summit evidence</p>
+              <p className="section-kicker">Summit reality</p>
               <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
                 Premium summit planning needs visible mountain reality.
               </h2>

@@ -48,8 +48,8 @@ export default function PublicSiteFooter() {
             <a href="/insights/is-uganda-safe-for-tourists" className="hover:text-[#f5b416]">Uganda Safety Guide</a>
             <a href="/#book" className="hover:text-[#f5b416]">Start Private Planning</a>
             <a href="/terms" className="hover:text-[#f5b416]">Booking Terms</a>
-            <a href="/payment-information" className="hover:text-[#f5b416]">Payment Information</a>
-            <a href="/why-wild-spine" className="hover:text-[#f5b416]">Why Trust Wild Spine</a>
+            <a href="/payment-information" className="hover:text-[#f5b416]">How Payments Work</a>
+            <a href="/why-wild-spine" className="hover:text-[#f5b416]">Why Travel With Wild Spine</a>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ export default function PublicSiteFooter() {
       </div>
 
       <div className="mx-auto mt-12 max-w-6xl border-t border-white/10 pt-8 text-center text-sm text-white/55">
-        (c) 2026 Wild Spine Uganda. Trek the Backbone of Africa. Official company-bank transfer only after invoice issuance.
+        © 2026 Wild Spine Uganda. Trek the Backbone of Africa. Official company-bank transfer only after invoice issuance.
       </div>
     </footer>
   );

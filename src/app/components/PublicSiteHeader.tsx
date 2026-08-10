@@ -10,7 +10,8 @@ const navItems = [
   ["Retreats", "/corporate-retreats"],
   ["Impact", "/conservation-membership"],
   ["Guide", "/guide"],
-  ["Trust", "/why-wild-spine"],
+  ["Why us", "/why-wild-spine"],
+  ["How to pay", "/payment-information"],
   ["About", "/about"],
 ] as const;
 
@@ -78,7 +79,7 @@ export default function PublicSiteHeader() {
             href="/#book"
             className="whitespace-nowrap rounded-full bg-[#f5b416] px-4 py-3 text-sm font-black text-[#123a2a] transition hover:bg-[#ffd766] sm:px-5"
           >
-            <span className="hidden sm:inline">Plan Trip</span>
+            <span className="hidden sm:inline">Start Planning</span>
             <span className="sm:hidden">Plan</span>
           </a>
         </div>

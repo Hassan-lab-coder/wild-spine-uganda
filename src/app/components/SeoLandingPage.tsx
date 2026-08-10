@@ -47,7 +47,7 @@ export default function SeoLandingPage({
   timeline = [
     ["Step 1", "Share your travel month, group size, comfort level, and must-see experiences."],
     ["Step 2", "We check route logic, permit timing, lodge fit, and transfer reality before quoting."],
-    ["Step 3", "You receive clear next steps with inclusions, exclusions, payment guidance, and official invoice controls."],
+    ["Step 3", "You receive clear next steps with inclusions, exclusions, safe payment guidance, and a numbered invoice when approved."],
   ],
 }: SeoLandingPageProps) {
   const href = `/?source=${encodeURIComponent(kicker.toLowerCase().replaceAll(" ", "_"))}${route ? `&route=${encodeURIComponent(route)}` : ""}#book`;
@@ -96,7 +96,7 @@ export default function SeoLandingPage({
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <p className="section-kicker">Why plan with Wild Spine</p>
-            <h2 className="text-4xl font-black">Local guidance for travelers who want wonder without guesswork.</h2>
+            <h2 className="text-4xl font-black">Local safari guidance for travelers who want wonder with clarity.</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {bullets.map((item) => (
@@ -113,9 +113,9 @@ export default function SeoLandingPage({
         <section className="border-t border-white/10 px-6 py-24 md:px-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 max-w-3xl">
-              <p className="section-kicker">From the route</p>
+              <p className="section-kicker">On the ground</p>
               <h2 className="mt-3 text-4xl font-black md:text-5xl">
-                Real places behind the proposed journey.
+                See the places behind the proposed journey.
               </h2>
               <p className="mt-5 leading-8 text-gray-400">
                 Photos and clips show terrain, comfort, pacing, and route feeling before a traveler commits.

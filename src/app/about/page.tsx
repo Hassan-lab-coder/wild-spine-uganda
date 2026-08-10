@@ -4,9 +4,9 @@ import OrganicVideoCard from "../components/OrganicVideoCard";
 
 const proofPoints = [
   {
-    value: "12+",
-    label: "Years route experience",
-    text: "Wild Spine planning is shaped by years of Uganda field movement across gorilla, safari, and mountain travel realities.",
+    value: "Route-led",
+    label: "Uganda planning",
+    text: "Wild Spine planning is shaped by real movement across gorilla, safari, and mountain travel realities.",
   },
   {
     value: "Local",
@@ -63,29 +63,29 @@ const specialties = [
 
 const fieldTeamMedia = [
   {
-    title: "Park handoff context",
+    title: "Park arrival context",
     image: "/images/field/guide-ranger-station.webp",
     alt: "Guide standing outside a stone ranger station with trekking staff nearby",
-    text: "Visible people and real park settings make the brand feel accountable, not anonymous.",
+    text: "Recognizable people and real park settings make the journey feel grounded before arrival.",
   },
   {
     title: "Forest trail support",
     image: "/images/field/forest-guide-moment.webp",
     alt: "Guide filming a forest trail moment in Uganda",
-    text: "Complex trips depend on the quality of the people behind the itinerary.",
+    text: "Complex trips depend on the calm, practical people behind the itinerary.",
   },
   {
     title: "Mountain route texture",
     image: "/images/field/rwenzori-forest-ladder.webp",
     alt: "A ladder bridge section through dense Rwenzori forest",
-    text: "Wild Spine should feel rooted in Uganda's real terrain, not a generic luxury promise.",
+    text: "The brand should feel rooted in Uganda's real terrain, not generic luxury language.",
   },
 ];
 
 export const metadata = seoMetadata({
   title: "About Our Local Gorilla & Rwenzori Experts",
   description:
-    "Meet Wild Spine Uganda, a local premium travel team planning private gorilla trekking, Bwindi permits, Rwenzori expeditions, and high-trust Uganda safari journeys.",
+    "Meet Wild Spine Uganda, a local premium travel team planning private gorilla trekking, Bwindi permits, Rwenzori expeditions, and high-touch Uganda safari journeys.",
   path: "/about",
   image: "/images/field/guide-ranger-station.webp",
   keywords: ["Wild Spine Uganda", "Uganda tour operator", "gorilla trekking Uganda", "Rwenzori expeditions"],
@@ -143,7 +143,7 @@ export default function AboutPage() {
       <section className="bg-[#07110c] px-6 py-24 md:px-24">
         <div className="mx-auto max-w-6xl">
           <div className="max-w-3xl">
-            <p className="section-kicker">Why Travelers Trust Us</p>
+            <p className="section-kicker">Why Travelers Choose Us</p>
             <h2 className="text-4xl font-black leading-tight md:text-6xl">
               The difference is not louder marketing. It is better preparation.
             </h2>
@@ -177,13 +177,13 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="section-kicker">Seen in the field</p>
+              <p className="section-kicker">On the ground</p>
               <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
-                Trust grows when travelers can see the people and places.
+                The journey feels stronger when the people and places are visible.
               </h2>
             </div>
             <p className="max-w-3xl text-lg leading-8 text-white/68">
-              We only publish named roles and credentials when they can be verified. Real field media keeps the company grounded without overstating credentials.
+              Named profiles and credentials are published only after confirmation. Field media keeps the company grounded without overstating credentials.
             </p>
           </div>
 
@@ -280,7 +280,7 @@ export default function AboutPage() {
 
         <div className="relative z-10 mx-auto max-w-6xl">
           <div className="max-w-3xl">
-            <p className="section-kicker">Wild Spine Brand Trust Review</p>
+            <p className="section-kicker">For first-time Uganda travelers</p>
             <h2 className="text-4xl font-black leading-tight md:text-6xl">
               Safe enough to inquire. Strong enough to remember.
             </h2>

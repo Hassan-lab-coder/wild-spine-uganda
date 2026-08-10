@@ -47,4 +47,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.vercel
+# Local agent, Ruflo, and Codex runtime files
+.agents/
+.claude/
+.claude-flow/
+.codex/
+.swarm/
+AGENTS.md
+CLAUDE.md
+ruvector.db
