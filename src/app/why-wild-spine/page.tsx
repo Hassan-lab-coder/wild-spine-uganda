@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
 import OrganicVideoCard from "../components/OrganicVideoCard";
+import VerifiedTeamProfiles from "../components/VerifiedTeamProfiles";
 
 export const metadata = seoMetadata({
   title: "Why Travel With Wild Spine Uganda?",
@@ -20,12 +21,6 @@ const proofSections = [
   ["Sustainability", "Wild Spine plans routes that respect park rules, local communities, guide professionalism, conservation priorities, and realistic pressure on sensitive ecosystems."],
   ["Reviews and references", "Public third-party review links and references will be added only when verified. Private guest notes are kept separate from public review platforms."],
   ["Complaints process", "Complaints must be submitted in writing with booking references. Wild Spine logs the issue, acknowledges receipt, investigates, and responds with next steps."],
-];
-
-const teamPlaceholders = [
-  ["Founder / Managing Director", "Full name, portrait, tourism experience, languages, specialist regions, and verified qualifications will be added after confirmation."],
-  ["Senior Journey Planner", "Assigned planner profiles will show real names, portraits, languages, parks handled, and planning experience once approved."],
-  ["Lead Guide / Field Operations", "Guide credentials, park specialisms, languages, first-aid or mountain qualifications, and licence details will be added after verification."],
 ];
 
 const bookingControls = [
@@ -137,28 +132,7 @@ export default function WhyWildSpinePage() {
         </div>
       </section>
 
-      <section className="border-y border-[#d8cda9] bg-[#f8f4e8] px-6 py-20 md:px-24">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <p className="section-kicker">Team and guide profiles</p>
-            <h2 className="mt-3 text-4xl font-black">People trust identifiable people.</h2>
-            <p className="mt-5 leading-8 text-[#68746a]">
-              Names, portraits, experience, languages, regions, and qualifications should appear here only after they are verified by Wild Spine management.
-            </p>
-          </div>
-          <div className="grid gap-5 md:grid-cols-3">
-            {teamPlaceholders.map(([role, text]) => (
-              <article key={role} className="rounded-3xl border border-[#d8cda9] bg-white p-6">
-                <div className="mb-5 flex h-28 items-center justify-center rounded-2xl border border-dashed border-[#d8cda9] bg-[#fff9ea] text-center text-xs font-black uppercase tracking-widest text-[#b8860b]">
-                  Real portrait pending
-                </div>
-                <h3 className="text-xl font-black">{role}</h3>
-                <p className="mt-3 text-sm leading-6 text-[#68746a]">{text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <VerifiedTeamProfiles />
 
       <section className="px-6 py-20 md:px-24">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.05fr_0.95fr]">
