@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { seoMetadata } from "@/lib/seo";
+import PrivateRouteIdeas from "../components/PrivateRouteIdeas";
 
 export const metadata = seoMetadata({
-  title: "Uganda Tours | Gorilla Trekking & Rwenzori Expeditions",
+  title: "Uganda Tours 2026 & 2027 | Gorilla Trekking, Safari & Rwenzori",
   description:
-    "Explore private Uganda tours with gorilla trekking in Bwindi, Rwenzori hiking, Margherita expeditions, luxury safari extensions, and permit planning.",
+    "Explore private Uganda tour ideas for 2026 and 2027 with gorilla trekking in Bwindi, Rwenzori hiking, safari extensions, route planning, and permit guidance.",
   path: "/tours",
   image: "/images/travel/forest-guide.jpg",
   keywords: ["Uganda tours", "gorilla trekking Uganda", "Rwenzori expeditions", "private Uganda safari"],
@@ -52,10 +53,12 @@ export default function ToursPage() {
 
         <div className="relative z-10 mx-auto max-w-6xl">
           <a href="/" className="text-yellow-500 hover:text-yellow-400">Back Home</a>
-          <p className="section-kicker mt-16">Signature Expeditions</p>
-          <h1 className="mb-8 text-5xl font-black leading-tight md:text-7xl">Choose your Uganda crossing.</h1>
+          <p className="section-kicker mt-16">Private Uganda tours</p>
+          <h1 className="mb-8 text-5xl font-black leading-tight md:text-7xl">
+            Gorilla, safari, and Rwenzori routes planned around real dates.
+          </h1>
           <p className="max-w-3xl text-lg leading-8 text-gray-300">
-            From mountain gorillas in Bwindi to glacier trails in the Rwenzori, these journeys are built for travelers who want rare, premium, and unforgettable Uganda.
+            From mountain gorillas in Bwindi to glacier trails in the Rwenzori, these journeys are starting points for private planning. We check permits, lodges, routing, and pacing before you receive a quote.
           </p>
         </div>
       </section>
@@ -91,6 +94,8 @@ export default function ToursPage() {
           </p>
         </div>
       </section>
+
+      <PrivateRouteIdeas theme="dark" />
     </main>
   );
 }

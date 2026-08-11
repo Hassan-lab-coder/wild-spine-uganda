@@ -3,9 +3,9 @@ import { seoMetadata } from "@/lib/seo";
 import OrganicVideoCard from "../components/OrganicVideoCard";
 
 export const metadata = seoMetadata({
-  title: "Traveler Reviews & Private Trip Feedback",
+  title: "Reviews & References | Wild Spine Uganda",
   description:
-    "Read Wild Spine Uganda traveler feedback and practical guidance for verifying gorilla trekking, Rwenzori, and private safari planning.",
+    "Understand how Wild Spine Uganda verifies traveler reviews, references, field proof, and trust signals for gorilla trekking, Rwenzori, and private safari planning.",
   path: "/reviews",
   image: "/images/field/guide-ranger-station.webp",
   keywords: ["Wild Spine Uganda reviews", "Uganda tour operator reviews", "gorilla trekking reviews"],
@@ -18,54 +18,30 @@ const proofStats = [
   ["Uganda based", "Ground knowledge from Uganda, not a remote brochure desk."],
 ];
 
-const reviews = [
+const reviewEvidencePlan = [
   {
-    quote: "Wild Spine handled the details we were nervous about: permits, route timing, lodge choices, and the long transfers. The trip felt personal, calm, and very well organized.",
-    name: "Sarah M.",
-    country: "United States",
-    route: "Bwindi gorilla trek",
-    date: "Traveled September 2025",
-    source: "Private client feedback",
+    title: "Verified public review links",
+    status: "Pending verification",
+    note:
+      "Public review profiles will be linked here only after Wild Spine confirms the account ownership and source authenticity.",
   },
   {
-    quote: "The team knew exactly when to slow down, when to move, and what mattered on the mountain. We felt looked after from Kampala to the Rwenzori valleys.",
-    name: "Daniel K.",
-    country: "Germany",
-    route: "Rwenzori hiking extension",
-    date: "Traveled July 2025",
-    source: "Post-trip email review",
+    title: "Client references",
+    status: "Shared privately when available",
+    note:
+      "Some travelers prefer privacy. References should be shared only with consent and never published as anonymous proof.",
   },
   {
-    quote: "This did not feel like a copy-paste safari. The communication before arrival was clear, honest, and fast, which made trusting them easy.",
-    name: "Amelia R.",
-    country: "United Kingdom",
-    route: "Private Uganda itinerary",
-    date: "Traveled February 2026",
-    source: "Verified planning client",
+    title: "Field proof",
+    status: "Visible on site",
+    note:
+      "Real route photos and short clips are used to show terrain, lodge rhythm, guides, vehicles, and park context without overstating credentials.",
   },
   {
-    quote: "Everything was explained before we paid: permits, transfer times, accommodation level, and what could change if availability moved. That clarity mattered.",
-    name: "James C.",
-    country: "United Kingdom",
-    route: "Spine Explorer",
-    date: "Traveled August 2025",
-    source: "Planning feedback",
-  },
-  {
-    quote: "The gorilla day was emotional, but the best part was not worrying about the logistics. We knew where we were going and why each stop mattered.",
-    name: "Emily R.",
-    country: "United States",
-    route: "Bwindi and Lake Bunyonyi",
-    date: "Traveled December 2025",
-    source: "Private traveler review",
-  },
-  {
-    quote: "Professional, reliable, and deeply knowledgeable about Uganda's wilderness. The mountain preparation was honest and very practical.",
-    name: "Lucas M.",
-    country: "Germany",
-    route: "Rwenzori expedition planning",
-    date: "Traveled January 2026",
-    source: "Expedition client feedback",
+    title: "Written booking trail",
+    status: "Required before payment",
+    note:
+      "Itineraries, itemised quotes, numbered invoices, receipts, and payment status are the primary trust record for serious bookings.",
   },
 ];
 
@@ -88,7 +64,7 @@ export default function ReviewsPage() {
       <section className="px-6 pb-20 pt-32 md:px-24">
         <div className="mx-auto max-w-6xl">
           <a href="/" className="text-yellow-500 hover:text-yellow-400">Back Home</a>
-          <p className="section-kicker mt-16">Guest notes</p>
+          <p className="section-kicker mt-16">Reviews and references</p>
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
               <h1 className="mt-5 text-5xl font-black leading-tight md:text-7xl">
@@ -96,7 +72,7 @@ export default function ReviewsPage() {
               </h1>
             </div>
             <p className="text-lg leading-8 text-gray-300">
-              Gorilla trekking and Rwenzori travel are serious bookings. This page brings together guest notes, field scenes, and practical questions travelers can ask before they commit.
+              Gorilla trekking and Rwenzori travel are serious bookings. This page shows how Wild Spine handles review evidence, field proof, and practical verification questions without publishing unverified claims.
             </p>
           </div>
         </div>
@@ -175,26 +151,20 @@ export default function ReviewsPage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="section-kicker">Guest Feedback</p>
-              <h2 className="mt-3 text-4xl font-black md:text-5xl">Recent planning and trip notes</h2>
+              <p className="section-kicker">Evidence standard</p>
+              <h2 className="mt-3 text-4xl font-black md:text-5xl">Reviews are published only when they can be verified.</h2>
             </div>
             <a href="/#book" className="rounded-full bg-yellow-500 px-7 py-4 text-center font-black text-black hover:bg-yellow-400">
               Request Your Route
             </a>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {reviews.map((review) => (
-              <article key={`${review.name}-${review.route}`} className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <p className="mb-5 text-sm font-black tracking-widest text-yellow-500">GUEST NOTE</p>
-                <p className="leading-7 text-gray-300">&quot;{review.quote}&quot;</p>
-                <div className="mt-6 border-t border-white/10 pt-5">
-                  <h3 className="font-black">{review.name}</h3>
-                  <p className="text-sm text-gray-500">{review.country}</p>
-                  <p className="mt-3 text-sm font-bold text-yellow-500">{review.route}</p>
-                  <p className="mt-2 text-xs uppercase tracking-widest text-gray-500">{review.date}</p>
-                  <p className="mt-2 text-xs text-gray-500">{review.source}</p>
-                </div>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {reviewEvidencePlan.map((item) => (
+              <article key={item.title} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                <p className="mb-5 text-sm font-black tracking-widest text-yellow-500">{item.status}</p>
+                <h3 className="text-2xl font-black">{item.title}</h3>
+                <p className="mt-4 leading-7 text-gray-300">{item.note}</p>
               </article>
             ))}
           </div>

@@ -13,10 +13,10 @@ const trustItems = [
   },
 ];
 
-const shortQuotes = [
-  "The planning felt calm, personal, and very well organized.",
-  "We always knew the next step before we arrived in Uganda.",
-  "Not a copy-paste safari. The communication made trusting them easy.",
+const planningChecks = [
+  "Permit and lodge availability checked before quoting",
+  "Transfer times and recovery days explained in writing",
+  "Company-bank payment steps shared only on authorised invoices",
 ];
 
 export default function ConversionTrustStrip() {
@@ -41,9 +41,9 @@ export default function ConversionTrustStrip() {
       </div>
 
       <div className="mx-auto mt-8 grid max-w-6xl gap-3 md:grid-cols-3">
-        {shortQuotes.map((quote) => (
-          <p key={quote} className="rounded-full border border-[#d8cda9] bg-white/55 px-5 py-3 text-sm font-bold text-[#4e6257]">
-            &quot;{quote}&quot;
+        {planningChecks.map((check) => (
+          <p key={check} className="rounded-full border border-[#d8cda9] bg-white/55 px-5 py-3 text-sm font-bold text-[#4e6257]">
+            {check}
           </p>
         ))}
       </div>

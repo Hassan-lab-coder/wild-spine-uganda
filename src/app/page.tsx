@@ -12,6 +12,7 @@ import TrustSafetyBlock from "./components/TrustSafetyBlock";
 import BookingConfidencePanel from "./components/BookingConfidencePanel";
 import PlanWithConfidence from "./components/PlanWithConfidence";
 import OrganicVideoCard from "./components/OrganicVideoCard";
+import PrivateRouteIdeas from "./components/PrivateRouteIdeas";
 
 const tours = [
   {
@@ -194,30 +195,24 @@ const storyCards = [
   },
 ];
 
-const travelerReviews = [
+const travelerQuestions = [
   {
-    text: "Wild Spine handled the details we were nervous about: permits, route timing, lodge choices, and the long transfers. The trip felt personal, calm, and very well organized.",
-    name: "Sarah M.",
-    country: "United States",
-    trip: "Bwindi gorilla trek",
-    date: "Traveled September 2025",
-    source: "Private client feedback",
+    title: "Will the route feel rushed?",
+    answer:
+      "We build in realistic drive times, early starts only where they make sense, and recovery space after intense forest or mountain days.",
+    detail: "Pacing and comfort",
   },
   {
-    text: "The team knew exactly when to slow down, when to move, and what mattered on the mountain. We felt looked after from Kampala to the Rwenzori valleys.",
-    name: "Daniel K.",
-    country: "Germany",
-    trip: "Rwenzori hiking extension",
-    date: "Traveled July 2025",
-    source: "Post-trip email review",
+    title: "What happens before I pay?",
+    answer:
+      "You receive a written itinerary, itemised quotation, cancellation terms, and a numbered invoice before any company-bank transfer is requested.",
+    detail: "Clear paperwork",
   },
   {
-    text: "This did not feel like a copy-paste safari. The communication before arrival was clear, honest, and fast, which made trusting them easy.",
-    name: "Amelia R.",
-    country: "United Kingdom",
-    trip: "Private Uganda itinerary",
-    date: "Traveled February 2026",
-    source: "Verified planning client",
+    title: "Can I compare route options?",
+    answer:
+      "Yes. We can compare Bwindi sectors, fly-in versus drive-in access, lodge styles, and extensions before you choose the route.",
+    detail: "Decision support",
   },
 ];
 
@@ -309,10 +304,10 @@ const planningPageLinks = [
     cta: "Read refund policy",
   },
   {
-    title: "Reviews",
-    desc: "Guest notes, field context, and verified public review links as they become available.",
+    title: "Reviews & references",
+    desc: "How review links, client references, field proof, and booking evidence are verified before publication.",
     href: "/reviews",
-    cta: "Read guest notes",
+    cta: "Review trust evidence",
   },
   {
     title: "Official contact",
@@ -870,11 +865,13 @@ function HomeContent() {
                 ))}
               </ul>
 
-              <p className="text-[#b8860b] font-black">Explore Route →</p>
+              <p className="text-[#b8860b] font-black">Explore route</p>
             </a>
           ))}
         </div>
       </section>
+
+      <PrivateRouteIdeas />
 
 <section className="py-32 px-6 md:px-24 bg-[#123a2a] text-white">
   <div className="max-w-6xl mx-auto">
@@ -953,17 +950,13 @@ function HomeContent() {
     </div>
 
     <div className="grid md:grid-cols-3 gap-6">
-      {travelerReviews.map((review) => (
-        <div key={review.name} className="rounded-2xl border border-[#d8cda9] bg-white/85 shadow-lg backdrop-blur-sm p-6">
+      {travelerQuestions.map((item) => (
+        <div key={item.title} className="rounded-2xl border border-[#d8cda9] bg-white/85 shadow-lg backdrop-blur-sm p-6">
           <p className="mb-5 text-sm font-black tracking-widest text-[#b8860b]">
-            Guest note
+            {item.detail}
           </p>
-          <p className="text-[#3d4a41] leading-7 mb-6">&quot;{review.text}&quot;</p>
-          <h4 className="font-black">{review.name}</h4>
-          <p className="text-sm text-[#7b857b]">{review.country}</p>
-          <p className="mt-3 text-sm font-bold text-[#b8860b]">{review.trip}</p>
-          <p className="mt-2 text-xs uppercase tracking-widest text-[#7b857b]">{review.date}</p>
-          <p className="mt-2 text-xs text-[#7b857b]">{review.source}</p>
+          <h4 className="mb-4 text-2xl font-black text-[#123a2a]">{item.title}</h4>
+          <p className="text-[#3d4a41] leading-7">{item.answer}</p>
         </div>
       ))}
     </div>
@@ -1244,7 +1237,7 @@ function HomeContent() {
             </div>
             <p className="max-w-2xl leading-7 text-[#68746a]">
               Keep the practical pages close to the booking point: why travel with us, how bank-transfer payments work,
-              terms, refunds, guest notes, and official contact details.
+              terms, refunds, review evidence, and official contact details.
             </p>
           </div>
 

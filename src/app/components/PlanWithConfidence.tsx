@@ -22,9 +22,14 @@ export default function PlanWithConfidence() {
           </a>
         </div>
 
-        <div className="grid auto-rows-fr gap-4 sm:grid-cols-2">
-          {bankTransferTrustPoints.map((point) => (
-            <div key={point} className="flex min-h-28 items-center rounded-2xl border border-[#d8cda9] bg-white/78 p-5 shadow-sm">
+        <div className="grid auto-rows-fr gap-4 sm:grid-cols-2 xl:grid-cols-6">
+          {bankTransferTrustPoints.map((point, index) => (
+            <div
+              key={point}
+              className={`flex min-h-28 items-center rounded-2xl border border-[#d8cda9] bg-white/78 p-5 shadow-sm ${
+                index < 3 ? "xl:col-span-2" : "xl:col-span-3"
+              }`}
+            >
               <p className="font-bold leading-7 text-[#365143]">{point}</p>
             </div>
           ))}
