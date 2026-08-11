@@ -4,8 +4,8 @@ const profileSlots = [
   {
     role: "Founder / Managing Director",
     focus: "Company leadership and booking accountability",
-    image: "/images/field/guide-ranger-station.webp",
-    imageAlt: "Field team outside a Uganda ranger station during trek preparation",
+    image: "/images/profiles/founder-director-placeholder.webp",
+    imageAlt: "Non-identifying founder profile preview outside a Uganda safari lodge setting",
     summary:
       "The founder profile will publish the approved public name, leadership role, Uganda tourism background, languages, and verified business responsibility.",
     checks: ["Public name", "Approved portrait", "Company role", "Tourism background"],
@@ -13,8 +13,8 @@ const profileSlots = [
   {
     role: "Senior Journey Planner",
     focus: "Itinerary design, permits, lodges, and guest communication",
-    image: "/images/field/forest-guide-moment.webp",
-    imageAlt: "Guide capturing a forest trail moment in Uganda",
+    image: "/images/profiles/journey-planner-placeholder.webp",
+    imageAlt: "Non-identifying journey planner profile preview reviewing a Uganda itinerary",
     summary:
       "Journey planner profiles will show who handles your route, which parks they know well, languages spoken, and how they support you before arrival.",
     checks: ["Assigned planner", "Route regions", "Languages", "Planning experience"],
@@ -22,8 +22,8 @@ const profileSlots = [
   {
     role: "Lead Guide / Field Operations",
     focus: "Park rhythm, field safety, and ground coordination",
-    image: "/images/field/rwenzori-boardwalk-valley.webp",
-    imageAlt: "Rwenzori boardwalk trail showing real mountain terrain",
+    image: "/images/profiles/lead-guide-placeholder.webp",
+    imageAlt: "Non-identifying lead guide profile preview on a misty Uganda forest trail",
     summary:
       "Guide profiles will include verified park specialisms, guiding experience, relevant first-aid or mountain credentials, and language support.",
     checks: ["Park specialisms", "Guide credentials", "First-aid status", "Licence details"],
@@ -77,11 +77,11 @@ export default function VerifiedTeamProfiles() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#123a2a]/90 via-[#123a2a]/35 to-transparent" />
                 <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-white/12 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-white backdrop-blur">
-                  Profile verification
+                  Profile preview
                 </div>
                 <div className="absolute bottom-0 p-6 text-white">
                   <p className="text-sm font-black uppercase tracking-[0.22em] text-[#f5b416]">
-                    To be named after approval
+                    Verified portrait to follow
                   </p>
                   <h3 className="mt-3 text-3xl font-black leading-tight">{profile.role}</h3>
                 </div>
